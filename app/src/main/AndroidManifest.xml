@@ -5,6 +5,8 @@
     package="com.allever.security.photo.browser">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".app.MyApplication"
@@ -14,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".test.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
