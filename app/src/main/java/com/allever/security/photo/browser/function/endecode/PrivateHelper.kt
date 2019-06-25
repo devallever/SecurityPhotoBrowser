@@ -1,20 +1,33 @@
 package com.allever.security.photo.browser.function.endecode
 
+import android.util.Log
 import java.io.*
 import java.lang.Exception
 import kotlin.experimental.xor
 
 object PrivateHelper {
 
+    private val TAG = PrivateHelper::class.java.simpleName
+
     /***
      * 加密
      */
     fun encode(originPath: String, enDecodeListener: EnDecodeListener?) {
         enDecodeListener?.onStart()
+
+        val originFile = File(originPath)
+        if (!originFile.exists()) {
+            //原文件不存在
+            Log.d(TAG, "origin file not exist!")
+            enDecodeListener?.onFail()
+            return
+        }
+
         val privateHeader = PrivateHeader(originPath)
         val headBytes = privateHeader.buildHeader()
         val baos = ByteArrayOutputStream()
         val bufferInputStream = BufferedInputStream(FileInputStream(File(originPath)))
+        val fileOutputStream = FileOutputStream(File(privateHeader.encodePath))
         try {
             //写入数据头
             baos.write(headBytes, 0, headBytes.size)
@@ -28,13 +41,16 @@ object PrivateHelper {
                 }
                 baos.write(buffer, 0, len)
             }
-            enDecodeListener?.onSuccess()
+
+            fileOutputStream.write(baos.toByteArray())
+            enDecodeListener?.onSuccess(privateHeader.encodePath)
         } catch (e: Exception) {
             e.printStackTrace()
             enDecodeListener?.onFail()
         } finally {
             baos.close()
             bufferInputStream.close()
+            fileOutputStream?.close()
         }
     }
 
@@ -43,6 +59,14 @@ object PrivateHelper {
      */
     fun decode(encodePath: String, enDecodeListener: EnDecodeListener?) {
         enDecodeListener?.onStart()
+
+        val encodeFile = File(encodePath)
+        if (!encodeFile.exists()) {
+            Log.d(TAG, "encodeFile not exist!")
+            enDecodeListener?.onFail()
+            return
+        }
+
         val privateHeader = PrivateHeader()
         privateHeader.resolveHeader(encodePath)
         val bufferedInputStream = BufferedInputStream(FileInputStream(File(encodePath)))
@@ -61,7 +85,7 @@ object PrivateHelper {
                 byteArrayOutputStream.write(buffer, 0, len)
             }
             fileOutputStream.write(byteArrayOutputStream.toByteArray())
-            enDecodeListener?.onSuccess()
+            enDecodeListener?.onSuccess(privateHeader.originPath)
         } catch (e: Exception) {
             e.printStackTrace()
             enDecodeListener?.onFail()

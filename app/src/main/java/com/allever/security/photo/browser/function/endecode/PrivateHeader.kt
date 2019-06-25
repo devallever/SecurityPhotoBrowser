@@ -2,8 +2,8 @@ package com.allever.security.photo.browser.function.endecode
 
 import android.os.Environment
 import android.util.Log
+import com.allever.lib.common.app.App
 import com.allever.security.photo.browser.util.BytesUtils
-import com.android.absbase.App
 import java.io.*
 import java.lang.Exception
 import java.util.*
@@ -28,7 +28,7 @@ class PrivateHeader {
 
     }
 
-    val ENCODE_PATH_DIR = Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Decode"
+    val ENCODE_PATH_DIR = Environment.getExternalStorageDirectory().absolutePath + File.separator + "" + App.context.getPackageName() + "/Image/Cache/Decode"
 
     private val KEY_VALUE = Random().nextInt(8) + 1
 
@@ -70,7 +70,15 @@ class PrivateHeader {
         timeMillis = System.currentTimeMillis()
         originPathLength = originPath.length
         originPath = originPath
+        val encodeDirFile = File(ENCODE_PATH_DIR)
+        if (!encodeDirFile.exists()) {
+            encodeDirFile.mkdirs()
+        }
         encodePath = "$ENCODE_PATH_DIR${File.separator}${originFile.name}"
+        val encodeFile = File(encodePath)
+        if (!encodeFile.exists()) {
+            encodeFile.createNewFile()
+        }
         encodePathLength = encodePath.length
         key = KEY_VALUE
         //还差原始文件数据偏移量
