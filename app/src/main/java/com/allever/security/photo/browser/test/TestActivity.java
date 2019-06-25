@@ -42,7 +42,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private void encode() {
         //加密
         String originPath = Environment.getExternalStorageDirectory().getPath() + "/test.jpg";
-        String newPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/private-test";
+        String newPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test-private";
         Log.d(TAG, "encode: originPath = " + originPath);
         Log.d(TAG, "encode: newPath = " + newPath);
 
@@ -54,11 +54,15 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(originPath)));
             int len = 0;
             byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] keyByte = new byte[1];
+            keyByte[0] = KEY;
+            byteArrayOutputStream.write(keyByte, 0, keyByte.length);
             while ((len = bufferedInputStream.read(b)) > 0) {
                 for (int i = 0; i < len; i++) {
                     b[i] = (byte) (b[i] ^ (byte) KEY);
-                    byteArrayOutputStream.write(b[i]);
+//                    byteArrayOutputStream.write(b[i]);
                 }
+                byteArrayOutputStream.write(b, 0, len);
             }
             fileOutputStream = new FileOutputStream(new File(newPath));
             fileOutputStream.write(byteArrayOutputStream.toByteArray());
@@ -85,8 +89,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     private void decode() {
         //解密
-        String privatePath = Environment.getExternalStorageDirectory().getPath() + "/private-test";
-        String newPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/decode-test.jpg";
+        String privatePath = Environment.getExternalStorageDirectory().getPath() + "/test-private";
+        String newPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test-decode.jpg";
         Log.d(TAG, "decode: privatePath = " + privatePath);
         Log.d(TAG, "decode: newPath = " + newPath);
 
@@ -97,12 +101,18 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             byte[] b = new byte[1024];
             bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(privatePath)));
             int len = 0;
+            byte[] keyByte = new byte[1];
+            bufferedInputStream.read(keyByte, 0, 1);
+            Log.d(TAG, "decode: key = " + keyByte[0]);
+            //如果要跳过1个字节数，传的是1
+            bufferedInputStream.skip(0);
             byteArrayOutputStream = new ByteArrayOutputStream();
             while ((len = bufferedInputStream.read(b)) > 0) {
                 for (int i = 0; i < len; i++) {
                     b[i] = (byte) (b[i] ^ (byte) KEY);
-                    byteArrayOutputStream.write(b[i]);
+//                    byteArrayOutputStream.write(b[i]);
                 }
+                byteArrayOutputStream.write(b, 0, len);
             }
             fileOutputStream = new FileOutputStream(new File(newPath));
             fileOutputStream.write(byteArrayOutputStream.toByteArray());
