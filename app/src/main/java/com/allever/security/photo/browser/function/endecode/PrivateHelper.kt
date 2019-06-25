@@ -23,18 +23,18 @@ object PrivateHelper {
             return
         }
 
-        val privateHeader = PrivateHeader(originPath)
-        val headBytes = privateHeader.buildHeader()
+        val headerBean = HeaderBean(originPath)
+        val headBytes = headerBean.buildHeader()
         val baos = ByteArrayOutputStream()
         val bufferInputStream = BufferedInputStream(FileInputStream(File(originPath)))
-        val fileOutputStream = FileOutputStream(File(privateHeader.encodePath))
+        val fileOutputStream = FileOutputStream(File(headerBean.encodePath))
         try {
             //写入数据头
             baos.write(headBytes, 0, headBytes.size)
             //写入数据体
             val buffer = ByteArray(1024)
             var len = -1
-            val key = privateHeader.key.toByte()
+            val key = headerBean.key.toByte()
             while (bufferInputStream.read(buffer).also { len = it } != -1) {
                 for ((index, b) in buffer.withIndex()) {
                     buffer[index] = b.xor(key)
@@ -43,14 +43,14 @@ object PrivateHelper {
             }
 
             fileOutputStream.write(baos.toByteArray())
-            enDecodeListener?.onSuccess(privateHeader.encodePath)
+            enDecodeListener?.onSuccess(headerBean.encodePath)
         } catch (e: Exception) {
             e.printStackTrace()
             enDecodeListener?.onFail()
         } finally {
             baos.close()
             bufferInputStream.close()
-            fileOutputStream?.close()
+            fileOutputStream.close()
         }
     }
 
@@ -67,15 +67,16 @@ object PrivateHelper {
             return
         }
 
-        val privateHeader = PrivateHeader()
-        privateHeader.resolveHeader(encodePath)
+        val headerBean = HeaderBean()
+        headerBean.resolveHeader(encodePath)
         val bufferedInputStream = BufferedInputStream(FileInputStream(File(encodePath)))
         val byteArrayOutputStream = ByteArrayOutputStream()
-        val fileOutputStream = FileOutputStream(File(privateHeader.originPath))
+        val fileOutputStream = FileOutputStream(File(headerBean.originPath))
         try {
             //如果要跳过1个字节数，传的是1
-            bufferedInputStream.skip(privateHeader.originOffset.toLong())
-            val key = privateHeader.key.toByte()
+            //跳过数据头，读取源文件数据
+            bufferedInputStream.skip(headerBean.originOffset.toLong())
+            val key = headerBean.key.toByte()
             var len = -1
             val buffer = ByteArray(1024)
             while (bufferedInputStream.read(buffer).also { len = it } != -1) {
@@ -85,7 +86,7 @@ object PrivateHelper {
                 byteArrayOutputStream.write(buffer, 0, len)
             }
             fileOutputStream.write(byteArrayOutputStream.toByteArray())
-            enDecodeListener?.onSuccess(privateHeader.originPath)
+            enDecodeListener?.onSuccess(headerBean.originPath)
         } catch (e: Exception) {
             e.printStackTrace()
             enDecodeListener?.onFail()

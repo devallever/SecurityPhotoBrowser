@@ -19,9 +19,9 @@ import java.util.*
  *      * //    加密路径	        n
  *      * //    秘钥	            1
  */
-class PrivateHeader {
+class HeaderBean {
     companion object {
-        val TAG = PrivateHeader::class.java.name
+        val TAG = HeaderBean::class.java.name
 
         //魔法值4个字节（-AL-）
         val MAGIC_VALUE = "-AL-"
