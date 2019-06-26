@@ -112,60 +112,6 @@ class PrivateHelper {
             threadPool.execute(runnable)
         }
 
-//        /**
-//         * 加密多个文件
-//         */
-//        fun encodeList(albumPath: String, heads: ArrayList<PrivateBean>, listener: EncodeListListener? = null) {
-//            val errorList = arrayListOf<PrivateBean>()
-//            val successList = arrayListOf<PrivateBean>()
-//            var fixSize = 0 //已经处理的数量
-//            val runnable = Runnable {
-//                run {
-//                    //start
-//                    mHandler?.post { listener?.onStart() }
-//                    if (heads.isEmpty()) {
-//                        mHandler?.post { listener?.onFailed(successList, errorList) }
-//                    }
-//                    heads.map { value ->
-//                        encode(albumPath, value, object : EncodeListener {
-//                            override fun onEncodeStart() {}
-//                            override fun onEncodeSuccess(head: PrivateBean) {
-//                                successList.add(head)
-//                                //最后一个
-//                                if (fixSize == heads.size - 1) {
-//                                    if (errorList.size == 0) {
-//                                        //success
-//                                        mHandler?.post {
-//                                            listener?.onSuccess(successList, errorList)
-//                                        }
-//                                    } else {
-//                                        mHandler?.post {
-//                                            listener?.onFailed(successList, errorList)
-//                                        }
-//                                    }
-//                                }
-//                                fixSize++
-//                            }
-//
-//                            override fun onEncodeFailed(msg: String, head: PrivateBean) {
-//                                errorList.add(head)
-//                                if (fixSize == heads.size - 1) {
-//                                    if (errorList.size != 0) {
-//                                        //failed
-//                                        mHandler?.post {
-//                                            listener?.onFailed(successList, errorList)
-//                                        }
-//                                    }
-//                                }
-//                                fixSize++
-//                            }
-//                        })
-//                    }
-//                }
-//            }
-//            threadPool.execute(runnable)
-//        }
-
         /**
          * 加密
          *
@@ -187,8 +133,6 @@ class PrivateHelper {
                         val originalMD5 = MD5.getMD5Str(head.originalPath)
                         val encodePath = File(PATH_ENCODE_ORIGINAL, originalMD5).path
                         val tempPath = File(PATH_DECODE_TEMP, originalMD5).path
-//                        val split = head.originalPath.split("/")
-//                        val tempPath = File(PATH_DECODE_TEMP, split[split.size-1]).path
                         head.encodePath = encodePath
                         head.tempPath = tempPath
                         createFile(encodePath)
@@ -246,7 +190,6 @@ class PrivateHelper {
                         //解析头
                         if (deImageBean.resolveHead(path)) {
                             //对原始文件名加密
-//                        val filePath = File(PATH_DECODE_TEMP, MD5.getMD5Str(deImageBean.originalPath)).path
                             val filePath = deImageBean.tempPath
                             createFile(filePath)
                             val fileInputStream = FileInputStream(path)
@@ -478,8 +421,6 @@ class PrivateHelper {
             localThumbnailBean.date = bean.date
             localThumbnailBean.uri = bean.uri?.toString()
             localThumbnailBean.path = bean.path
-            localThumbnailBean.isChecked = bean.isChecked
-            localThumbnailBean.degree = bean.degree
             localThumbnailBean.duration = bean.duration
             localThumbnailBean.type = bean.type
             localThumbnailBean.sourceType = bean.sourceType
@@ -493,13 +434,10 @@ class PrivateHelper {
             bean.date = local.date
             bean.uri = Uri.parse(local.uri ?: "")
             bean.path = local.path
-            bean.isChecked = local.isChecked
-            bean.degree = local.degree
             bean.duration = local.duration
             bean.type = local.type
             bean.sourceType = local.sourceType
             bean.tempPath = local.tempPath
-//        bean.selectCount = local.selectCount
             return bean
         }
 

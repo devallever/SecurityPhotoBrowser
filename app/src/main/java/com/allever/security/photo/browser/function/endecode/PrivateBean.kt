@@ -9,10 +9,10 @@ import java.util.*
 
 class PrivateBean {
     companion object {
-        val Tag = PrivateBean::class.java.name
+        val TAG = PrivateBean::class.java.name
 
         //魔法值4个字节（-PE-）
-        val VALUE_MAGIC = "-PE-"
+        const val VALUE_MAGIC = "-AL-"
 
     }
 
@@ -177,7 +177,7 @@ class PrivateBean {
             val magic = String(buffer)
             this.magic = magic
             if (magic != VALUE_MAGIC) {
-                Log.e(Tag, "invalid photo")
+                Log.e(TAG, "invalid photo")
                 return false
             }
             buffer = ByteArray(4)
@@ -250,7 +250,7 @@ class PrivateBean {
      */
     fun resolveHead(path: String): Boolean {
         if (!File(path).exists()) {
-            Log.e(Tag, "file is not found : path $path")
+            Log.e(TAG, "file is not found : path $path")
             return false
         }
         val fis = FileInputStream(path)

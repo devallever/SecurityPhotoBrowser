@@ -7,27 +7,38 @@ import android.text.TextUtils;
 import com.allever.security.photo.browser.util.MediaTypeUtil;
 
 public class ThumbnailBean implements Parcelable {
-    private String mPath;
-    private String tempPath;    //临时缓存的文件路径
-    private long mDate;
-    private boolean isChecked = false;
-    private Uri mUri;
-    private int mDegree = 0;
-    private int mType = MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE();
-    private long mDuration;
+    /***
+     * 源文件路径
+     */
+    private String originPath;
+    /***
+     * 解密临时文件路径(运行时存在)
+     */
+    private String tempPath;
+    private long timeMillis;
+    private Uri uri;
+    /***
+     * 媒体类型： 图片，视频，文本
+     */
+    private int mediaType = MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE();
+    private long duration;
 
     private int mSelectCount = 0;
 
     public static final int SYSTEM = 0;
     public static final int DECODE = 1;
-    private int sourceType = SYSTEM; //资源来源  0是默认来自系统相册、1是来自解密的资源
+    /***
+     * 资源来源： 系统，解密
+     * 资源来源  0是默认来自系统相册、1是来自解密的资源
+     */
+    private int sourceType = SYSTEM;
 
     public ThumbnailBean() {
 
     }
 
     public boolean isInvalid() {
-        return TextUtils.isEmpty(mPath) || TextUtils.isEmpty(tempPath);
+        return TextUtils.isEmpty(originPath) || TextUtils.isEmpty(tempPath);
     }
 
     public String getTempPath() {
@@ -39,22 +50,18 @@ public class ThumbnailBean implements Parcelable {
     }
 
     public ThumbnailBean(String path, long date, boolean isChecked, Uri uri, int degree, int type) {
-        mPath = path;
-        mDate = date;
-        this.isChecked = isChecked;
-        mUri = uri;
-        mDegree = degree;
-        mType = type;
+        this.originPath = path;
+        this.timeMillis = date;
+        this.uri = uri;
+        this.mediaType = type;
     }
 
     public ThumbnailBean(Parcel source) {
-        mPath = source.readString();
+        originPath = source.readString();
         tempPath = source.readString();
-        mDate = source.readLong();
-        isChecked = source.readInt() == 1 ? true : false;
-        mUri = Uri.parse(source.readString());
-        mDegree = source.readInt();
-        mType = source.readInt();
+        timeMillis = source.readLong();
+        uri = Uri.parse(source.readString());
+        mediaType = source.readInt();
         sourceType = source.readInt();
     }
 
@@ -65,13 +72,11 @@ public class ThumbnailBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mPath);
+        dest.writeString(originPath);
         dest.writeString(tempPath);
-        dest.writeLong(mDate);
-        dest.writeInt(isChecked ? 1 : 0);
-        dest.writeString(mUri.toString());
-        dest.writeInt(mDegree);
-        dest.writeInt(mType);
+        dest.writeLong(timeMillis);
+        dest.writeString(uri.toString());
+        dest.writeInt(mediaType);
         dest.writeInt(sourceType);
     }
 
@@ -89,51 +94,35 @@ public class ThumbnailBean implements Parcelable {
     };
 
     public String getPath() {
-        return mPath;
+        return originPath;
     }
 
     public void setPath(String mPath) {
-        this.mPath = mPath;
+        this.originPath = mPath;
     }
 
     public long getDate() {
-        return mDate;
+        return timeMillis;
     }
 
     public void setDate(long mDate) {
-        this.mDate = mDate;
-    }
-
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean isChecked) {
-        this.isChecked = isChecked;
+        this.timeMillis = mDate;
     }
 
     public Uri getUri() {
-        return mUri;
+        return uri;
     }
 
     public void setUri(Uri mUri) {
-        this.mUri = mUri;
-    }
-
-    public int getDegree() {
-        return mDegree;
-    }
-
-    public void setDegree(int mDegree) {
-        this.mDegree = mDegree;
+        this.uri = mUri;
     }
 
     public int getType() {
-        return mType;
+        return mediaType;
     }
 
     public void setType(int mType) {
-        this.mType = mType;
+        this.mediaType = mType;
     }
 
     public int getSelectCount() {
@@ -145,26 +134,24 @@ public class ThumbnailBean implements Parcelable {
     }
 
     public long getDuration() {
-        return mDuration;
+        return duration;
     }
 
     public void setDuration(long duration) {
-        this.mDuration = duration;
+        this.duration = duration;
     }
 
-//	@Override
-//	public String toString() {
-//		return "ThumbnailBean{" +
-//				"mPath='" + mPath + '\'' +
-//				", mDate=" + mDate +
-//				", isChecked=" + isChecked +
-//				", mUri=" + mUri +
-//				", mDegree=" + mDegree +
-//				", mType=" + mType +
-//				", mDuration=" + mDuration +
-//				", mSelectCount=" + mSelectCount +
-//				'}';
-//	}
+	@Override
+	public String toString() {
+		return "ThumbnailBean{" +
+				"originPath='" + originPath + '\'' +
+				", timeMillis=" + timeMillis +
+				", uri=" + uri +
+				", mediaType=" + mediaType +
+				", duration=" + duration +
+				", mSelectCount=" + mSelectCount +
+				'}';
+	}
 
     public int getSourceType() {
         return sourceType;
