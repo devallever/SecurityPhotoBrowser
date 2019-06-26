@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import com.allever.security.photo.browser.R;
@@ -880,8 +881,9 @@ public class FileUtil {
      * @param pathName
      * @return
      */
-    public static String getParentFilePath(String pathName) {
+    public static String getParentFilePath(@Nullable String pathName) {
         if (TextUtils.isEmpty(pathName)) return null;
+        if (pathName == null) return null;
         return (pathName.substring(0, pathName.lastIndexOf(File.separator)));
     }
 

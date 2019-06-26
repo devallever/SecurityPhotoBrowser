@@ -13,7 +13,7 @@ public class ThumbnailBean implements Parcelable {
     private boolean isChecked = false;
     private Uri mUri;
     private int mDegree = 0;
-    private int mType = MediaTypeUtil.TYPE_OTHER_IMAGE;
+    private int mType = MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE();
     private long mDuration;
 
     private int mSelectCount = 0;

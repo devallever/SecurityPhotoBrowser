@@ -42,7 +42,7 @@ public class FolderUtil {
             if (TextUtils.isEmpty(houzui)) {
                 return false;
             } else {
-                return EncryptUtil.BACKUP_FILE_TYPE.equals(houzui.toLowerCase());
+                return EncryptUtil.INSTANCE.getBACKUP_FILE_TYPE().equals(houzui.toLowerCase());
             }
         } else {
             return false;
@@ -127,7 +127,7 @@ public class FolderUtil {
      * @param context
      */
     public static List<String> getAllSDPath(Context context) {
-        if (PhoneInfo.isNotSupportReadExtSdcardPathFromMount()) {
+        if (PhoneInfo.INSTANCE.isNotSupportReadExtSdcardPathFromMount()) {
             return getVolumePaths(context);
         }
         List<String> result = getExtSDCardPaths();
@@ -284,7 +284,7 @@ public class FolderUtil {
      * 检查SDCARD的状态  输出提示用户的Toast
      */
     public static void checkSdCardState(Activity activity) {
-        long size = getCurrentSelectedSdCardSize(FolderHelper.getOrCreateSaveLocation());
+        long size = getCurrentSelectedSdCardSize(FolderHelper.INSTANCE.getOrCreateSaveLocation());
         if (size == -1L) {//不可用的情况
             Toast.makeText(activity, R.string.storage_not_ready, Toast.LENGTH_SHORT).show();
         } else {
@@ -299,8 +299,8 @@ public class FolderUtil {
      * 检查SDCARD的状态  输出提示用户的Toast
      */
     public static boolean isSdcardPathCanWrite(Activity activity, String path) {
-        if (PhoneInfo.isSupportWriteExtSdCard() && ExtSdcardUtils.isExtSdcardPath(path)) {//如果是外置的路径 且是5.0以上
-            if (ExtSdcardUtils.hasExtSdcardPermission()) {
+        if (PhoneInfo.INSTANCE.isSupportWriteExtSdCard() && ExtSdcardUtils.INSTANCE.isExtSdcardPath(path)) {//如果是外置的路径 且是5.0以上
+            if (ExtSdcardUtils.INSTANCE.hasExtSdcardPermission()) {
                 return true;
             }
         } else {

@@ -1,6 +1,4 @@
-package com.allever.security.photo.browser.test
-
-//package com.allever.security.photo.browser.function.endecode
+//package com.allever.security.photo.browser.test
 //
 //import android.util.Log
 //import com.allever.security.photo.browser.util.FileUtils

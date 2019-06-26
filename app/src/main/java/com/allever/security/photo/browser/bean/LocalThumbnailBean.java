@@ -12,7 +12,7 @@ public class LocalThumbnailBean implements Serializable {
     private boolean isChecked = false;
     private String mUri;
     private int mDegree = 0;
-    private int mType = MediaTypeUtil.TYPE_OTHER_IMAGE;
+    private int mType = MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE();
     private long mDuration;
 
     private int mSelectCount = 0;
