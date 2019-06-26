@@ -32,13 +32,10 @@ object PrivateHelper {
             //写入数据头
             baos.write(headBytes, 0, headBytes.size)
             //写入数据体
-            val buffer = ByteArray(1024)
+            var buffer = ByteArray(1024)
             var len = -1
-            val key = headerBean.key.toByte()
             while (bufferInputStream.read(buffer).also { len = it } != -1) {
-                for ((index, b) in buffer.withIndex()) {
-                    buffer[index] = b.xor(key)
-                }
+                buffer = encodeByteArray(buffer, headerBean.key)
                 baos.write(buffer, 0, len)
             }
 
@@ -78,11 +75,9 @@ object PrivateHelper {
             bufferedInputStream.skip(headerBean.originOffset.toLong())
             val key = headerBean.key.toByte()
             var len = -1
-            val buffer = ByteArray(1024)
+            var buffer = ByteArray(1024)
             while (bufferedInputStream.read(buffer).also { len = it } != -1) {
-                for ((index, b) in buffer.withIndex()) {
-                    buffer[index] = b.xor(key)
-                }
+                buffer = encodeByteArray(buffer, headerBean.key)
                 byteArrayOutputStream.write(buffer, 0, len)
             }
             fileOutputStream.write(byteArrayOutputStream.toByteArray())
@@ -96,6 +91,25 @@ object PrivateHelper {
             fileOutputStream.close()
         }
     }
+
+    /***
+     * 加密字节数组
+     */
+    private fun encodeByteArray(byteArray: ByteArray, key: Int): ByteArray {
+        //异或操作
+        for ((index, b) in byteArray.withIndex()) {
+            byteArray[index] = encodeByte(b, key)
+        }
+        return byteArray
+    }
+
+    /***
+     * 加密字节
+     */
+    private fun encodeByte(byte: Byte, key: Int): Byte {
+        return byte.xor(key.toByte())
+    }
+
 
 
 }
