@@ -1,6 +1,7 @@
 package com.allever.security.photo.browser.function.endecode
 
 import android.util.Log
+import com.allever.security.photo.browser.util.FileUtils
 import java.io.*
 import java.lang.Exception
 import kotlin.experimental.xor
@@ -57,15 +58,19 @@ object PrivateHelper {
     fun decode(encodePath: String, enDecodeListener: EnDecodeListener?) {
         enDecodeListener?.onStart()
 
-        val encodeFile = File(encodePath)
-        if (!encodeFile.exists()) {
+        if (!FileUtils.checkExist(encodePath)) {
             Log.d(TAG, "encodeFile not exist!")
             enDecodeListener?.onFail()
             return
         }
 
         val headerBean = HeaderBean()
-        headerBean.resolveHeader(encodePath)
+        val resolveResult = headerBean.resolveHeader(encodePath)
+        if (!resolveResult) {
+            Log.d(TAG, "resolve header fail!")
+            return
+        }
+
         val bufferedInputStream = BufferedInputStream(FileInputStream(File(encodePath)))
         val byteArrayOutputStream = ByteArrayOutputStream()
         val fileOutputStream = FileOutputStream(File(headerBean.originPath))
