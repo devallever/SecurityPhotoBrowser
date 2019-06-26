@@ -13,11 +13,11 @@ public class SystemProperties {
         String value = null;
         try {
             Class clazz = Class.forName("android.os.SystemProperties");
-            Class[] args = new Class[] {
-                String.class
+            Class[] args = new Class[]{
+                    String.class
             };
             Method method = clazz.getMethod("get", args);
-            value = (String)(method.invoke(null, key));
+            value = (String) (method.invoke(null, key));
         } catch (Throwable tr) {
             Log.e(TAG, "", tr);
         }
@@ -28,11 +28,11 @@ public class SystemProperties {
         String value = null;
         try {
             Class clazz = Class.forName("android.os.SystemProperties");
-            Class[] args = new Class[] {
+            Class[] args = new Class[]{
                     String.class, String.class
             };
             Method method = clazz.getMethod("get", args);
-            value = (String)(method.invoke(null, key, defaultValue));
+            value = (String) (method.invoke(null, key, defaultValue));
         } catch (Throwable tr) {
             Log.e(TAG, "", tr);
         }
@@ -43,11 +43,11 @@ public class SystemProperties {
         boolean value = defaultValue;
         try {
             Class clazz = Class.forName("android.os.SystemProperties");
-            Class[] args = new Class[] {
+            Class[] args = new Class[]{
                     String.class, boolean.class
             };
             Method method = clazz.getMethod("getBoolean", args);
-            value = (Boolean)(method.invoke(null, key, defaultValue));
+            value = (Boolean) (method.invoke(null, key, defaultValue));
         } catch (Throwable tr) {
             Log.e(TAG, "", tr);
         }
@@ -58,11 +58,11 @@ public class SystemProperties {
         int value = defaultValue;
         try {
             Class clazz = Class.forName("android.os.SystemProperties");
-            Class[] args = new Class[] {
+            Class[] args = new Class[]{
                     String.class, int.class
             };
             Method method = clazz.getMethod("getInt", args);
-            value = (Integer)(method.invoke(null, key, defaultValue));
+            value = (Integer) (method.invoke(null, key, defaultValue));
         } catch (Throwable tr) {
             Log.e(TAG, "", tr);
         }
@@ -73,11 +73,11 @@ public class SystemProperties {
         long value = defaultValue;
         try {
             Class clazz = Class.forName("android.os.SystemProperties");
-            Class[] args = new Class[] {
+            Class[] args = new Class[]{
                     String.class, long.class
             };
             Method method = clazz.getMethod("getLong", args);
-            value = (Long)(method.invoke(null, key, defaultValue));
+            value = (Long) (method.invoke(null, key, defaultValue));
         } catch (Throwable tr) {
             Log.e(TAG, "", tr);
         }

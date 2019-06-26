@@ -1,6 +1,7 @@
 package com.allever.security.photo.browser.util;
 
 /**
+ *
  */
 
 public class SpConstant {
@@ -253,19 +254,19 @@ public class SpConstant {
      * 拍照或录制视频后，是否立即保持图片到相册
      */
     public static final String SAVE_IMG_IMMEDIATELY = "SAVE_IMG_IMMEDIATELY";
-    public static final String HOLIDAY_DB_VERSION= "HOLIDAY_DB_VERSION";
+    public static final String HOLIDAY_DB_VERSION = "HOLIDAY_DB_VERSION";
 
     //最近使用的gif
-    public static final String GIF_RECENTLY= "GIF_RECENTLY";
+    public static final String GIF_RECENTLY = "GIF_RECENTLY";
 
     //ins分享过的图片uri 1:1  用于删除
-    public static final String INS_SHARE_IMG_URI= "INS_SHARE_IMG_URI";
+    public static final String INS_SHARE_IMG_URI = "INS_SHARE_IMG_URI";
 
     public static final String HAS_CHECK_PRIVACY = "ALREADY_CHECK_PRIVACY";
 
     public static final String SHOW_MAIN_FUNC_LIST_GUIDE_TIP = "SHOW_MAIN_FUNC_LIST_GUIDE_TIP";
 
-    public static final String STORE_DOWNLOAD_COUNT_OF_DAY= "STORE_DOWNLOAD_COUNT_OF_DAY";
+    public static final String STORE_DOWNLOAD_COUNT_OF_DAY = "STORE_DOWNLOAD_COUNT_OF_DAY";
 
     public static final String HAS_USE_BOOBJOB = "HAS_USE_BOOBJOB";
 

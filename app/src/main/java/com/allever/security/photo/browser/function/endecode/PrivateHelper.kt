@@ -19,9 +19,11 @@ class PrivateHelper {
     companion object {
         val Tag = PrivateHelper::class.java.simpleName
         //加密文件存储路径
-        val PATH_ENCODE_ORIGINAL = Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Decode"
+        val PATH_ENCODE_ORIGINAL =
+            Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Decode"
         //相册目录
-        val PATH_ALBUM = Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Album"
+        val PATH_ALBUM =
+            Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Album"
         //解密临时文件路径
         val PATH_DECODE_TEMP = App.getContext().externalCacheDir.absolutePath + "/.temp/"
         //创建 .nomedia 文件
@@ -39,8 +41,10 @@ class PrivateHelper {
         }
 
         val mHandler: Handler = Handler(App.getContext().mainLooper)
-        val threadPool = ThreadPoolExecutor(3, 10, 30L,
-                TimeUnit.SECONDS, LinkedBlockingDeque(), ExecutorThreadFactory(), ThreadPoolExecutor.DiscardPolicy());
+        val threadPool = ThreadPoolExecutor(
+            3, 10, 30L,
+            TimeUnit.SECONDS, LinkedBlockingDeque(), ExecutorThreadFactory(), ThreadPoolExecutor.DiscardPolicy()
+        );
 
         class ExecutorThreadFactory : ThreadFactory {
             override fun newThread(r: Runnable?): Thread {
@@ -424,7 +428,7 @@ class PrivateHelper {
 
         private fun createFile(path: String) {
             val parentPath = File(path).parent
-                    ?: throw (RuntimeException("createFile parent is null"))
+                ?: throw (RuntimeException("createFile parent is null"))
             val parent = File(parentPath)
             if (!parent.exists()) {
                 parent.mkdirs()
@@ -487,7 +491,7 @@ class PrivateHelper {
         fun changeLocalThumbnailBean2ThumbnailBean(local: LocalThumbnailBean): ThumbnailBean {
             val bean = ThumbnailBean()
             bean.date = local.date
-            bean.uri = Uri.parse(local.uri?:"")
+            bean.uri = Uri.parse(local.uri ?: "")
             bean.path = local.path
             bean.isChecked = local.isChecked
             bean.degree = local.degree

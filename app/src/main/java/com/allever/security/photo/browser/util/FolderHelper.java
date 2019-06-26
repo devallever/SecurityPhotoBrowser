@@ -427,7 +427,7 @@ public class FolderHelper {
 
     /**
      * Add the image to media store
-      */
+     */
     public static Uri addImage(Context context, String fileName, String mimeType,
                                long date, String latitude, String longitude, int orientation, int jpegLength,
                                String path, int width, int height) {

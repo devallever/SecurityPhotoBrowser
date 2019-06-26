@@ -104,30 +104,30 @@ class PrivateBean {
             buffer = ByteArray(totalOffsetSize)
             //-----------------存数据-------------------
             //添加魔法值 -PE-
-            offset = copyBytes(magic,buffer,offset)
+            offset = copyBytes(magic, buffer, offset)
             //文件原始数据偏移量
             val totalOffsetSizeBuffer = BytesUtils.intToByteArray(totalOffsetSize)
-            offset = copyBytes(totalOffsetSizeBuffer,buffer,offset)
+            offset = copyBytes(totalOffsetSizeBuffer, buffer, offset)
             //文件原始数据长度
-            offset = copyBytes(originalSizeBtyes,buffer,offset)
+            offset = copyBytes(originalSizeBtyes, buffer, offset)
             //加密时间戳
-            offset = copyBytes(encodeTimeMillsBtyes,buffer,offset)
+            offset = copyBytes(encodeTimeMillsBtyes, buffer, offset)
             //文件原始路径长度的四个字节
             val originalPathSizeBytes = BytesUtils.intToByteArray(originalPathBytes.size)
-            offset = copyBytes(originalPathSizeBytes,buffer,offset)
-            offset = copyBytes(originalPathBytes,buffer,offset)
+            offset = copyBytes(originalPathSizeBytes, buffer, offset)
+            offset = copyBytes(originalPathBytes, buffer, offset)
             //相册目录长度的四个字节
             val albumPathSizeBytes = BytesUtils.intToByteArray(albumPathBytes.size)
-            offset = copyBytes(albumPathSizeBytes,buffer,offset)
-            offset = copyBytes(albumPathBytes,buffer,offset)
+            offset = copyBytes(albumPathSizeBytes, buffer, offset)
+            offset = copyBytes(albumPathBytes, buffer, offset)
             //加密路径长度的四个字节
             val encodePathSizeBytes = BytesUtils.intToByteArray(encodePathBytes.size)
-            offset = copyBytes(encodePathSizeBytes,buffer,offset)
-            offset = copyBytes(encodePathBytes,buffer,offset)
+            offset = copyBytes(encodePathSizeBytes, buffer, offset)
+            offset = copyBytes(encodePathBytes, buffer, offset)
             //缓存文件路径长度的四个字节
             val tempPathSizeBytes = BytesUtils.intToByteArray(tempPathBytes.size)
-            offset = copyBytes(tempPathSizeBytes,buffer,offset)
-            offset = copyBytes(tempPathBytes,buffer,offset)
+            offset = copyBytes(tempPathSizeBytes, buffer, offset)
+            offset = copyBytes(tempPathBytes, buffer, offset)
             //密钥1个字节
             buffer[offset] = BytesUtils.intToByte(VALUE_KEY)
             originalOffset = buffer.size
@@ -145,10 +145,11 @@ class PrivateBean {
      * @param disBytes  目的
      * @param offset   偏移量
      */
-    private  fun copyBytes(srcBytes:ByteArray,disBytes:ByteArray,offset:Int ):Int{
+    private fun copyBytes(srcBytes: ByteArray, disBytes: ByteArray, offset: Int): Int {
         System.arraycopy(srcBytes, 0, disBytes, offset, srcBytes.size)
         return offset + srcBytes.size
     }
+
     /**
      * 截取字节
      * @param srcBytes  源
@@ -156,10 +157,11 @@ class PrivateBean {
      * @param offset   偏移量
      * @param size 截取多长
      */
-    private  fun cutBytes(srcBytes:ByteArray,disBytes:ByteArray,offset:Int ,size:Int):Int{
+    private fun cutBytes(srcBytes: ByteArray, disBytes: ByteArray, offset: Int, size: Int): Int {
         System.arraycopy(srcBytes, offset, disBytes, 0, size)
         return offset + size
     }
+
     /**
      * 解析数据头
      */
