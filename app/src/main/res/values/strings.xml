@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">私密相册</string>
+
+    <!-- 异常提示 -->
+    <string name="storage_not_ready">Cannot take photo. Please insert a storage card or change the storage path of photos.</string>
+    <string name="little_sdcard_tips">Not Enough Storage. Photo/video may not be saved.</string>
+    <string name="request_ext_sdcard_permission_tip">SD Write Permission</string>
+    <string name="request_ext_sdcard_permission_msg1">In order to write to the SD card, App needs you to explicitly grant permission through Android. After you press CONFIRM, the Android document selection dialog will be displayed.</string>
+    <string name="request_ext_sdcard_permission_msg2">Please navigate to your external SD card and select the top level folder.</string>
+    <string name="request_ext_sdcard_permission_msg3">You may need to use a menu option to show the SD card.</string>
+    <!-- 文件夹选择界面 -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+
+    <string name="media_save_file_name_prefix">KeepSecurity</string>
 </resources>
