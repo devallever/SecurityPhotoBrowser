@@ -25,6 +25,7 @@ import com.android.absbase.utils.ToastUtils
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.LinkedHashMap
 
 class AlbumActivity : BaseActivity(), View.OnClickListener {
     private lateinit var mRecyclerView: RecyclerView
@@ -33,7 +34,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
     private lateinit var mBtnAddAlbum: View
 
     private lateinit var mAlbumDataTask: PrivateAlbumDataTask
-    private val mAlbumImageFolderMap = ConcurrentHashMap<String, ImageFolder>()
+    private val mAlbumImageFolderMap = LinkedHashMap<String, ImageFolder>()
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAddAlbumDialog: AlertDialog? = null
 
@@ -158,6 +159,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
                     val fileList = rootDir.listFiles() ?: return null
                     //遍历相册目录
                     for (albumDir in fileList) {
+                        DLog.d("album name = ${albumDir.name}")
                         if (!albumDir.isDirectory) {
                             continue
                         }
