@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">私密相册</string>
 
+    <!-- Pick -->
+    <string name="pick_import">Import</string>
+    <!-- Tabs -->
+    <string name="tab_all_album">All</string>
+    <string name="tab_video">Video</string>
+    <string name="tab_photo">Photo</string>
+
+    <!-- 分割线 -->
+    <color name="dividing_line_color">#26ffffff</color>
+
+
+    <!--  -->
+
     <!-- 异常提示 -->
     <string name="storage_not_ready">Cannot take photo. Please insert a storage card or change the storage path of photos.</string>
     <string name="little_sdcard_tips">Not Enough Storage. Photo/video may not be saved.</string>

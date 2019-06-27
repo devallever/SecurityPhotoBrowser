@@ -8,13 +8,13 @@ import android.view.View
 import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.ui.PickActivity
-import com.allever.security.photo.browser.ui.adapter.AlbumAdapter
+import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.android.absbase.ui.widget.RippleImageView
 import com.android.absbase.utils.ToastUtils
 
 class AlbumActivity : BaseActivity(), View.OnClickListener {
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAlbumAdapter: AlbumAdapter
+    private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private lateinit var mImageFolderList: MutableList<ImageFolder>
     private lateinit var mIvSetting: RippleImageView
 
@@ -38,13 +38,13 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
 
     private fun initData() {
         mImageFolderList = mutableListOf()
-        for (i in 0 .. 10) {
+        for (i in 0..10) {
             val imageFolder = ImageFolder()
             mImageFolderList.add(imageFolder)
         }
-        mAlbumAdapter = AlbumAdapter(this, R.layout.item_album, mImageFolderList)
-        mRecyclerView.adapter = mAlbumAdapter
-        mAlbumAdapter.listener = object : AlbumAdapter.ItemClickListener {
+        mPrivateAlbumAdapter = PrivateAlbumAdapter(this, R.layout.item_private_album, mImageFolderList)
+        mRecyclerView.adapter = mPrivateAlbumAdapter
+        mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
                 ToastUtils.show("position = $position")
                 PickActivity.start(this@AlbumActivity)
@@ -53,7 +53,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v) {
+        when (v) {
             mIvSetting -> {
                 ToastUtils.show("setting")
             }

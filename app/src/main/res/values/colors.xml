@@ -5,9 +5,20 @@
     <color name="colorAccent">#D81B60</color>
 
     <!-- default -->
-    <color name="default_background">#202122</color>
 
+    <color name="default_theme_color">@color/colorPrimary</color>
+    <color name="default_background">#202122</color>
+    <color name="default_top_bar_color">@color/black</color>
+
+    <!-- common -->
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+
+    <!--  tab -->
+    <color name="tab_bar_color">@color/black</color>
+    <color name="album_tab_selected_color">@color/default_theme_color</color>
+    <color name="album_tab_un_selected_color">#4dffffff</color>
+    <color name="album_tab_indicator_color">@color/default_theme_color</color>
+
 
 </resources>

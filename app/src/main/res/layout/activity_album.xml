@@ -9,9 +9,9 @@
     android:background="@color/default_background">
 
     <RelativeLayout
-        android:id="@+id/album_rl_top_bar"
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="@dimen/default_top_bar_height"
         android:background="@color/black">
 
         <TextView
@@ -38,7 +38,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/album_recycler_view"
-        android:layout_below="@+id/album_rl_top_bar"
+        android:layout_below="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

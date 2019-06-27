@@ -7,7 +7,7 @@ import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 
 import com.allever.security.photo.browser.bean.ImageFolder
 
-class AlbumAdapter(context: Context, layoutResId: Int, data: MutableList<ImageFolder>) :
+class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<ImageFolder>) :
     BaseRecyclerViewAdapter<ImageFolder>(context, layoutResId, data) {
 
     var listener: ItemClickListener? = null
@@ -18,7 +18,7 @@ class AlbumAdapter(context: Context, layoutResId: Int, data: MutableList<ImageFo
         }
     }
 
-    interface ItemClickListener{
+    interface ItemClickListener {
         fun onItemClick(position: Int)
     }
 }

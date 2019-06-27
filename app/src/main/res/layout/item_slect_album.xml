@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_select_album_height">
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="@dimen/item_select_album_image_width"
+        android:layout_height="@dimen/item_select_album_image_height"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/test"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="20dp"
+        tools:ignore="RtlHardcoded"/>
+
+    <TextView
+        android:id="@+id/tv_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_select_album_title_height"
+        android:layout_toRightOf="@id/iv_image"
+        android:layout_marginStart="@dimen/item_select_album_title_margin_start"
+        android:layout_marginTop="@dimen/item_select_album_margin_top"
+        android:textSize="@dimen/item_select_album_title_text_size"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/item_select_album_title_margin_start"
+        android:layout_toEndOf="@id/iv_image"
+        android:text="Download"
+        tools:ignore="RtlHardcoded"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_select_album_count_container_height"
+        android:layout_toRightOf="@id/iv_image"
+        android:layout_marginStart="@dimen/item_select_album_count_container_margin_start"
+        android:layout_below="@+id/tv_album_name"
+        android:layout_marginLeft="@dimen/item_select_album_count_container_margin_start"
+        android:layout_toEndOf="@id/iv_image"
+        tools:ignore="RtlHardcoded">
+
+        <ImageView
+            android:id="@+id/iv_video"
+            style="@style/item_select_album_iv_count_style"
+            android:src="@drawable/ic_album_video_flag"/>
+
+        <TextView
+            android:id="@+id/tv_video_count"
+            style="@style/item_select_album_tv_count_style"
+            android:layout_toEndOf="@+id/iv_video"
+            android:layout_toRightOf="@+id/iv_video"
+            tools:ignore="RtlHardcoded"/>
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            style="@style/item_select_album_iv_count_style"
+            android:src="@drawable/ic_album_image_flag"
+            android:layout_marginLeft="@dimen/item_select_album_iv_photo_margin_start"
+            android:layout_marginStart="@dimen/item_select_album_iv_photo_margin_start"
+            tools:ignore="RtlHardcoded"/>
+
+        <TextView
+            android:id="@+id/tv_photo_count"
+            style="@style/item_select_album_tv_count_style"
+            android:layout_toEndOf="@id/iv_photo"
+            android:layout_toRightOf="@id/iv_photo"
+            tools:ignore="RtlHardcoded"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
