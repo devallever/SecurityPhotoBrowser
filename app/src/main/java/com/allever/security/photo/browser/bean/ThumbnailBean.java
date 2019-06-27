@@ -24,6 +24,7 @@ public class ThumbnailBean implements Parcelable {
     private long duration;
 
     private int mSelectCount = 0;
+    private boolean autoPlay = false;
 
     public static final int SYSTEM = 0;
     public static final int DECODE = 1;
@@ -63,6 +64,7 @@ public class ThumbnailBean implements Parcelable {
         uri = Uri.parse(source.readString());
         mediaType = source.readInt();
         sourceType = source.readInt();
+        autoPlay = source.readInt() == 1;
     }
 
     @Override
@@ -78,6 +80,7 @@ public class ThumbnailBean implements Parcelable {
         dest.writeString(uri.toString());
         dest.writeInt(mediaType);
         dest.writeInt(sourceType);
+        dest.writeInt(autoPlay ? 1 : 0);
     }
 
     public static final Creator<ThumbnailBean> CREATOR = new Creator<ThumbnailBean>() {
@@ -159,5 +162,13 @@ public class ThumbnailBean implements Parcelable {
 
     public void setSourceType(int sourceType) {
         this.sourceType = sourceType;
+    }
+
+    public boolean isAutoPlay() {
+        return autoPlay;
+    }
+
+    public void setAutoPlay(boolean autoPlay) {
+        this.autoPlay = autoPlay;
     }
 }

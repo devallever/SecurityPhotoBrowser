@@ -12,6 +12,7 @@ import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.SeparatorBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
+import com.allever.security.photo.browser.ui.adapter.ItemClickListener
 
 class GalleryActivity: BaseActivity(), View.OnClickListener {
 
@@ -82,6 +83,16 @@ class GalleryActivity: BaseActivity(), View.OnClickListener {
                 }
             }
         })
+
+        mGalleryAdapter.itemClickListener = object : ItemClickListener {
+            override fun onItemClick(position: Int) {
+                PreviewActivity.start(this@GalleryActivity)
+            }
+
+            override fun onItemLongClick(position: Int) {
+
+            }
+        }
 
         mRecyclerView.adapter = mGalleryAdapter
     }

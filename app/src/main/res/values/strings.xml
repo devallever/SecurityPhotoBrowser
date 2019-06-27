@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">私密相册</string>
+    <string name="app_name">隐私相册浏览器</string>
 
     <!-- Pick -->
     <string name="pick_import">Import</string>

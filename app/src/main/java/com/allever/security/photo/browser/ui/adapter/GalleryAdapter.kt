@@ -8,8 +8,17 @@ import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
 class GalleryAdapter(context: Context, data: MutableList<Any>, multiItemTypeSupport: MultiItemTypeSupport<Any>) :
     MultiItemCommonAdapter<Any>(context, data, multiItemTypeSupport) {
 
-    override fun bindHolder(holder: BaseViewHolder, position: Int, item: Any) {
+    var itemClickListener: ItemClickListener? = null
 
+    override fun bindHolder(holder: BaseViewHolder, position: Int, item: Any) {
+        holder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick(position)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            itemClickListener?.onItemLongClick(position)
+            return@setOnLongClickListener true
+        }
     }
 
 }

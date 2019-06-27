@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/preview_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!-- 标题栏 -->
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_top_bar_height"
+        android:background="#33000000">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_album_unselected"
+            android:scaleType="centerInside"/>
+
+    </RelativeLayout>
+
+    <!-- 工具栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#33000000">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/nav_button_share"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/nav_button_export"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/nav_button_delete"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
+
+</RelativeLayout>

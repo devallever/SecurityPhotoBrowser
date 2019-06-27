@@ -39,4 +39,6 @@ dependencies {
     implementation project(':common')
     implementation(name: "Toolkit-1.1", ext: 'aar')
 
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
 }
