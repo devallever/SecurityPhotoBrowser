@@ -7,6 +7,7 @@ import android.view.View
 
 import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.bean.ImageFolder
+import com.allever.security.photo.browser.ui.GalleryActivity
 import com.allever.security.photo.browser.ui.PickActivity
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.android.absbase.ui.widget.RippleImageView
@@ -17,6 +18,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private lateinit var mImageFolderList: MutableList<ImageFolder>
     private lateinit var mIvSetting: RippleImageView
+    private lateinit var mBtnAddAlbum: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,9 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
 
         mIvSetting = findViewById(R.id.album_iv_setting)
         mIvSetting.setOnClickListener(this)
+        mBtnAddAlbum = findViewById(R.id.album_btn_add_album)
+        mBtnAddAlbum.setOnClickListener(this)
+
 
     }
 
@@ -46,8 +51,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
         mRecyclerView.adapter = mPrivateAlbumAdapter
         mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
-                ToastUtils.show("position = $position")
-                PickActivity.start(this@AlbumActivity)
+                GalleryActivity.start(this@AlbumActivity)
             }
         }
     }
@@ -56,6 +60,9 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
         when (v) {
             mIvSetting -> {
                 ToastUtils.show("setting")
+            }
+            mBtnAddAlbum -> {
+                ToastUtils.show("new album")
             }
         }
     }

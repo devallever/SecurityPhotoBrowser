@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.PickActivity"/>
+        <activity android:name=".ui.GalleryActivity"/>
     </application>
 
 </manifest>

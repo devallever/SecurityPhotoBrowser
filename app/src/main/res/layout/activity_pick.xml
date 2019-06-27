@@ -12,6 +12,13 @@
         android:layout_height="@dimen/default_top_bar_height"
         android:background="@color/black">
 
+        <ImageView
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"
+            android:scaleType="centerInside"/>
+
         <!-- 相册标题 -->
         <LinearLayout
             android:id="@+id/ll_album_title_container"
