@@ -19,14 +19,28 @@ class ImageFolder {
     var bucketId: String? = null
 
     /**
-     * 图片的ThumbnailBean
+     * 所有ThumbnailBean
      */
     var data: ArrayList<ThumbnailBean>? = null
+
+    /**
+     * Photo ThumbnailBean
+     */
+    var photoThumbnailBeans: ArrayList<ThumbnailBean>? = null
+
+    /**
+     * Video ThumbnailBean
+     */
+    var videoThumbnailBeans: ArrayList<ThumbnailBean>? = null
 
     /**
      * 图片的数量
      */
     var count: Int = 0
+
+    var photoCount: Int = 0
+
+    var videoCount: Int = 0
 
     /**
      * 第一张图片的ThumbnailBean
@@ -38,6 +52,12 @@ class ImageFolder {
 
     val isDataInit: Boolean
         get() = data != null
+
+    var isChecked: Boolean = false
+//        get() = firstThumbnailBean!!.isChecked()
+//        set(flag) {
+//            firstThumbnailBean!!.setChecked(flag)
+//        }
 
     constructor() {
         count = 0

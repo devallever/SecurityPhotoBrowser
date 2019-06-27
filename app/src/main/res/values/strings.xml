@@ -25,6 +25,20 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="ok">Ok</string>
+    <string name="save">Save</string>
 
     <string name="media_save_file_name_prefix">KeepSecurity</string>
+
+    <!--  dialog -->
+    <string name="dialog_default_title">Title</string>
+    <string name="dialog_default_message">Message</string>
+    <string name="dialog_default_positive_text">@string/ok</string>
+    <string name="dialog_default_negative_text">@string/cancel</string>
+
+    <string name="add_album">Add Album</string>
+    <string name="input_album_name">Input album name</string>
+    <string name="tips_please_input_album_name">Please input album name.</string>
+
+
 </resources>
