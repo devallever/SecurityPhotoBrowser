@@ -17,10 +17,14 @@ import android.widget.TextView
 
 import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.SelectAlbumAdapter
 import com.allever.security.photo.browser.ui.widget.tab.TabLayout
+import com.allever.security.photo.browser.util.AsyncTask
+import com.allever.security.photo.browser.util.ImageHelper
+import com.allever.security.photo.browser.util.MediaTypeUtil
 import com.android.absbase.utils.ResourcesUtils
 
 class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragment.PickCallback, View.OnClickListener {
@@ -172,16 +176,19 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
     private fun initAlbumRecyclerView() {
         mAlbumRecyclerView = findViewById(R.id.select_album_recycler_view)
         mAlbumRecyclerView.layoutManager = LinearLayoutManager(this)
+        mAlbumAdapter = SelectAlbumAdapter(this, R.layout.item_slect_album, mAlbumData)
+        mAlbumRecyclerView.adapter = mAlbumAdapter
     }
 
     private fun initData() {
-        for (i in 0..30) {
-            val imageFolder = ImageFolder()
-            mAlbumData.add(imageFolder)
-        }
+//        for (i in 0..30) {
+//            val imageFolder = ImageFolder()
+//            mAlbumData.add(imageFolder)
+//        }
 
-        mAlbumAdapter = SelectAlbumAdapter(this, R.layout.item_slect_album, mAlbumData)
-        mAlbumRecyclerView.adapter = mAlbumAdapter
+        getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
+
+
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -246,6 +253,141 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
         }
         return view
     }
+
+    /**
+     * 获取媒体数据的异步任务
+     *
+     * @return
+     */
+    private fun getFolderDataTask(): AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>> {
+//        mIsNeedRefresh = false
+        return object : AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>>() {
+
+            override fun doInBackground(vararg params: Void): java.util.ArrayList<ImageFolder>? {
+
+                //文件夹信息
+                val datas = ImageHelper.getAllFolderData(this@PickActivity)
+
+                //按目录名称排序
+                datas.sortWith(Comparator { arg0, arg1 -> arg0.name!!.compareTo(arg1.name!!) })
+
+                //插入第一个数据，all
+                val firstImageFolder = ImageFolder()
+                firstImageFolder.dir = null
+                firstImageFolder.bucketId = null
+//                firstImageFolder.name = getString(R.string.album_default_album_name)
+                firstImageFolder.name = "全部"
+
+                datas.add(0, firstImageFolder)
+
+                for (i in 0 until datas.size) {
+                    val imageFolder = datas[i]
+                    var allThumbnailBean: ArrayList<ThumbnailBean>?
+                    allThumbnailBean = if (imageFolder.bucketId == null) {
+                        ImageHelper.getThumbnailBeanFromPath(this@PickActivity, imageFolder.dir)
+                    } else {
+                        //解决sdcard根目录数据重复问题，使用路径会搜索到根目录及子目录的内容，改成bucketId，
+                        ImageHelper.getThumbnailBeanFromBucketId(this@PickActivity, imageFolder.bucketId)
+                    }
+                    imageFolder.data = allThumbnailBean
+
+                    //分类
+                    val photoThumbnailBean = mutableListOf<ThumbnailBean>()
+                    val videoThumbnailBean = mutableListOf<ThumbnailBean>()
+                    for (position in 0 until allThumbnailBean.size) {
+                        val thumbnailBean = allThumbnailBean[position]
+                        if (MediaTypeUtil.isImage(thumbnailBean.type)) {
+                            photoThumbnailBean.add(thumbnailBean)
+                        } else if (MediaTypeUtil.isVideo(thumbnailBean.type)) {
+                            videoThumbnailBean.add(thumbnailBean)
+                        }
+                    }
+
+                    //手动插入第一个folder数据，firstThumbnailBean字段为空，需要特殊处理
+                    if (imageFolder.firstThumbnailBean == null && allThumbnailBean.size > 0) {
+                        imageFolder.setFirstImageBean(allThumbnailBean[0])
+                    }
+
+                    imageFolder.photoThumbnailBeans = (photoThumbnailBean as ArrayList<ThumbnailBean>)
+                    imageFolder.videoThumbnailBeans = (videoThumbnailBean as ArrayList<ThumbnailBean>)
+
+                    imageFolder.photoCount = photoThumbnailBean.size
+                    imageFolder.videoCount = videoThumbnailBean.size
+
+                    datas[i] = imageFolder
+
+                }
+
+                //排除空目录
+                val iterator = datas.iterator()
+                while (iterator.hasNext()) {
+                    val folder = iterator.next()
+                    if (folder.data?.isEmpty() == true) {
+                        iterator.remove()
+                    }
+                }
+
+                GlobalData.cloneAlbumData(datas)
+
+                return datas
+            }
+
+            override fun onPostExecute(result: java.util.ArrayList<ImageFolder>?) {
+                if (result == null || result.size == 0) {
+                    return
+                }
+
+                mAlbumData.clear()
+                mAlbumData.addAll(result)
+                mAlbumAdapter.notifyDataSetChanged()
+
+                //默认显示第一个相册的数据
+                val firstImageFolder = result[0]
+                updateData(firstImageFolder)
+                updateFragmentUI()
+
+                //选中后，如果监听到系统相册变化，重新获取了数据，需要刷新选中的数据
+                for (j in 0 until mSelectedData.size) {
+                    val selectedData = mSelectedData[j]
+                    for (i in 0 until mAllData.size) {
+                        val thumbnailBean = mAllData[i]
+                        if (selectedData.path == thumbnailBean.path) {
+//                            thumbnailBean.isChecked = true
+                            mSelectedData.removeAt(j)
+                            mSelectedData.add(j, thumbnailBean)
+                            break
+                        }
+                    }
+                }
+//                updateSelectedPanelUI()
+            }
+        }
+    }
+
+
+    private fun updateData(imageFolder: ImageFolder) {
+        mAllData.clear()
+        mPhotoData.clear()
+        mVideoData.clear()
+
+        mAllData.addAll(imageFolder.data!!)
+        mVideoData.addAll(imageFolder.videoThumbnailBeans!!)
+        mPhotoData.addAll(imageFolder.photoThumbnailBeans!!)
+    }
+
+    private fun updateFragmentUI(thumbnailBean: ThumbnailBean? = null) {
+        val fragmentCount = mFragments.size
+        for (i in 0 until fragmentCount) {
+            val fragment = mFragments[i] as? PickFragment
+            if (thumbnailBean == null) {
+                val tab = TabModel.getTab(i)
+                fragment?.updateData(mFragmentDataMap[tab])
+            } else {
+                fragment?.updateData(thumbnailBean)
+            }
+        }
+    }
+
 
     companion object {
         fun start(context: Context) {

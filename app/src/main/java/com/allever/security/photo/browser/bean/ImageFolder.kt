@@ -73,7 +73,7 @@ class ImageFolder {
         this.name = this.dir!!.substring(lastIndexOf)
     }
 
-    fun setFirstImageBean(thumbnailBean: ThumbnailBean) {
+    fun setFirstImageBean(thumbnailBean: ThumbnailBean?) {
         this.firstThumbnailBean = thumbnailBean
     }
 }

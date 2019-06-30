@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.allever.lib.common.app.BaseFragment
 import com.allever.lib.common.app.App
+import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.PickImageAdapter
@@ -18,7 +19,7 @@ class PickFragment : BaseFragment() {
     var type: TabModel.Tab? = null
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mPickImageAdapter: PickImageAdapter
+    private var mPickImageAdapter: PickImageAdapter? = null
     private val mData = mutableListOf<ThumbnailBean>()
 
     lateinit var mView: View
@@ -26,10 +27,10 @@ class PickFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //test
-        for (index in 0..30) {
-            val thumbnailBean = ThumbnailBean()
-            mData.add(thumbnailBean)
-        }
+//        for (index in 0..30) {
+//            val thumbnailBean = ThumbnailBean()
+//            mData.add(thumbnailBean)
+//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +41,7 @@ class PickFragment : BaseFragment() {
     }
 
     private fun initView() {
+        DLog.d("initView")
         mRecyclerView = mView.findViewById(R.id.pick_recycler_view)
         mRecyclerView.layoutManager = GridLayoutManager(activity, 4)
 
@@ -56,6 +58,22 @@ class PickFragment : BaseFragment() {
 
     private fun initData() {
 
+    }
+
+
+    fun updateData(data: MutableList<ThumbnailBean>?) {
+        DLog.d("updateData")
+        data ?: return
+        mData.clear()
+        mData.addAll(data)
+        mPickImageAdapter?.notifyDataSetChanged()
+    }
+
+
+    fun updateData(data: ThumbnailBean?) {
+        data ?: return
+        val index = mData.indexOf(data)
+        mPickImageAdapter?.notifyItemChanged(index, index)
     }
 
     interface PickCallback {
