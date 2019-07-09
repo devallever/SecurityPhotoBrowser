@@ -26,11 +26,6 @@ class PickFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //test
-//        for (index in 0..30) {
-//            val thumbnailBean = ThumbnailBean()
-//            mData.add(thumbnailBean)
-//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +57,6 @@ class PickFragment : BaseFragment() {
 
 
     fun updateData(data: MutableList<ThumbnailBean>?) {
-        DLog.d("updateData")
         data ?: return
         mData.clear()
         mData.addAll(data)
