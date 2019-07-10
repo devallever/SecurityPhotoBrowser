@@ -25,6 +25,7 @@ import com.android.absbase.utils.ToastUtils
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
 class AlbumActivity : BaseActivity(), View.OnClickListener {
@@ -72,7 +73,7 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
         mRecyclerView.adapter = mPrivateAlbumAdapter
         mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
-                GalleryActivity.start(this@AlbumActivity)
+                GalleryActivity.start(this@AlbumActivity, mImageFolderList[position].name!!, ArrayList(mImageFolderList[position].data))
             }
         }
     }
@@ -199,9 +200,9 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
                         imageFolder.name = albumDir.name
 
                         val sortThumbnailBeans = ArrayList(thumbnailBeans)
-                        Collections.sort(
-                            sortThumbnailBeans
-                        ) { arg0, arg1 -> java.lang.Long.compare(arg1.date, arg0.date) }
+                        sortThumbnailBeans.sortWith(Comparator {
+                                arg0, arg1 -> java.lang.Long.compare(arg1.date, arg0.date)
+                        })
 
                         thumbnailBeans = sortThumbnailBeans
 

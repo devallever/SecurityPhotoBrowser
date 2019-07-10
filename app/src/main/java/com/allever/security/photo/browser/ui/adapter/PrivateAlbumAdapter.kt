@@ -5,9 +5,12 @@ import android.widget.ImageView
 
 import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 
 import com.allever.security.photo.browser.bean.ImageFolder
+import com.allever.security.photo.browser.util.ImageUtil
+import com.allever.security.photo.browser.util.MediaTypeUtil
 import com.bumptech.glide.Glide
 
 class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<ImageFolder>) :
@@ -19,14 +22,30 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
         val albumName = item.name ?: "未命名"
         val totalCount = item.count
         holder.setText(R.id.item_tv_album_name, "$albumName($totalCount)")
-        holder.setText(R.id.item_tv_album_video_count, item.videoCount.toString())
-        holder.setText(R.id.item_tv_album_image_count, item.photoCount.toString())
 
-        Glide.with(mContext).load(item.firstThumbnailBean?.uri).into(holder.getView(R.id.iv_image)!!)
+        //相册信息
+        var videoCount = 0
+        var imageCount = 0
+        //获取图片数和视频数
+        item.data?.forEach { bean ->
+            if (MediaTypeUtil.isVideo(bean.type)){
+                videoCount ++
+            }else{
+                imageCount ++
+            }
+        }
+
+        holder.setText(R.id.item_tv_album_video_count, videoCount.toString())
+        holder.setText(R.id.item_tv_album_image_count, imageCount.toString())
 
         holder.itemView.setOnClickListener {
             listener?.onItemClick(position)
         }
+
+        if (item.data?.isNotEmpty() == true) {
+            ImageUtil.loadEncodeImage(mContext, item.data!![0], holder.getView(R.id.iv_image)!!)
+        }
+
     }
 
     interface ItemClickListener {

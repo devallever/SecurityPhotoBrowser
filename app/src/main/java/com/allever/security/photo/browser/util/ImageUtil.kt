@@ -17,7 +17,16 @@
 package com.allever.security.photo.browser.util
 
 
+import android.content.Context
+import android.widget.ImageView
+import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.function.endecode.DecodeListener
+import com.allever.security.photo.browser.function.endecode.PrivateBean
+import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.android.absbase.utils.DeviceUtils
+import com.bumptech.glide.Glide
+import java.io.File
 
 
 object ImageUtil {
@@ -40,4 +49,25 @@ object ImageUtil {
         )
 
 
+    fun loadEncodeImage(context: Context, thumbnailBean: ThumbnailBean?, imageView: ImageView) {
+        thumbnailBean?: return
+        val tempFile = File(thumbnailBean.tempPath)
+        if (tempFile.exists()) {
+            Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
+        } else {
+            //解码
+            val md5Path = MD5.getMD5Str(thumbnailBean.path) ?: return
+            PrivateHelper.decode(
+                File(
+                    PrivateHelper.PATH_ENCODE_ORIGINAL,
+                    md5Path
+                ).absolutePath, object : DecodeListener {
+                    override fun onDecodeStart() {}
+                    override fun onDecodeSuccess(privateBean: PrivateBean) {
+                        Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
+                    }
+                    override fun onDecodeFailed(msg: String) {}
+                })
+        }
+    }
 }

@@ -60,7 +60,7 @@ object PrivateHelper {
     /**
      * 加密多个文件
      */
-    fun encodeList(heads: ArrayList<PrivateBean>, listener: EncodeListListener? = null) {
+    fun encodeList(heads: MutableList<PrivateBean>, listener: EncodeListListener? = null) {
         val errorList = arrayListOf<PrivateBean>()
         val successList = arrayListOf<PrivateBean>()
         var fixSize = 0 //已经处理的数量
@@ -424,6 +424,7 @@ object PrivateHelper {
         localThumbnailBean.type = bean.type
         localThumbnailBean.sourceType = bean.sourceType
         localThumbnailBean.tempPath = bean.tempPath
+        localThumbnailBean.isChecked = bean.isChecked
 //        localThumbnailBean.selectCount = bean.selectCount
         return localThumbnailBean
     }
@@ -437,10 +438,11 @@ object PrivateHelper {
         bean.type = local.type
         bean.sourceType = local.sourceType
         bean.tempPath = local.tempPath
+        bean.isChecked = local.isChecked
         return bean
     }
 
-    fun changeThumbnailList2LocalThumbnaiList(arrayList: ArrayList<ThumbnailBean>): ArrayList<LocalThumbnailBean> {
+    fun changeThumbnailList2LocalThumbnaiList(arrayList: MutableList<ThumbnailBean>): MutableList<LocalThumbnailBean> {
         val list = arrayListOf<LocalThumbnailBean>()
         arrayList.mapTo(list, object : (ThumbnailBean) -> LocalThumbnailBean {
             override fun invoke(p1: ThumbnailBean): LocalThumbnailBean {

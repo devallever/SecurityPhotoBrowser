@@ -46,7 +46,6 @@ class ImageFolder {
      * 第一张图片的ThumbnailBean
      */
     var firstThumbnailBean: ThumbnailBean? = null
-        private set
 
     var isNeedRefresh: Boolean = false
 

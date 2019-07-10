@@ -12,20 +12,28 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 
 import com.allever.lib.common.app.BaseActivity
+import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
+import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.function.endecode.EncodeListListener
+import com.allever.security.photo.browser.function.endecode.PrivateBean
+import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.ui.adapter.SelectAlbumAdapter
 import com.allever.security.photo.browser.ui.widget.tab.TabLayout
-import com.allever.security.photo.browser.util.AsyncTask
-import com.allever.security.photo.browser.util.ImageHelper
-import com.allever.security.photo.browser.util.MediaTypeUtil
+import com.allever.security.photo.browser.util.*
+import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
+import com.android.absbase.utils.ToastUtils
+import java.io.File
+import java.util.*
 
 class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragment.PickCallback, View.OnClickListener {
 
@@ -36,6 +44,7 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
     private lateinit var mFlSelectAlbumContainer: ViewGroup
     private lateinit var mIvSelectAlbum: ImageView
     private lateinit var mAlbumRecyclerView: RecyclerView
+    private lateinit var mBtnImport: RippleTextView
 
     private lateinit var mAlbumAdapter: SelectAlbumAdapter
 
@@ -59,10 +68,14 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
     private var mIvArrowRotateAnimUp: Animator? = null
     private var mIvArrowRotateAnimDown: Animator? = null
 
+    private var mAlbumName: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pick)
+
+        mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
 
         initView()
 
@@ -83,6 +96,9 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
         initViewPager()
         initAnim()
         initAlbumRecyclerView()
+
+        mBtnImport = findViewById(R.id.btn_import)
+        mBtnImport.setOnClickListener(this)
     }
 
     private fun initTabs() {
@@ -230,6 +246,67 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
             mFlSelectAlbumContainer -> {
                 showSelectAlbumContainer(false)
             }
+
+            mBtnImport -> {
+                for (index in mSelectedData.indices) {
+                    val bean = mSelectedData[index]
+                    bean.sourceType = ThumbnailBean.DECODE
+                    val nameMd5 = MD5.getMD5Str(bean.path)
+                    if (nameMd5 != null) {
+                        bean.tempPath = File(PrivateHelper.PATH_DECODE_TEMP, nameMd5).path
+                    }
+                }
+                //加密
+                if (mAlbumName == null) {
+                    return
+                }
+                val albumPath = PrivateHelper.PATH_ALBUM + File.separator + mAlbumName
+                encodeData(albumPath, mSelectedData)
+
+            }
+
+        }
+    }
+
+    /***
+     * 加密
+     * @param albumPath
+     * @param beans
+     */
+    private var mEncodeList = mutableListOf<PrivateBean>()
+    private fun encodeData(albumPath: String, beans: MutableList<ThumbnailBean>?) {
+        mEncodeList.clear()
+        if (beans != null && beans.size > 0) {
+            val localThumbnailBeans = PrivateHelper.changeThumbnailList2LocalThumbnaiList(beans)
+            for (bean in localThumbnailBeans) {
+                if (SharePreferenceUtil.setObjectToShare(this, MD5.getMD5Str(bean.path), bean)) {
+                    mEncodeList.add(
+                        PrivateBean(
+                            File(bean.path).length(),
+                            bean.date,
+                            bean.path,
+                            albumPath
+                        )
+                    )
+                }
+            }
+            PrivateHelper.encodeList(mEncodeList, object : EncodeListListener {
+                override fun onStart() {
+                    mBtnImport.isClickable = false
+                    DLog.d("onStart encode")
+                }
+
+                override fun onSuccess(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
+                    DLog.d("onSuccess encode")
+                    mBtnImport.isClickable = true
+                    finish()
+                }
+
+                override fun onFailed(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
+                    DLog.d("onFailed encode")
+                    mBtnImport.isClickable = true
+                }
+            })
         }
     }
 
@@ -352,14 +429,12 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
                     for (i in 0 until mAllData.size) {
                         val thumbnailBean = mAllData[i]
                         if (selectedData.path == thumbnailBean.path) {
-//                            thumbnailBean.isChecked = true
                             mSelectedData.removeAt(j)
                             mSelectedData.add(j, thumbnailBean)
                             break
                         }
                     }
                 }
-//                updateSelectedPanelUI()
             }
         }
     }
@@ -389,6 +464,17 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
     }
 
     override fun onPickItemClick(thumbnailBean: ThumbnailBean) {
+
+        if (thumbnailBean.isChecked) {
+            //添加
+            mSelectedData.add(thumbnailBean)
+        } else {
+            //移除
+            if(mSelectedData.contains(thumbnailBean)){
+                mSelectedData.remove(thumbnailBean)
+            }
+        }
+
         updateFragmentUI(thumbnailBean)
     }
 
@@ -396,11 +482,14 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
     }
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context, albumName: String) {
             val intent = Intent(context, PickActivity::class.java)
+            intent.putExtra(EXTRA_ALBUM_NAME, albumName)
             context.startActivity(intent)
         }
 
         private const val ANIMATION_DURATION = 200L
+
+        private const val EXTRA_ALBUM_NAME = "EXTRA_ALBUM_NAME"
     }
 }
