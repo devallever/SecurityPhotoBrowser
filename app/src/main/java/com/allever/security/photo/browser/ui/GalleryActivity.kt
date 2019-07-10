@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.SeparatorBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
@@ -17,7 +18,7 @@ import com.allever.security.photo.browser.ui.adapter.ItemClickListener
 import java.util.ArrayList
 import java.util.HashMap
 
-class GalleryActivity: BaseActivity(), View.OnClickListener {
+class GalleryActivity: Base2Activity(), View.OnClickListener {
 
 
     private lateinit var mBtnPick: View

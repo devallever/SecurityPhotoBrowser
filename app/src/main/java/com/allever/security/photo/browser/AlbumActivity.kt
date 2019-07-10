@@ -1,5 +1,7 @@
 package com.allever.security.photo.browser
 
+import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.os.HandlerCompat.postDelayed
@@ -11,10 +13,12 @@ import android.view.View
 
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
+import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
+import com.allever.security.photo.browser.function.password.PasswordConfig
 import com.allever.security.photo.browser.ui.GalleryActivity
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.allever.security.photo.browser.util.DialogHelper
@@ -28,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
-class AlbumActivity : BaseActivity(), View.OnClickListener {
+class AlbumActivity : Base2Activity(), View.OnClickListener {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private lateinit var mIvSetting: RippleImageView
@@ -42,6 +46,9 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album)
+
+        //清除私密相册密码验证记录
+        PasswordConfig.secretCheckPass = false
 
         initView()
 
@@ -220,6 +227,13 @@ class AlbumActivity : BaseActivity(), View.OnClickListener {
         override fun onPostExecute(result: MutableList<ImageFolder>) {
             mImageFolderList = result
             mPrivateAlbumAdapter.setData(mImageFolderList)
+        }
+    }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, AlbumActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }

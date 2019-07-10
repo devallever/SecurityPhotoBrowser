@@ -18,7 +18,7 @@ object PasswordConfig {
      */
     const val KEY_SECRET_VAULT_PASSWORD_PASS = "cm_wsxzer"
     var secretCheckPass: Boolean
-        get() = SpUtils.obtain().get(KEY_SECRET_VAULT_PASSWORD_PASS, false)
+        get() = SpUtils.obtain()[KEY_SECRET_VAULT_PASSWORD_PASS, false]
         set(value) = SpUtils.obtain().save(KEY_SECRET_VAULT_PASSWORD_PASS, value)
 
     /**
@@ -26,7 +26,7 @@ object PasswordConfig {
      */
     const val KEY_SECRET_VAULT_NEED_REFRESH = "cm_zerdfsdg"
     var secretVaultNeedRefresh: Boolean
-        get() = SpUtils.obtain().get(KEY_SECRET_VAULT_NEED_REFRESH, false)
+        get() = SpUtils.obtain()[KEY_SECRET_VAULT_NEED_REFRESH, false]
         set(value) = SpUtils.obtain().save(KEY_SECRET_VAULT_NEED_REFRESH, value)
 
     /**
@@ -35,7 +35,7 @@ object PasswordConfig {
      */
     const val KEY_SECRET_VAULT_NEED_HIDE = "cm_vbgd"
     var secretVaultNeedHide: Boolean
-        get() = SpUtils.obtain().get(KEY_SECRET_VAULT_NEED_HIDE, false)
+        get() = SpUtils.obtain()[KEY_SECRET_VAULT_NEED_HIDE, false]
         set(value) = SpUtils.obtain().save(KEY_SECRET_VAULT_NEED_HIDE, value)
 
     /**
@@ -43,6 +43,6 @@ object PasswordConfig {
      */
     const val KEY_SECRET_VAULT_NEED_HIDE_RESUME = "cm_qwesdas"
     var secretVaultNeedHideResume: Boolean
-        get() = SpUtils.obtain().get(KEY_SECRET_VAULT_NEED_HIDE_RESUME, false)
+        get() = SpUtils.obtain()[KEY_SECRET_VAULT_NEED_HIDE_RESUME, false]
         set(value) = SpUtils.obtain().save(KEY_SECRET_VAULT_NEED_HIDE_RESUME, value)
 }

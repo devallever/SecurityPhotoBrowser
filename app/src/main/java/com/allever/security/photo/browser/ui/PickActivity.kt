@@ -19,6 +19,7 @@ import android.widget.TextView
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
@@ -35,7 +36,7 @@ import com.android.absbase.utils.ToastUtils
 import java.io.File
 import java.util.*
 
-class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragment.PickCallback, View.OnClickListener {
+class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragment.PickCallback, View.OnClickListener {
 
     private lateinit var mTabs: TabLayout
     private lateinit var mViewPager: ViewPager

@@ -17,13 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/FullScreenStyle"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AlbumActivity">
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".AlbumActivity"/>
         <activity android:name=".ui.PickActivity"/>
         <activity android:name=".ui.GalleryActivity"/>
         <activity android:name=".ui.PreviewActivity"/>
