@@ -1,18 +1,22 @@
 package com.allever.security.photo.browser
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v4.os.HandlerCompat.postDelayed
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 
-import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
+import com.allever.lib.permission.PermissionListener
+import com.allever.lib.permission.PermissionManager
+
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
@@ -23,12 +27,13 @@ import com.allever.security.photo.browser.ui.GalleryActivity
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+
 import com.android.absbase.App
 import com.android.absbase.ui.widget.RippleImageView
 import com.android.absbase.utils.ToastUtils
+
 import java.io.File
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
@@ -54,8 +59,23 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
 
         initData()
 
-        //todo 获取数据
-        getPrivateAlbumData()
+        PermissionManager.request(object : PermissionListener {
+            override fun onGranted(grantedList: MutableList<String>) {
+                getPrivateAlbumData()
+            }
+
+            override fun onDenied(deniedList: MutableList<String>) {
+
+            }
+
+            override fun alwaysDenied(deniedList: MutableList<String>) {
+                PermissionManager.jumpPermissionSetting(this@AlbumActivity, 0,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        dialog?.dismiss()
+                    })
+            }
+
+        }, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     override fun onDestroy() {
@@ -100,50 +120,86 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                 ToastUtils.show("setting")
             }
             mBtnAddAlbum -> {
-                val builder = DialogHelper.Builder()
-                    .setTitleContent(App.getContext().getString(R.string.add_album))
-                    .isShowMessage(false)
-                    .isShowEditText(true)
-                    .setOkContent(App.getContext().getString(R.string.save))
-                    .setCancelContent(App.getContext().getString(R.string.cancel))
+                PermissionManager.request(object : PermissionListener {
+                    override fun onGranted(grantedList: MutableList<String>) {
+                        handleAddAlbum()
+                    }
 
-                mAddAlbumDialog = DialogHelper.createEditTextDialog(
-                    this,
-                    builder,
-                    object : DialogHelper.EditDialogCallback {
-                        override fun onOkClick(dialog: AlertDialog, etContent: String) {
-                            if (TextUtils.isEmpty(etContent)) {
-                                ToastUtils.show(App.getContext().getString(R.string.tips_please_input_album_name))
-                                return
-                            }
+                    override fun alwaysDenied(deniedList: MutableList<String>) {
+                        PermissionManager.jumpPermissionSetting(this@AlbumActivity, 1,
+                            DialogInterface.OnClickListener { dialog, which ->
+                                dialog?.dismiss()
+                            })
+                    }
+                }, Manifest.permission.READ_EXTERNAL_STORAGE)
 
-                            val imageFolder = ImageFolder()
-                            imageFolder.name = (etContent)
-                            imageFolder.dir = (PrivateHelper.PATH_ALBUM + File.separator + etContent)
-                            imageFolder.data = ArrayList()
-                            imageFolder.count = (0)
+            }
+        }
+    }
 
-                            //创建相册
-                            createAlbum(etContent)
+    private fun handleAddAlbum() {
+        val builder = DialogHelper.Builder()
+            .setTitleContent(App.getContext().getString(R.string.add_album))
+            .isShowMessage(false)
+            .isShowEditText(true)
+            .setOkContent(App.getContext().getString(R.string.save))
+            .setCancelContent(App.getContext().getString(R.string.cancel))
 
-                            //刷新数据
-                            mPrivateAlbumAdapter.addData(mImageFolderList.size, imageFolder)
-                            val albumPath = PrivateHelper.PATH_ALBUM + File.separator + etContent
-                            mAlbumImageFolderMap[albumPath] = imageFolder
+        mAddAlbumDialog = DialogHelper.createEditTextDialog(
+            this,
+            builder,
+            object : DialogHelper.EditDialogCallback {
+                override fun onOkClick(dialog: AlertDialog, etContent: String) {
+                    if (TextUtils.isEmpty(etContent)) {
+                        ToastUtils.show(App.getContext().getString(R.string.tips_please_input_album_name))
+                        return
+                    }
 
-                            //滚动到底部
-                            mHandler.postDelayed({
-                                mRecyclerView.smoothScrollToPosition(mImageFolderList.size)
-                            }, 200)
-                            mAddAlbumDialog?.dismiss()
+                    val imageFolder = ImageFolder()
+                    imageFolder.name = (etContent)
+                    imageFolder.dir = (PrivateHelper.PATH_ALBUM + File.separator + etContent)
+                    imageFolder.data = ArrayList()
+                    imageFolder.count = (0)
 
-                        }
+                    //创建相册
+                    handleAddAlbum(etContent)
 
-                        override fun onCancelClick(dialog: AlertDialog) {
+                    //刷新数据
+                    mPrivateAlbumAdapter.addData(mImageFolderList.size, imageFolder)
+                    val albumPath = PrivateHelper.PATH_ALBUM + File.separator + etContent
+                    mAlbumImageFolderMap[albumPath] = imageFolder
 
-                        }
-                    })
-                mAddAlbumDialog?.show()
+                    //滚动到底部
+                    mHandler.postDelayed({
+                        mRecyclerView.smoothScrollToPosition(mImageFolderList.size)
+                    }, 200)
+                    mAddAlbumDialog?.dismiss()
+
+                }
+
+                override fun onCancelClick(dialog: AlertDialog) {
+
+                }
+            })
+        mAddAlbumDialog?.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                0 -> {
+                    //获取加密相册内容
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        getPrivateAlbumData()
+                    }
+                }
+                1 -> {
+                    //创建相册
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        handleAddAlbum()
+                    }
+                }
             }
         }
     }
@@ -152,7 +208,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
      * 创建相册
      * @param album 相册名
      */
-    private fun createAlbum(album: String) {
+    private fun handleAddAlbum(album: String) {
         val albumFile = File(PrivateHelper.PATH_ALBUM + File.separator + album)
         if (!albumFile.exists()) {
             albumFile.mkdirs()

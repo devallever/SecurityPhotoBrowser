@@ -1,2 +1,3 @@
-include ':app', ':common'
+include ':app', ':permission', 'common'
+project(':permission').projectDir = new File(settingsDir, '../AndroidDependencyLib/permission')
 project(':common').projectDir = new File(settingsDir, '../AndroidDependencyLib/common')

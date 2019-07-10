@@ -1,5 +1,6 @@
 package com.allever.security.photo.browser.ui
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -18,6 +19,8 @@ import android.widget.TextView
 
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
+import com.allever.lib.permission.PermissionListener
+import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.app.GlobalData
@@ -198,12 +201,21 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
     }
 
     private fun initData() {
-//        for (i in 0..30) {
-//            val imageFolder = ImageFolder()
-//            mAlbumData.add(imageFolder)
-//        }
 
-        getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
+        PermissionManager.request(object : PermissionListener {
+            override fun onGranted(grantedList: MutableList<String>) {
+                getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
+            }
+
+            override fun onDenied(deniedList: MutableList<String>) {
+
+            }
+
+            override fun alwaysDenied(deniedList: MutableList<String>) {
+
+            }
+
+        }, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 
     }
