@@ -9,6 +9,8 @@
     <color name="default_theme_color">@color/colorPrimary</color>
     <color name="default_background">#202122</color>
     <color name="default_top_bar_color">@color/black</color>
+    <color name="default_icon_color_filter">#ffffff</color>
+    <color name="default_btn_color_filter">#00000000</color>
 
     <!-- common -->
     <color name="white">#ffffff</color>
@@ -19,6 +21,9 @@
     <color name="album_tab_selected_color">@color/default_theme_color</color>
     <color name="album_tab_un_selected_color">#4dffffff</color>
     <color name="album_tab_indicator_color">@color/default_theme_color</color>
+
+    <color name="keyboard_text_color">@color/white</color>
+    <color name="password_view_key_board_bg">#B2161616</color>
 
 
 </resources>

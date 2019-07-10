@@ -46,4 +46,26 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <style name="keyboard_line_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/keyboard_height</item>
+    </style>
+
+    <!--
+    android:id="@+id/keyboard_key_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/keyboard_text_color"
+            android:textSize="@dimen/keyboard_text_size"
+    -->
+    <style name="keyboard_grid_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/keyboard_text_color</item>
+        <item name="android:textSize">@dimen/keyboard_text_size</item>
+    </style>
 </resources>

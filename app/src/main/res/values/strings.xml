@@ -41,4 +41,11 @@
     <string name="tips_please_input_album_name">Please input album name.</string>
 
 
+    <string name="album_select_secret_vault_new_password_tip">Enter your new passcode</string>
+    <string name="album_select_secret_vault_comfirm_password_tip">Comfirm your new passcode</string>
+    <string name="album_select_secret_vault_password_tip">Enter your passcode</string>
+    <string name="enter_old_pwd">Enter your old passcode</string>
+    <string name="enter_new_pwd">@string/album_select_secret_vault_new_password_tip</string>
+    <string name="enter_comfirm_pwd">@string/album_select_secret_vault_comfirm_password_tip</string>
+
 </resources>
