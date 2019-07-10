@@ -175,7 +175,8 @@ class PrivateViewProxy(val activity: Activity) {
                 passwordView = passwordHelper.getPasswordView()
                 passwordView?.tag =
                         WINDOW_PASSWORD_VIEW
-                val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                val lp =
+                    FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 lp.bottomMargin = martinBottom
                 centent?.addView(passwordView, lp)
                 passwordView?.bringToFront()

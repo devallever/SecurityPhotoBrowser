@@ -43,7 +43,7 @@ class PickFragment : BaseFragment() {
 
         mPickImageAdapter = PickImageAdapter(App.context, R.layout.item_pick, mData)
         mRecyclerView.adapter = mPickImageAdapter
-        mPickImageAdapter?.optionListener = object : PickImageAdapter.OptionListener{
+        mPickImageAdapter?.optionListener = object : PickImageAdapter.OptionListener {
             override fun onItemClick(position: Int, item: ThumbnailBean) {
                 ToastUtils.show("onItem click ${item.path}")
                 callback?.onPickItemClick(item)

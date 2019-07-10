@@ -28,10 +28,10 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
         var imageCount = 0
         //获取图片数和视频数
         item.data?.forEach { bean ->
-            if (MediaTypeUtil.isVideo(bean.type)){
-                videoCount ++
-            }else{
-                imageCount ++
+            if (MediaTypeUtil.isVideo(bean.type)) {
+                videoCount++
+            } else {
+                imageCount++
             }
         }
 

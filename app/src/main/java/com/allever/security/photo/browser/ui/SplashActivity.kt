@@ -5,7 +5,7 @@ import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.AlbumActivity
 import com.allever.security.photo.browser.R
 
-class SplashActivity: BaseActivity() {
+class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)

@@ -5,7 +5,7 @@ import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.util.MediaTypeUtil
 
 
-object GlobalData{
+object GlobalData {
     //相册列表数据
     var albumData = mutableListOf<ImageFolder>()
 
@@ -48,7 +48,7 @@ object GlobalData{
         }
     }
 
-    private fun cloneThumbnail(thumbnail: ThumbnailBean): ThumbnailBean{
+    private fun cloneThumbnail(thumbnail: ThumbnailBean): ThumbnailBean {
         val cloneThumbnail = ThumbnailBean()
 //        cloneThumbnail.isChecked = false
         cloneThumbnail.path = thumbnail.path

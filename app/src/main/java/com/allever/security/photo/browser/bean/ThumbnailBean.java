@@ -149,17 +149,17 @@ public class ThumbnailBean implements Parcelable {
         this.duration = duration;
     }
 
-	@Override
-	public String toString() {
-		return "ThumbnailBean{" +
-				"originPath='" + originPath + '\'' +
-				", timeMillis=" + timeMillis +
-				", uri=" + uri +
-				", mediaType=" + mediaType +
-				", duration=" + duration +
-				", mSelectCount=" + mSelectCount +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "ThumbnailBean{" +
+                "originPath='" + originPath + '\'' +
+                ", timeMillis=" + timeMillis +
+                ", uri=" + uri +
+                ", mediaType=" + mediaType +
+                ", duration=" + duration +
+                ", mSelectCount=" + mSelectCount +
+                '}';
+    }
 
     public int getSourceType() {
         return sourceType;

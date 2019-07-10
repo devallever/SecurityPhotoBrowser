@@ -26,9 +26,9 @@ object SystemUtils {
     fun enableStrictMode() {
         if (hasGingerbread()) {
             val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
-                    .detectAll().penaltyLog()
+                .detectAll().penaltyLog()
             val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-                    .detectAll().penaltyLog()
+                .detectAll().penaltyLog()
 
             if (hasHoneycomb()) {
                 threadPolicyBuilder.penaltyFlashScreen()
@@ -81,8 +81,10 @@ object SystemUtils {
 
         var autoBrightness = false
         try {
-            autoBrightness = Settings.System.getInt(contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
+            autoBrightness = Settings.System.getInt(
+                contentResolver,
+                Settings.System.SCREEN_BRIGHTNESS_MODE
+            ) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
         } catch (e: Settings.SettingNotFoundException) {
 
         }
@@ -100,8 +102,10 @@ object SystemUtils {
     fun getBrightness(context: Context): Int {
         var brightness = 200
         try {
-            brightness = Settings.System.getInt(context.contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS)
+            brightness = Settings.System.getInt(
+                context.contentResolver,
+                Settings.System.SCREEN_BRIGHTNESS
+            )
         } catch (e: Settings.SettingNotFoundException) {
         }
 
@@ -135,9 +139,11 @@ object SystemUtils {
      */
     fun saveBrightness(resolver: ContentResolver, brightness: Int) {
         val uri = Settings.System
-                .getUriFor("screen_brightness")
-        Settings.System.putInt(resolver, "screen_brightness",
-                brightness)
+            .getUriFor("screen_brightness")
+        Settings.System.putInt(
+            resolver, "screen_brightness",
+            brightness
+        )
         resolver.notifyChange(uri, null)
     }
 

@@ -50,7 +50,7 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
     }
 
     override fun onClick(v: View?) {
-        when(v) {
+        when (v) {
             mIvExport -> {
                 DLog.d("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
                 restoreResource(mThumbnailBeanList[mPosition])
@@ -79,7 +79,7 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
         val privateBean = PrivateBean()
         val name = MD5.getMD5Str(bean.path)
         val file = File(PrivateHelper.PATH_ENCODE_ORIGINAL, name)
-        if (privateBean.resolveHead(file.absolutePath)){
+        if (privateBean.resolveHead(file.absolutePath)) {
             PrivateHelper.unLockAndRestore(privateBean, object : UnLockAndRestoreListener {
                 override fun onStart() {
 //                    showVideoSavingAnim()
@@ -99,7 +99,6 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
         }
 
     }
-
 
 
     companion object {

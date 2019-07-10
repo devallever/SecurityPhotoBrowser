@@ -11,7 +11,7 @@ class SelectAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<I
     BaseRecyclerViewAdapter<ImageFolder>(context, layoutResId, data) {
     override fun bindHolder(holder: BaseViewHolder, position: Int, item: ImageFolder) {
         Glide.with(mContext).load(item.firstThumbnailBean?.path).into(holder.getView(R.id.iv_image)!!)
-        holder.setText(R.id.tv_album_name, item.name?:"")
+        holder.setText(R.id.tv_album_name, item.name ?: "")
         holder.setText(R.id.tv_video_count, item.videoCount.toString())
         holder.setText(R.id.tv_photo_count, item.photoCount.toString())
     }

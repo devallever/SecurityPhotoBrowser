@@ -27,9 +27,11 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
         public const val TYPE_CHECK = 1
     }
 
-    @IntDef(value = [
-        STATUS_NEW_PWD, STATUS_CONFORM_PWD, STATUS_CHECK_PWD
-    ])
+    @IntDef(
+        value = [
+            STATUS_NEW_PWD, STATUS_CONFORM_PWD, STATUS_CHECK_PWD
+        ]
+    )
     @Retention(AnnotationRetention.SOURCE)
     annotation class Status
 
@@ -88,13 +90,14 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
     }
 
 
-    private fun showLogo(isShow: Boolean){
+    private fun showLogo(isShow: Boolean) {
         if (isShow) {
             mIvLogo?.visibility = View.VISIBLE
         } else {
             mIvLogo?.visibility = View.GONE
         }
     }
+
     private fun showBackground(isShow: Boolean) {
         if (isShow) {
             mIvBg?.visibility = View.VISIBLE
@@ -159,10 +162,12 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
     private val duration = 500L
     private val delayTime = 200L
     private fun initPasswordAnimal() {
-        mObjectAnimator = ObjectAnimator.ofFloat(mLlBubbleContainer, "translationX",
-                start, end, start, -end, start,
-                start - 5, end, start - 5, -end, start - 5,
-                start - 10, end, start - 10, -end, start - 10, start)
+        mObjectAnimator = ObjectAnimator.ofFloat(
+            mLlBubbleContainer, "translationX",
+            start, end, start, -end, start,
+            start - 5, end, start - 5, -end, start - 5,
+            start - 10, end, start - 10, -end, start - 10, start
+        )
         mObjectAnimator?.duration = duration
 
         mObjectAnimator?.addListener(object : Animator.AnimatorListener {

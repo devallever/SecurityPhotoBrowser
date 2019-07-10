@@ -1207,7 +1207,7 @@ public class ImageHelper {
         return doThumbnailBeanAlgorithm(result1, result2);
     }
 
-    public static ArrayList<ThumbnailBean> getImageThumbnailFromPath(Context context, String path){
+    public static ArrayList<ThumbnailBean> getImageThumbnailFromPath(Context context, String path) {
         ContentResolver cr = context.getContentResolver();
         ArrayList<ThumbnailBean> result = new ArrayList<>();
         Cursor cursor = null;
@@ -1254,9 +1254,9 @@ public class ImageHelper {
                 } while (cursor.moveToNext());
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -1264,7 +1264,7 @@ public class ImageHelper {
         return result;
     }
 
-    private static ArrayList<ThumbnailBean> getVideoThumbnailFromPath(Context context, String path, long maxDuration){
+    private static ArrayList<ThumbnailBean> getVideoThumbnailFromPath(Context context, String path, long maxDuration) {
         ContentResolver cr = context.getContentResolver();
         ArrayList<ThumbnailBean> result = new ArrayList<>();
         Cursor cursor = null;
@@ -1311,7 +1311,7 @@ public class ImageHelper {
                     }
                 } while (cursor.moveToNext());
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (cursor != null) {
@@ -1714,7 +1714,6 @@ public class ImageHelper {
 //            Toast.makeText(context, R.string.no_suitable_player, Toast.LENGTH_SHORT).show();
 //        }
 //    }
-
     public static ArrayList<ImageFolder> getAllFolderData(Context context) {
         return getAllFolderData(context, -1);
     }
@@ -1731,15 +1730,15 @@ public class ImageHelper {
         ArrayList<ImageFolder> data2 = getAllVideoFolderData(context);
         HashMap<String, Integer> data1Path = new HashMap<>();
 
-        if (data1 != null){
-            for (int i = 0; i< data1.size(); i++) {
+        if (data1 != null) {
+            for (int i = 0; i < data1.size(); i++) {
                 ThumbnailBean bean = data1.get(i).getFirstThumbnailBean();
                 String dir = bean.getPath().substring(0, bean.getPath().lastIndexOf(File.separator));
                 data1Path.put(dir, i);
             }
         }
 
-        return  doUniformData(data1, data2, data1Path);
+        return doUniformData(data1, data2, data1Path);
     }
 
     public static ArrayList<ImageFolder> getAllImageFolderData(Context context) {
@@ -2436,7 +2435,7 @@ public class ImageHelper {
     public static ArrayList<ThumbnailBean> getVideoThumbnailBeanFromBucketId(Context context, String bucketId) {
         ArrayList<ThumbnailBean> result2 = new ArrayList<ThumbnailBean>();
 
-        if (TextUtils.isEmpty(bucketId)){
+        if (TextUtils.isEmpty(bucketId)) {
             return result2;
         }
 

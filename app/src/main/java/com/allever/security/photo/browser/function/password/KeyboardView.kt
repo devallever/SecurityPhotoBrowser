@@ -43,7 +43,12 @@ class KeyboardView : LinearLayout, View.OnClickListener {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(
+        context,
+        attrs,
+        defStyleAttr,
+        defStyleRes
+    ) {
     }
 
 
@@ -76,9 +81,9 @@ class KeyboardView : LinearLayout, View.OnClickListener {
         keyDel?.setOnClickListener(this)
 
         val childCount = this.childCount
-        for (i in 0 until childCount){
+        for (i in 0 until childCount) {
             val childView = this.getChildAt(i)
-            if (childView is TextView){
+            if (childView is TextView) {
                 childView.textSize = defaultTextSize
             }
         }

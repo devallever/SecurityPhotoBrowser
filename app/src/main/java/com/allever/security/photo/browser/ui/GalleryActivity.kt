@@ -18,7 +18,7 @@ import com.allever.security.photo.browser.ui.adapter.ItemClickListener
 import java.util.ArrayList
 import java.util.HashMap
 
-class GalleryActivity: Base2Activity(), View.OnClickListener {
+class GalleryActivity : Base2Activity(), View.OnClickListener {
 
 
     private lateinit var mBtnPick: View
@@ -62,9 +62,9 @@ class GalleryActivity: Base2Activity(), View.OnClickListener {
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val itemType = mGalleryAdapter.getItemViewType(position)
-                return if (itemType == GALLERY_ITEM_TYPE_SEPARATOR){
+                return if (itemType == GALLERY_ITEM_TYPE_SEPARATOR) {
                     3
-                }else{
+                } else {
                     1
                 }
             }
@@ -72,7 +72,7 @@ class GalleryActivity: Base2Activity(), View.OnClickListener {
         mRecyclerView.layoutManager = gridLayoutManager
         mGalleryAdapter = GalleryAdapter(this, mGalleryData, object : MultiItemTypeSupport<Any> {
             override fun getLayoutId(itemType: Int): Int {
-                return when(itemType) {
+                return when (itemType) {
                     GALLERY_ITEM_TYPE_IMAGE -> {
                         R.layout.item_gallery
                     }
@@ -87,11 +87,11 @@ class GalleryActivity: Base2Activity(), View.OnClickListener {
 
             override fun getItemViewType(position: Int, t: Any): Int {
                 val obj = mGalleryData[position]
-                return when(obj) {
+                return when (obj) {
                     is ThumbnailBean -> {
                         GALLERY_ITEM_TYPE_IMAGE
                     }
-                    is  SeparatorBean-> {
+                    is SeparatorBean -> {
                         GALLERY_ITEM_TYPE_SEPARATOR
 
                     }
@@ -121,7 +121,7 @@ class GalleryActivity: Base2Activity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v) {
+        when (v) {
             mBtnPick -> {
                 PickActivity.start(this, mAlbumName!!)
             }

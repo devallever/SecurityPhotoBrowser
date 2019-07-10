@@ -32,7 +32,7 @@ class VideoViewHolder
 
     private var mAlphaAnimator: ObjectAnimator? = null
 
-    private var mAnimListener = object : Animator.AnimatorListener{
+    private var mAnimListener = object : Animator.AnimatorListener {
         override fun onAnimationRepeat(animation: Animator?) {
 //            DLog.d(TAG, "onAnimationRepeat")
         }
@@ -184,10 +184,16 @@ class VideoViewHolder
         val cr = App.getContext().contentResolver
         var cursor: Cursor? = null
         try {
-            cursor = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    arrayOf(MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DURATION),
-                    MediaStore.Video.VideoColumns.DATA + " = ? ", arrayOf(mPath),
-                    MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC" + ", " + MediaStore.Video.VideoColumns._ID + " ASC")
+            cursor = cr.query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(
+                    MediaStore.Video.VideoColumns._ID,
+                    MediaStore.Video.VideoColumns.DATA,
+                    MediaStore.Video.VideoColumns.DURATION
+                ),
+                MediaStore.Video.VideoColumns.DATA + " = ? ", arrayOf(mPath),
+                MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC" + ", " + MediaStore.Video.VideoColumns._ID + " ASC"
+            )
 
             if (cursor == null) {
                 return false

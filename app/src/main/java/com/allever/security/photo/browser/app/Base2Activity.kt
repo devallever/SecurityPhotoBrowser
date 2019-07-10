@@ -5,7 +5,7 @@ import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.function.password.PrivateViewManager
 import com.allever.security.photo.browser.function.password.PrivateViewProxy
 
-open class Base2Activity: BaseActivity() {
+open class Base2Activity : BaseActivity() {
 
     protected lateinit var mPrivateViewProxy: PrivateViewProxy
 

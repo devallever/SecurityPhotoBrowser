@@ -80,7 +80,11 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
         mRecyclerView.adapter = mPrivateAlbumAdapter
         mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
-                GalleryActivity.start(this@AlbumActivity, mImageFolderList[position].name!!, ArrayList(mImageFolderList[position].data))
+                GalleryActivity.start(
+                    this@AlbumActivity,
+                    mImageFolderList[position].name!!,
+                    ArrayList(mImageFolderList[position].data)
+                )
             }
         }
     }
@@ -207,8 +211,8 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                         imageFolder.name = albumDir.name
 
                         val sortThumbnailBeans = ArrayList(thumbnailBeans)
-                        sortThumbnailBeans.sortWith(Comparator {
-                                arg0, arg1 -> java.lang.Long.compare(arg1.date, arg0.date)
+                        sortThumbnailBeans.sortWith(Comparator { arg0, arg1 ->
+                            java.lang.Long.compare(arg1.date, arg0.date)
                         })
 
                         thumbnailBeans = sortThumbnailBeans

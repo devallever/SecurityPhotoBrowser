@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.ViewGroup
 import com.allever.security.photo.browser.bean.ThumbnailBean
 
-class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: MutableList<ThumbnailBean>) : FragmentStatePagerAdapter(fragmentManager) {
+class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: MutableList<ThumbnailBean>) :
+    FragmentStatePagerAdapter(fragmentManager) {
 
     var data: MutableList<ThumbnailBean>? = data
     var currentFragment: Fragment? = null

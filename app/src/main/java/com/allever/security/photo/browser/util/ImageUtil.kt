@@ -50,7 +50,7 @@ object ImageUtil {
 
 
     fun loadEncodeImage(context: Context, thumbnailBean: ThumbnailBean?, imageView: ImageView) {
-        thumbnailBean?: return
+        thumbnailBean ?: return
         val tempFile = File(thumbnailBean.tempPath)
         if (tempFile.exists()) {
             Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
@@ -66,6 +66,7 @@ object ImageUtil {
                     override fun onDecodeSuccess(privateBean: PrivateBean) {
                         Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
                     }
+
                     override fun onDecodeFailed(msg: String) {}
                 })
         }

@@ -13,9 +13,13 @@ import com.android.absbase.App
 import com.android.absbase.ui.widget.RippleButton
 import java.lang.Exception
 
-object DialogHelper{
+object DialogHelper {
 
-    fun createEditTextDialog(activity: Activity, builder: DialogHelper.Builder?, callback: DialogHelper.EditDialogCallback?): AlertDialog {
+    fun createEditTextDialog(
+        activity: Activity,
+        builder: DialogHelper.Builder?,
+        callback: DialogHelper.EditDialogCallback?
+    ): AlertDialog {
         var builder = builder
         val editAlertDialog = AlertDialog.Builder(activity).create()
         val view = LayoutInflater.from(activity).inflate(R.layout.layout_alert_dialog, null)
@@ -37,18 +41,18 @@ object DialogHelper{
         cancelView.text = builder.cancelText
         okView.text = builder.okText
 
-        if (builder.showEditText == true){
+        if (builder.showEditText == true) {
             editText.visibility = View.VISIBLE
             val content = builder.etContent
             editText.setText(content)
-            editText.setSelection(content?.length?: 0)
-        }else{
+            editText.setSelection(content?.length ?: 0)
+        } else {
             editText.visibility = View.GONE
         }
 
-        if (builder.showMessage == true){
+        if (builder.showMessage == true) {
             detailView.visibility = View.VISIBLE
-        }else{
+        } else {
             detailView.visibility = View.GONE
         }
 
@@ -63,7 +67,7 @@ object DialogHelper{
         editAlertDialog.setCancelable(true)
         editAlertDialog.setCanceledOnTouchOutside(false)
         editAlertDialog.setOnShowListener {
-            if (builder.showEditText == true){
+            if (builder.showEditText == true) {
                 try {
                     val imm = App.getContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                     imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
@@ -77,14 +81,14 @@ object DialogHelper{
         return editAlertDialog
     }
 
-    interface EditDialogCallback{
-        fun onOkClick(dialog: AlertDialog, etContent: String){}
-        fun onCancelClick(dialog: AlertDialog){}
+    interface EditDialogCallback {
+        fun onOkClick(dialog: AlertDialog, etContent: String) {}
+        fun onCancelClick(dialog: AlertDialog) {}
     }
 
 
-    class Builder{
-        var title: String?= App.getContext().getString(R.string.dialog_default_title)
+    class Builder {
+        var title: String? = App.getContext().getString(R.string.dialog_default_title)
         var message: String? = App.getContext().getString(R.string.dialog_default_message)
         var okText: String? = App.getContext().getString(R.string.dialog_default_positive_text)
         var cancelText: String? = App.getContext().getString(R.string.dialog_default_negative_text)
@@ -92,37 +96,37 @@ object DialogHelper{
         var showMessage: Boolean? = true
         var etContent: String? = ""
 
-        fun setTitleContent(title: String): Builder{
+        fun setTitleContent(title: String): Builder {
             this.title = title
             return this
         }
 
-        fun setMessageContent(message: String): Builder{
+        fun setMessageContent(message: String): Builder {
             this.message = message
             return this
         }
 
-        fun setOkContent(okText: String): Builder{
+        fun setOkContent(okText: String): Builder {
             this.okText = okText
             return this
         }
 
-        fun setCancelContent(cancelText: String): Builder{
+        fun setCancelContent(cancelText: String): Builder {
             this.cancelText = cancelText
             return this
         }
 
-        fun isShowEditText(show: Boolean): Builder{
+        fun isShowEditText(show: Boolean): Builder {
             showEditText = show
             return this
         }
 
-        fun isShowMessage(show: Boolean): Builder{
+        fun isShowMessage(show: Boolean): Builder {
             showMessage = show
             return this
         }
 
-        fun setEditTextContent(etContent: String): Builder{
+        fun setEditTextContent(etContent: String): Builder {
             this.etContent = etContent
             return this
         }

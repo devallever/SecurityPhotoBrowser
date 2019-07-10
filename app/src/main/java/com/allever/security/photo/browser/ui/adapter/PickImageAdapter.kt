@@ -16,6 +16,7 @@ class PickImageAdapter(context: Context, val layoutResId: Int, data: MutableList
     var optionListener: OptionListener? = null
 
     private var mItemWidth = 0
+
     init {
         val screenWidth = DeviceUtils.SCREEN_WIDTH_PX.toFloat()
         val margin = DeviceUtils.dip2px(4f)
@@ -23,8 +24,10 @@ class PickImageAdapter(context: Context, val layoutResId: Int, data: MutableList
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val itemView = LayoutInflater.from(mContext).inflate(layoutResId, parent,
-            false)
+        val itemView = LayoutInflater.from(mContext).inflate(
+            layoutResId, parent,
+            false
+        )
         val holder = BaseViewHolder(mContext, itemView)
         val lp = itemView.layoutParams
 //        lp.width = mItemWidth.toInt()

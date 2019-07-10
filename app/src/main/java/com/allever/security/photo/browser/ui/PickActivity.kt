@@ -275,6 +275,7 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
      * @param beans
      */
     private var mEncodeList = mutableListOf<PrivateBean>()
+
     private fun encodeData(albumPath: String, beans: MutableList<ThumbnailBean>?) {
         mEncodeList.clear()
         if (beans != null && beans.size > 0) {
@@ -471,7 +472,7 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
             mSelectedData.add(thumbnailBean)
         } else {
             //移除
-            if(mSelectedData.contains(thumbnailBean)){
+            if (mSelectedData.contains(thumbnailBean)) {
                 mSelectedData.remove(thumbnailBean)
             }
         }
