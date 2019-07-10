@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.VideoView
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.util.ImageUtil
 import com.allever.security.photo.browser.util.MediaTypeUtil
 
 class PreviewFragment : Fragment() {
@@ -22,9 +23,13 @@ class PreviewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_preview, container, false)
+        val imageView = rootView?.findViewById<ImageView>(R.id.id_iv_image)
+        val videoView = rootView?.findViewById<VideoView>(R.id.id_video_view)
+        if (MediaTypeUtil.isImage(mThumbnailBean?.type!!)) {
+            ImageUtil.loadEncodeImage(context!!, mThumbnailBean, imageView!!)
+        }
 //
-//        val imageView = rootView?.findViewById<ImageView>(R.id.id_iv_image)
-//        val videoView = rootView?.findViewById<VideoView>(R.id.id_video_view)
+
 //        val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.id_iv_video_controller)
 //
 //        if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
@@ -53,7 +58,7 @@ class PreviewFragment : Fragment() {
         mVideoViewHolder = null
     }
 
-    fun pause(){
+    fun pause() {
         mVideoViewHolder?.pause()
     }
 

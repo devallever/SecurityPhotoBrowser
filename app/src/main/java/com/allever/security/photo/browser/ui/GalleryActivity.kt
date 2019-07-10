@@ -25,6 +25,7 @@ class GalleryActivity: BaseActivity(), View.OnClickListener {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mGalleryAdapter: GalleryAdapter
     private val mGalleryData = mutableListOf<Any>()
+    private val mThumbnailBeanList = mutableListOf<ThumbnailBean>()
 
     private var mAlbumName: String? = null
 
@@ -36,6 +37,11 @@ class GalleryActivity: BaseActivity(), View.OnClickListener {
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
 
         mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
+        mGalleryData.map {
+            if (it is ThumbnailBean) {
+                mThumbnailBeanList.add(it)
+            }
+        }
 
 //        initTestData()
 
@@ -97,7 +103,8 @@ class GalleryActivity: BaseActivity(), View.OnClickListener {
 
         mGalleryAdapter.itemClickListener = object : ItemClickListener {
             override fun onItemClick(position: Int) {
-                PreviewActivity.start(this@GalleryActivity)
+                val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
+                PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
             }
 
             override fun onItemLongClick(position: Int) {

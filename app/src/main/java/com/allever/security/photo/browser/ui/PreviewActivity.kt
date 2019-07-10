@@ -16,16 +16,23 @@ class PreviewActivity : BaseActivity() {
     private var mIvSelect: ImageView? = null
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
+    private var mPosition = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_priview)
 
-        initTestData()
+        mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
+        mPosition = intent.getIntExtra(EXTRA_POSITION, 0)
+
+//        initTestData()
 
         mViewPager = findViewById(R.id.preview_view_pager)
         mPagerAdapter = PreviewFragmentPagerAdapter(supportFragmentManager, mThumbnailBeanList)
         mViewPager?.adapter = mPagerAdapter
+
+        mViewPager?.currentItem = mPosition
 
     }
 
@@ -37,9 +44,14 @@ class PreviewActivity : BaseActivity() {
     }
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context, thumbnailBean: ArrayList<ThumbnailBean>, position: Int) {
             val intent = Intent(context, PreviewActivity::class.java)
+            intent.putParcelableArrayListExtra(EXTRA_DATA, thumbnailBean)
+            intent.putExtra(EXTRA_POSITION, position)
             context.startActivity(intent)
         }
+
+        private const val EXTRA_DATA = "EXTRA_DATA"
+        private const val EXTRA_POSITION = "EXTRA_POSITION"
     }
 }
