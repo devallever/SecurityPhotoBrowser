@@ -34,6 +34,8 @@ public class ThumbnailBean implements Parcelable {
      */
     private int sourceType = SYSTEM;
 
+    private boolean isChecked = false;
+
     public ThumbnailBean() {
 
     }
@@ -55,6 +57,7 @@ public class ThumbnailBean implements Parcelable {
         this.timeMillis = date;
         this.uri = uri;
         this.mediaType = type;
+        this.isChecked = isChecked;
     }
 
     public ThumbnailBean(Parcel source) {
@@ -65,6 +68,7 @@ public class ThumbnailBean implements Parcelable {
         mediaType = source.readInt();
         sourceType = source.readInt();
         autoPlay = source.readInt() == 1;
+        isChecked = source.readInt() == 1;
     }
 
     @Override
@@ -81,6 +85,7 @@ public class ThumbnailBean implements Parcelable {
         dest.writeInt(mediaType);
         dest.writeInt(sourceType);
         dest.writeInt(autoPlay ? 1 : 0);
+        dest.writeInt(isChecked ? 1 : 0);
     }
 
     public static final Creator<ThumbnailBean> CREATOR = new Creator<ThumbnailBean>() {
@@ -170,5 +175,13 @@ public class ThumbnailBean implements Parcelable {
 
     public void setAutoPlay(boolean autoPlay) {
         this.autoPlay = autoPlay;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }

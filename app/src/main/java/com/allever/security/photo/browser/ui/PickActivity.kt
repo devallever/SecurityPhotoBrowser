@@ -388,6 +388,12 @@ class PickActivity : BaseActivity(), TabLayout.OnTabSelectedListener, PickFragme
         }
     }
 
+    override fun onPickItemClick(thumbnailBean: ThumbnailBean) {
+        updateFragmentUI(thumbnailBean)
+    }
+
+    override fun onPickItemLongClick(thumbnailBean: ThumbnailBean) {
+    }
 
     companion object {
         fun start(context: Context) {

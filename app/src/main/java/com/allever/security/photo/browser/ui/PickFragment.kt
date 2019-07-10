@@ -12,6 +12,7 @@ import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.PickImageAdapter
+import com.android.absbase.utils.ToastUtils
 
 class PickFragment : BaseFragment() {
 
@@ -42,7 +43,19 @@ class PickFragment : BaseFragment() {
 
         mPickImageAdapter = PickImageAdapter(App.context, R.layout.item_pick, mData)
         mRecyclerView.adapter = mPickImageAdapter
+        mPickImageAdapter?.optionListener = object : PickImageAdapter.OptionListener{
+            override fun onItemClick(position: Int, item: ThumbnailBean) {
+                ToastUtils.show("onItem click ${item.path}")
+                callback?.onPickItemClick(item)
+            }
 
+            override fun onItemLongClick(position: Int, item: ThumbnailBean): Boolean {
+                ToastUtils.show("onItem onPickItemLongClick ${item.path}")
+                callback?.onPickItemLongClick(item)
+                return true
+            }
+
+        }
 //        val emptyView = mView.findViewById<View>(R.id.empty_view)
 //        val emptyIcon = mView.findViewById<ImageView>(R.id.iv_empty_type)
 //        val resId = type?.emptyIconResId
@@ -71,6 +84,7 @@ class PickFragment : BaseFragment() {
     }
 
     interface PickCallback {
-
+        fun onPickItemClick(thumbnailBean: ThumbnailBean)
+        fun onPickItemLongClick(thumbnailBean: ThumbnailBean)
     }
 }
