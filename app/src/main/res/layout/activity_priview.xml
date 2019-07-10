@@ -52,6 +52,7 @@
             android:scaleType="centerInside"/>
 
         <ImageView
+            android:id="@+id/preview_iv_export"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
