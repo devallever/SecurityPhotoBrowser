@@ -50,7 +50,7 @@ object GlobalData {
 
     private fun cloneThumbnail(thumbnail: ThumbnailBean): ThumbnailBean {
         val cloneThumbnail = ThumbnailBean()
-//        cloneThumbnail.isChecked = false
+        cloneThumbnail.isChecked = false
         cloneThumbnail.path = thumbnail.path
         cloneThumbnail.uri = thumbnail.uri
         cloneThumbnail.type = thumbnail.type

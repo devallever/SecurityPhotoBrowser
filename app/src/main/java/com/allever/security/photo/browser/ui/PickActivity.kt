@@ -27,6 +27,7 @@ import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.EncodeListListener
 import com.allever.security.photo.browser.function.endecode.PrivateBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
@@ -36,6 +37,7 @@ import com.allever.security.photo.browser.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.ToastUtils
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
 
@@ -313,6 +315,27 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
                 override fun onSuccess(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
                     DLog.d("onSuccess encode")
                     mBtnImport.isClickable = true
+
+                    val thumbnailBeans = mutableListOf<ThumbnailBean>()
+                    successList.map {
+                        val name = File(it.encodePath).name
+                        DLog.d("file name = $name")
+                        val obj = SharePreferenceUtil.getObjectFromShare(applicationContext, name)
+                        if (obj is LocalThumbnailBean) {
+                            val thumb = obj as LocalThumbnailBean
+                            val thumbnailBean =
+                                PrivateHelper.changeLocalThumbnailBean2ThumbnailBean(thumb)
+                            if (!thumbnailBean.isInvalid) {
+                                thumbnailBeans.add(thumbnailBean)
+                            }
+                        }
+                    }
+
+                    val encodeEvent =  EncodeEvent()
+                    encodeEvent.albumName = mAlbumName
+                    encodeEvent.thumbnailBeanList.addAll(thumbnailBeans)
+                    EventBus.getDefault().post(encodeEvent)
+
                     finish()
                 }
 
