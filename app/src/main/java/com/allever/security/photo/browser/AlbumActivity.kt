@@ -14,6 +14,7 @@ import android.text.TextUtils
 import android.view.View
 
 import com.allever.lib.common.util.DLog
+import com.allever.lib.common.util.ToastUtils
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 
@@ -30,7 +31,6 @@ import com.allever.security.photo.browser.util.SharePreferenceUtil
 
 import com.android.absbase.App
 import com.android.absbase.ui.widget.RippleImageView
-import com.android.absbase.utils.ToastUtils
 
 import java.io.File
 import java.util.*
@@ -75,7 +75,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                     })
             }
 
-        }, Manifest.permission.READ_EXTERNAL_STORAGE)
+        }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun onDestroy() {
@@ -131,7 +131,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                                 dialog?.dismiss()
                             })
                     }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE)
+                }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
             }
         }
@@ -189,14 +189,16 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 0 -> {
+                    ToastUtils.show("获取加密相册内容")
                     //获取加密相册内容
-                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         getPrivateAlbumData()
                     }
                 }
                 1 -> {
                     //创建相册
-                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    ToastUtils.show("创建相册")
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         handleAddAlbum()
                     }
                 }
