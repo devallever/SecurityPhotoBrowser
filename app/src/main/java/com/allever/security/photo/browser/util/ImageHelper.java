@@ -21,7 +21,7 @@ import com.allever.security.photo.browser.bean.BitmapBean;
 import com.allever.security.photo.browser.bean.ImageFolder;
 import com.allever.security.photo.browser.bean.ThumbnailBean;
 import com.allever.security.photo.browser.media.IDeleteListener;
-import com.android.absbase.App;
+import com.allever.lib.common.app.App;
 import com.android.absbase.helper.log.DLog;
 import com.android.absbase.utils.DeviceUtils;
 import com.android.absbase.utils.FileUtils;
@@ -53,8 +53,8 @@ public class ImageHelper {
     private static int mMaxMemory;
 
     static {
-        HEIGHT = SCREEN_HEIGHT - App.getContext().getResources().getDimensionPixelSize(R.dimen.image_eidt_select_bar_height)
-                - App.getContext().getResources().getDimensionPixelSize(R.dimen.image_edit_bottom_bar_height);
+        HEIGHT = SCREEN_HEIGHT - App.context.getResources().getDimensionPixelSize(R.dimen.image_eidt_select_bar_height)
+                - App.context.getResources().getDimensionPixelSize(R.dimen.image_edit_bottom_bar_height);
         mMaxMemory = (int) Runtime.getRuntime().maxMemory();
     }
 
@@ -319,7 +319,7 @@ public class ImageHelper {
 //
 //		int insamplesize = 1;
 //		Bitmap bitmap = null;
-//		ContentResolver mCr = App.getContext().getContentResolver();
+//		ContentResolver mCr = App.context.getContentResolver();
 //		BitmapFactory.Options option=new BitmapFactory.Options();
 //		InputStream in1 = null;
 //		InputStream in2 = null;
@@ -404,8 +404,8 @@ public class ImageHelper {
 
         int insamplesize = 1;
         Bitmap bitmap = null;
-        ContentResolver mCr = App.getContext().getContentResolver();
-        Resources res = App.getContext().getResources();
+        ContentResolver mCr = App.context.getContentResolver();
+        Resources res = App.context.getResources();
         BitmapFactory.Options option = new BitmapFactory.Options();
         InputStream in1 = null;
         InputStream in2 = null;
@@ -1104,7 +1104,7 @@ public class ImageHelper {
 //		InputStream in1 = null;
 //		InputStream in2 = null;
 //		try {
-//			ContentResolver mCr = App.getContext().getContentResolver();
+//			ContentResolver mCr = App.context.getContentResolver();
 //			BitmapFactory.Options option=new BitmapFactory.Options();
 //			option.inJustDecodeBounds=true;
 //			in1 = mCr.openInputStream(bean.mUri);
@@ -1617,7 +1617,7 @@ public class ImageHelper {
 //		ParcelFileDescriptor pfd1 = null;
 //		ParcelFileDescriptor pfd2 = null;
 //		ParcelFileDescriptor pfd3 = null;
-//		ContentResolver mCr = App.getContext().getContentResolver();
+//		ContentResolver mCr = App.context.getContentResolver();
 //		BitmapFactory.Options option=new BitmapFactory.Options();
 //		int insamplesize = 1;
 //		try {
@@ -2813,8 +2813,8 @@ public class ImageHelper {
 //
 //        int insamplesize = 1;
 //        Bitmap bitmap = null;
-//        ContentResolver mCr = App.getContext().getContentResolver();
-//        Resources res = App.getContext().getResources();
+//        ContentResolver mCr = App.context.getContentResolver();
+//        Resources res = App.context.getResources();
 //
 //        try {
 //            int size = bitmapBeans.size();
@@ -2980,8 +2980,8 @@ public class ImageHelper {
 //
 //        int insamplesize = 1;
 //        Bitmap bitmap = null;
-//        ContentResolver mCr = App.getContext().getContentResolver();
-//        Resources res = App.getContext().getResources();
+//        ContentResolver mCr = App.context.getContentResolver();
+//        Resources res = App.context.getResources();
 //        try {
 //            String uriString = bitmapBean.mUri.toString();
 //            if (uriString.startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())) {

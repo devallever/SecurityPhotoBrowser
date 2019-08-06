@@ -12,7 +12,7 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import android.view.WindowManager
 
 
@@ -131,7 +131,7 @@ class PrivateViewProxy(val activity: Activity) {
 
     private fun getNavigationBarHeight(decorView: View?): Int {
         val windowManager = try {
-            App.getContext().getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+            App.context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
         } catch (e: Throwable) {
             null
         }
@@ -146,7 +146,7 @@ class PrivateViewProxy(val activity: Activity) {
             decorView.getWindowVisibleDisplayFrame(rect)
             point.y - rect.height()
         } else {
-            val resources = App.getContext().resources
+            val resources = App.context.resources
             val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
             return resources.getDimensionPixelSize(resourceId)
         }

@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import com.allever.security.photo.browser.R
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import com.android.absbase.ui.widget.RippleButton
 import java.lang.Exception
 
@@ -69,7 +69,7 @@ object DialogHelper {
         editAlertDialog.setOnShowListener {
             if (builder.showEditText == true) {
                 try {
-                    val imm = App.getContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    val imm = App.context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                     imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
                 } catch (e: Exception) {
 
@@ -88,10 +88,10 @@ object DialogHelper {
 
 
     class Builder {
-        var title: String? = App.getContext().getString(R.string.dialog_default_title)
-        var message: String? = App.getContext().getString(R.string.dialog_default_message)
-        var okText: String? = App.getContext().getString(R.string.dialog_default_positive_text)
-        var cancelText: String? = App.getContext().getString(R.string.dialog_default_negative_text)
+        var title: String? = App.context.getString(R.string.dialog_default_title)
+        var message: String? = App.context.getString(R.string.dialog_default_message)
+        var okText: String? = App.context.getString(R.string.dialog_default_positive_text)
+        var cancelText: String? = App.context.getString(R.string.dialog_default_negative_text)
         var showEditText: Boolean? = false
         var showMessage: Boolean? = true
         var etContent: String? = ""

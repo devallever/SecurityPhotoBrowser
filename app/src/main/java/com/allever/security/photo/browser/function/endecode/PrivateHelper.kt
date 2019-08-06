@@ -3,7 +3,7 @@ package com.allever.security.photo.browser.function.endecode
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import android.util.Log
 import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
@@ -19,14 +19,14 @@ object PrivateHelper {
     val Tag = PrivateHelper::class.java.simpleName
     //加密文件存储路径
     val PATH_ENCODE_ORIGINAL =
-        Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Decode"
+        Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.context.packageName + "/Image/Cache/Decode"
     //相册目录
     val PATH_ALBUM =
-        Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.getPackageName() + "/Image/Cache/Album"
+        Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.context.packageName + "/Image/Cache/Album"
     //解密临时文件路径
-    val PATH_DECODE_TEMP = App.getContext().externalCacheDir.absolutePath + "/.temp/"
+    val PATH_DECODE_TEMP = App.context.externalCacheDir.absolutePath + "/.temp/"
     //创建 .nomedia 文件
-    val PATH_DECODE_TEMP_NOMEDIA = App.getContext().externalCacheDir.absolutePath + "/.temp/.nomedia"
+    val PATH_DECODE_TEMP_NOMEDIA = App.context.externalCacheDir.absolutePath + "/.temp/.nomedia"
 
     /**
      * 对字节加解密
@@ -39,7 +39,7 @@ object PrivateHelper {
         return bytes
     }
 
-    val mHandler: Handler = Handler(App.getContext().mainLooper)
+    val mHandler: Handler = Handler(App.context.mainLooper)
     val threadPool = ThreadPoolExecutor(
         3, 10, 30L,
         TimeUnit.SECONDS, LinkedBlockingDeque(), ExecutorThreadFactory(), ThreadPoolExecutor.DiscardPolicy()
@@ -155,7 +155,7 @@ object PrivateHelper {
                     // 成功后删除源文件,并且通知系统删除相册资源
                     val result = removeFile(head.originalPath)
                     if (result) {
-                        FolderHelper.broadcastVideoFile(App.getContext(), File(head.originalPath), null, null)
+                        FolderHelper.broadcastVideoFile(App.context, File(head.originalPath), null, null)
                     } else {
                     }
                 } catch (e: Exception) {
@@ -287,7 +287,7 @@ object PrivateHelper {
                         val originalFile = File(head.originalPath)
                         tempFile.copyTo(originalFile, true)
                         if (originalFile.exists()) {
-                            FolderHelper.broadcastVideoFile(App.getContext(), originalFile, null, null)
+                            FolderHelper.broadcastVideoFile(App.context, originalFile, null, null)
                             //删除临时缓存文件
                             tempFile.delete()
                             //删除加密文件

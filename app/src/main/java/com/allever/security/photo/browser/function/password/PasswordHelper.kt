@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.support.annotation.IntDef
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -110,10 +110,10 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
 
     private fun initView() {
 
-        colorFilter = App.getContext().resources.getColor(R.color.default_icon_color_filter)
-        defaultColorFilter = App.getContext().resources.getColor(R.color.default_btn_color_filter)
+        colorFilter = App.context.resources.getColor(R.color.default_icon_color_filter)
+        defaultColorFilter = App.context.resources.getColor(R.color.default_btn_color_filter)
 
-        mPasswordView = LayoutInflater.from(App.getContext()).inflate(R.layout.secret_vault_password_layout, null)
+        mPasswordView = LayoutInflater.from(App.context).inflate(R.layout.secret_vault_password_layout, null)
         mLlBubbleContainer = mPasswordView?.findViewById(R.id.ll_bubbles)
         mTvTips = mPasswordView?.findViewById(R.id.tv_password_tip)
         mKeyboardView = mPasswordView?.findViewById(R.id.keyboard_view)
@@ -142,7 +142,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
         }
 
         for (i in 0 until mBubbleSize) {
-            val view = View.inflate(App.getContext(), R.layout.view_password_bubble, null)
+            val view = View.inflate(App.context, R.layout.view_password_bubble, null)
             val bubbleView = view.findViewById(R.id.bubble) as ImageView
             bubbleView.setImageResource(R.drawable.album_icon_password)
             bubbleView.setColorFilter(colorFilter)
@@ -153,7 +153,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
 
     private var mVibrator: Vibrator? = null
     private fun initPasswordVibrator() {
-        mVibrator = App.getContext().getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+        mVibrator = App.context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
     }
 
     private val end = 25f
@@ -209,11 +209,11 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
         mType = TYPE_CHECK
         if (show) {
             if (PasswordConfig.secretVaultPassword.isEmpty()) {
-                mTvTips?.text = App.getContext().getString(R.string.album_select_secret_vault_new_password_tip)
+                mTvTips?.text = App.context.getString(R.string.album_select_secret_vault_new_password_tip)
                 mSettingPassword =
                         STATUS_NEW_PWD
             } else {
-                mTvTips?.text = App.getContext().getString(R.string.album_select_secret_vault_password_tip)
+                mTvTips?.text = App.context.getString(R.string.album_select_secret_vault_password_tip)
                 mSettingPassword =
                         STATUS_CHECK_PWD
             }
@@ -226,7 +226,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
     }
 
     fun modifyPasscode() {
-        mTvTips?.text = App.getContext().getString(R.string.enter_old_pwd)
+        mTvTips?.text = App.context.getString(R.string.enter_old_pwd)
         mSettingPassword =
                 STATUS_CHECK_PWD
         mType = TYPE_MODIFY
@@ -240,7 +240,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
 //            val timeMillis = System.currentTimeMillis()
 //            if(PasswordConfig.purchaseSubSize <= 0 && (timeMillis - PasswordConfig.firstEnterAPPOfDay > TimeUtils.MILLIS_IN_DAY)){
 //                PasswordConfig.firstEnterAPPOfDay = timeMillis
-//                BillingActivity.startActivity(App.getContext())
+//                BillingActivity.startActivity(App.context)
 //            }
 //        }
         //密码正确，延迟0.2秒
@@ -272,7 +272,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
         }
         if (mSettingPassword == STATUS_NEW_PWD) {
             password = sb.toString()
-            mTvTips?.text = App.getContext().getString(R.string.album_select_secret_vault_comfirm_password_tip)
+            mTvTips?.text = App.context.getString(R.string.album_select_secret_vault_comfirm_password_tip)
             mNumbers.clear()
             invalidate()
             mSettingPassword =
@@ -291,7 +291,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
                     //旧密码正确
                     mNumbers.clear()
                     invalidate()
-                    mTvTips?.text = App.getContext().getString(R.string.enter_new_pwd)
+                    mTvTips?.text = App.context.getString(R.string.enter_new_pwd)
                     mSettingPassword =
                             STATUS_NEW_PWD
                 } else {

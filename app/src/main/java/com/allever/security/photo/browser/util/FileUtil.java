@@ -12,7 +12,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import com.allever.security.photo.browser.R;
-import com.android.absbase.App;
+import com.allever.lib.common.app.App;
 import com.android.absbase.helper.log.DLog;
 import com.android.absbase.utils.FileUtils;
 
@@ -26,11 +26,11 @@ import java.util.zip.ZipInputStream;
 
 public class FileUtil {
 
-    public final static String EDIT_IAMGE_FILE_NAME = App.getContext().getResources().getString(R.string.media_save_file_name_prefix) + "-";
+    public final static String EDIT_IAMGE_FILE_NAME = App.context.getResources().getString(R.string.media_save_file_name_prefix) + "-";
 
-    public final static String PACKAGE_NAME = App.getContext().getPackageName();
+    public final static String PACKAGE_NAME = App.context.getPackageName();
 
-//    public final static String FILTER_CACHE_PATH = FileUtils.getExternalCacheDir(App.getContext(),
+//    public final static String FILTER_CACHE_PATH = FileUtils.getExternalCacheDir(App.context,
 //            "filter_plugin", true);
 
     /**
@@ -46,11 +46,11 @@ public class FileUtil {
 
     public static final String CACHE_DIR = "dir";
 
-    public static final String DOWNLOAD_PATH = FileUtils.getExternalCacheDir(App.getContext(),
+    public static final String DOWNLOAD_PATH = FileUtils.getExternalCacheDir(App.context,
             "download", true);
 
     public static String getBasicVideoPath() {
-        return FileUtils.getExternalCacheDir(App.getContext(),
+        return FileUtils.getExternalCacheDir(App.context,
                 "video", true);
     }
 
@@ -951,7 +951,7 @@ public class FileUtil {
             file.delete();
         }
         try {
-            istream = App.getContext().getResources().openRawResource(id);
+            istream = App.context.getResources().openRawResource(id);
             file.createNewFile();
             ostream = new FileOutputStream(file);
             byte[] buffer = new byte[1024];
@@ -981,8 +981,8 @@ public class FileUtil {
             File sdcardFiledir = Environment.getExternalStorageDirectory();
             long usableSpace = sdcardFiledir.getUsableSpace();
             long totalSpace = sdcardFiledir.getTotalSpace();
-            String usableSpaceStr = Formatter.formatFileSize(App.getContext(), usableSpace);
-            String totalSpaceStr = Formatter.formatFileSize(App.getContext(), totalSpace);
+            String usableSpaceStr = Formatter.formatFileSize(App.context, usableSpace);
+            String totalSpaceStr = Formatter.formatFileSize(App.context, totalSpace);
             return "total:" + totalSpaceStr + "_left:" + usableSpaceStr;
         } catch (Exception e) {
         }

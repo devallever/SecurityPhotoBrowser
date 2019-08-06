@@ -20,7 +20,7 @@ import android.provider.MediaStore.MediaColumns
 import android.provider.MediaStore.Video
 import android.text.TextUtils
 import android.util.Log
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import com.android.absbase.utils.FileUtils
 
 import java.io.File
@@ -47,7 +47,7 @@ object FolderHelper {
 
     private val VIDEO_BASE_URI = "content://media/external/video/media"
 
-    val MEDIA_TEMP_FOLDER_PATH = FileUtils.getExternalCacheDir(App.getContext(), "MediaTemp")
+    val MEDIA_TEMP_FOLDER_PATH = FileUtils.getExternalCacheDir(App.context, "MediaTemp")
 
     val imageFolder: File
         get() {
@@ -77,7 +77,7 @@ object FolderHelper {
         }
 
     //            if (PhoneInfo.isSupportWriteExtSdCard() && ExtSdcardUtils.isExtSdcardPath(location)) {
-    ////                ExtSdcardUtils.mkdirExtSdcardPath(App.getContext(), location, ExtSdcardUtils.getSavedExtSdcardUri());
+    ////                ExtSdcardUtils.mkdirExtSdcardPath(App.context, location, ExtSdcardUtils.getSavedExtSdcardUri());
     //                File f = new File(location);
     //                if (!f.exists()) {
     //                    f.mkdirs();

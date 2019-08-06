@@ -14,8 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.VideoView
 import com.allever.security.photo.browser.R
-import com.android.absbase.App
-import com.android.absbase.utils.ResourcesUtils
+import com.allever.lib.common.app.App
 import com.android.absbase.utils.ToastUtils
 
 class VideoViewHolder
@@ -181,7 +180,7 @@ class VideoViewHolder
             return false
         }
 
-        val cr = App.getContext().contentResolver
+        val cr = App.context.contentResolver
         var cursor: Cursor? = null
         try {
             cursor = cr.query(

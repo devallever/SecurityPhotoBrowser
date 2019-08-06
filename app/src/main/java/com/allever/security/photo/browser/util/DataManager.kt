@@ -3,7 +3,7 @@ package com.allever.security.photo.browser.util
 import android.opengl.GLES20
 import android.os.Environment
 import android.text.TextUtils
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 
 import java.io.File
 import java.nio.IntBuffer
@@ -115,13 +115,13 @@ object DataManager {
 
     val TAG = DataManager::class.java.simpleName
 
-    //    public static final String TEMP_DIR = FileUtils.getExternalCacheDir(App.getContext(),
+    //    public static final String TEMP_DIR = FileUtils.getExternalCacheDir(App.context,
     //            ".temp", true) + File.separator;
     //
-    //    public static final String RESOURCE_DIR = FileUtils.getExternalCacheDir(App.getContext(),
+    //    public static final String RESOURCE_DIR = FileUtils.getExternalCacheDir(App.context,
     //            ".normal_res", true) + File.separator;
     //
-    //    public static final String CONFIG_DIR = FileUtils.getExternalCacheDir(App.getContext(),
+    //    public static final String CONFIG_DIR = FileUtils.getExternalCacheDir(App.context,
     //            ".config",true) + File.separator;
     //
     //    public static final String FONT_DIR = RESOURCE_DIR + "font" + File.separator;
@@ -168,7 +168,7 @@ effect -> BF5B17FAC5C60D745A593B5920372235
     private val TUTORIAL_MD5 = "0575C8D592FB7B088226750ACEEC2B4E"
 
 
-    val INTERNAL_ROOT_DIR = App.getContext().filesDir.absolutePath
+    val INTERNAL_ROOT_DIR = App.context.filesDir.absolutePath
 
     val INTERNAL_RES_DIR = INTERNAL_ROOT_DIR + File.separator + RESOURCE_MD5
 

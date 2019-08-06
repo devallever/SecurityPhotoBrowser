@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.allever.security.photo.browser.R
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 
 
 class KeyboardView : LinearLayout, View.OnClickListener {
@@ -88,7 +88,7 @@ class KeyboardView : LinearLayout, View.OnClickListener {
             }
         }
 
-        vibrator = App.getContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator = App.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     }
 

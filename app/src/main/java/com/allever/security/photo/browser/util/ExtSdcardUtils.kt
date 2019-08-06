@@ -17,7 +17,7 @@ import android.text.style.ForegroundColorSpan
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.media.IDeleteListener
-import com.android.absbase.App
+import com.allever.lib.common.app.App
 import com.android.absbase.utils.SpUtils
 
 import java.io.File
@@ -65,7 +65,7 @@ object ExtSdcardUtils {
         var result = false
         val uri = savedExtSdcardUri
         if (uri != null) {
-            val uriPermissions = App.getContext().contentResolver.persistedUriPermissions
+            val uriPermissions = App.context.contentResolver.persistedUriPermissions
             if (uriPermissions != null && uriPermissions.size > 0) {
                 val size = uriPermissions.size
                 for (i in 0 until size) {
@@ -97,7 +97,7 @@ object ExtSdcardUtils {
         }
         builder.setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
         builder.setTitle(R.string.request_ext_sdcard_permission_tip)
-        val res = App.getContext().resources
+        val res = App.context.resources
         val msg1 = res.getString(R.string.request_ext_sdcard_permission_msg1)
         val msg2 = res.getString(R.string.request_ext_sdcard_permission_msg2)
         val msg3 = res.getString(R.string.request_ext_sdcard_permission_msg3)

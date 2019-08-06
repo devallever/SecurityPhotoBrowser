@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
+import com.allever.lib.common.app.App
 
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
@@ -29,7 +30,6 @@ import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 
-import com.android.absbase.App
 import com.android.absbase.ui.widget.RippleImageView
 
 import java.io.File
@@ -139,11 +139,11 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
 
     private fun handleAddAlbum() {
         val builder = DialogHelper.Builder()
-            .setTitleContent(App.getContext().getString(R.string.add_album))
+            .setTitleContent(App.context.getString(R.string.add_album))
             .isShowMessage(false)
             .isShowEditText(true)
-            .setOkContent(App.getContext().getString(R.string.save))
-            .setCancelContent(App.getContext().getString(R.string.cancel))
+            .setOkContent(App.context.getString(R.string.save))
+            .setCancelContent(App.context.getString(R.string.cancel))
 
         mAddAlbumDialog = DialogHelper.createEditTextDialog(
             this,
@@ -151,7 +151,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
             object : DialogHelper.EditDialogCallback {
                 override fun onOkClick(dialog: AlertDialog, etContent: String) {
                     if (TextUtils.isEmpty(etContent)) {
-                        ToastUtils.show(App.getContext().getString(R.string.tips_please_input_album_name))
+                        ToastUtils.show(App.context.getString(R.string.tips_please_input_album_name))
                         return
                     }
 
