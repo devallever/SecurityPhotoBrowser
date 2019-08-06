@@ -13,11 +13,13 @@ import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 
 class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -88,6 +90,12 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
 
                 override fun onSuccess() {
                     SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
+
+                    val decodeList = mutableListOf<ThumbnailBean>()
+                    decodeList.add(bean)
+                    val decodeEvent = DecodeEvent()
+                    decodeEvent.thumbnailBeanList = decodeList
+                    EventBus.getDefault().post(decodeEvent)
                     finish()
                     DLog.d("export onSuccess")
                 }

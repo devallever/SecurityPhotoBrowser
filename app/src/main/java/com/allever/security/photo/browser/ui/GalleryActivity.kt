@@ -13,6 +13,7 @@ import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.SeparatorBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
 import com.allever.security.photo.browser.ui.adapter.ItemClickListener
@@ -134,6 +135,15 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                 PickActivity.start(this, mAlbumName!!)
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
+        decodeEvent.thumbnailBeanList.map {
+            mGalleryData.remove(it)
+            mThumbnailBeanList.remove(it)
+        }
+        mGalleryAdapter.notifyDataSetChanged()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
