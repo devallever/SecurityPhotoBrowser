@@ -142,6 +142,28 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
             mGalleryData.add(it)
             mThumbnailBeanList.add(it)
         }
+
+        //排序
+        val sortThumbnailBeans = ArrayList<Any>()
+        sortThumbnailBeans.addAll(mGalleryData)
+        sortThumbnailBeans.sortWith(Comparator { arg0, arg1 ->
+            if (arg0 is ThumbnailBean && arg1 is ThumbnailBean) {
+                java.lang.Long.compare(arg1.date, arg0.date)
+            } else {
+                //不作处理
+                java.lang.Long.compare(0, 0)
+            }
+        })
+
+        mGalleryData.clear()
+        mGalleryData.addAll(sortThumbnailBeans)
+
+        mGalleryData.map {
+            if (it is ThumbnailBean) {
+                mThumbnailBeanList.add(it)
+            }
+        }
+
         mGalleryAdapter.notifyDataSetChanged()
     }
 

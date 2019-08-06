@@ -23,6 +23,7 @@ import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.password.PasswordConfig
 import com.allever.security.photo.browser.ui.GalleryActivity
@@ -31,6 +32,9 @@ import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 
 import com.android.absbase.ui.widget.RippleImageView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 import java.io.File
 import java.util.*
@@ -48,9 +52,13 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAddAlbumDialog: AlertDialog? = null
 
+    private var mClickAlbumPosition = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album)
+
+        EventBus.getDefault().register(this)
 
         //清除私密相册密码验证记录
         PasswordConfig.secretCheckPass = false
@@ -81,6 +89,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         mAlbumDataTask.cancel(true)
+        EventBus.getDefault().unregister(this)
     }
 
     private fun initView() {
@@ -105,6 +114,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                     mImageFolderList[position].name!!,
                     ArrayList(mImageFolderList[position].data)
                 )
+                mClickAlbumPosition = position
             }
         }
     }
@@ -290,6 +300,27 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
             mImageFolderList = result
             mPrivateAlbumAdapter.setData(mImageFolderList)
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveEncodeEvent(encodeEvent: EncodeEvent) {
+        val imageFolder = mImageFolderList[mClickAlbumPosition]
+        encodeEvent.thumbnailBeanList.map {
+            imageFolder.data?.add(it)
+        }
+
+        imageFolder.count = imageFolder.data?.size?:0
+        //排序
+        val sortThumbnailBeans = ArrayList<ThumbnailBean>()
+        sortThumbnailBeans.addAll(imageFolder.data!!)
+        sortThumbnailBeans.sortWith(Comparator { arg0, arg1 ->
+            java.lang.Long.compare(arg1.date, arg0.date)
+        })
+
+        imageFolder.data = sortThumbnailBeans
+
+        //刷新界面
+        mPrivateAlbumAdapter.notifyDataSetChanged()
     }
 
     companion object {
