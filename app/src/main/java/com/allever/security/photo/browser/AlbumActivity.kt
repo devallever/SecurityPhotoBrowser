@@ -23,6 +23,7 @@ import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.password.PasswordConfig
@@ -300,6 +301,15 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
             mImageFolderList = result
             mPrivateAlbumAdapter.setData(mImageFolderList)
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
+        val imageFolder = mImageFolderList[mClickAlbumPosition]
+        imageFolder.data?.removeAt(decodeEvent.index)
+        imageFolder.count = imageFolder.data?.size?:0
+        //刷新界面
+        mPrivateAlbumAdapter.notifyDataSetChanged()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

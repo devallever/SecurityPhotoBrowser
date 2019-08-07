@@ -42,6 +42,8 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
 
+        var listData: MutableList<ThumbnailBean>? = null
+        listData = intent.getParcelableArrayListExtra(EXTRA_DATA)
         mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mGalleryData.map {
             if (it is ThumbnailBean) {
@@ -139,10 +141,9 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
-        decodeEvent.thumbnailBeanList.map {
-            mGalleryData.remove(it)
-            mThumbnailBeanList.remove(it)
-        }
+        val removeBean = mThumbnailBeanList[decodeEvent.index]
+        mThumbnailBeanList.remove(removeBean)
+        mGalleryData.remove(removeBean)
         mGalleryAdapter.notifyDataSetChanged()
     }
 
