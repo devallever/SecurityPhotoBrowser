@@ -7,8 +7,10 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
+import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
@@ -16,11 +18,18 @@ import com.allever.security.photo.browser.bean.SeparatorBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.bean.event.EncodeEvent
+import com.allever.security.photo.browser.function.endecode.PrivateBean
+import com.allever.security.photo.browser.function.endecode.PrivateHelper
+import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
+import com.allever.security.photo.browser.function.endecode.UnLockListListener
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
 import com.allever.security.photo.browser.ui.adapter.ItemClickListener
+import com.allever.security.photo.browser.util.MD5
+import com.allever.security.photo.browser.util.SharePreferenceUtil
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -202,6 +211,66 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
         mGalleryAdapter.notifyDataSetChanged()
     }
+
+    /**
+     * 移除加密资源
+     */
+    private fun restoreResourceList(beanList: MutableList<ThumbnailBean>) {
+        val privateBeanList = mutableListOf<PrivateBean>()
+        beanList.map {
+            val privateBean = PrivateBean()
+            val name = MD5.getMD5Str(it.path)
+            val file = File(PrivateHelper.PATH_ENCODE_ORIGINAL, name)
+            if (privateBean.resolveHead(file.absolutePath)) {
+                privateBeanList.add(privateBean)
+            }
+        }
+
+        PrivateHelper.unLockList(privateBeanList, object : UnLockListListener{
+            override fun onStart() {}
+
+            override fun onSuccess() {
+                beanList.map {
+                    SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(it.path), null)
+                }
+            }
+
+            override fun onFailed(errors: List<PrivateBean>) {
+                privateBeanList.mapIndexed { index, privateBean ->
+
+                }
+            }
+
+        })
+    }
+
+    /**
+     * 移除加密资源
+     */
+    private fun restoreResource(bean: ThumbnailBean) {
+        val privateBean = PrivateBean()
+        val name = MD5.getMD5Str(bean.path)
+        val file = File(PrivateHelper.PATH_ENCODE_ORIGINAL, name)
+        if (privateBean.resolveHead(file.absolutePath)) {
+            PrivateHelper.unLockAndRestore(privateBean, object : UnLockAndRestoreListener {
+                override fun onStart() {
+                    DLog.d("export onStart")
+                }
+
+                override fun onSuccess() {
+                    SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
+                    finish()
+                    DLog.d("export onSuccess")
+                }
+
+                override fun onFailed(msg: String) {
+                    DLog.d("export onFailed")
+                }
+            })
+        }
+
+    }
+
 
 
     companion object {
