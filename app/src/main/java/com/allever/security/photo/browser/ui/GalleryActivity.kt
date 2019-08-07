@@ -47,6 +47,8 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
     private var mAlbumName: String? = null
 
+    private var mPrivateThumbMap = HashMap<PrivateBean, ThumbnailBean>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,6 +171,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
             mBtnExport -> {
                 ToastUtils.show("Export")
+                restoreResourceList(mExportThumbnailBeanList)
             }
         }
     }
@@ -223,22 +226,37 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
             val file = File(PrivateHelper.PATH_ENCODE_ORIGINAL, name)
             if (privateBean.resolveHead(file.absolutePath)) {
                 privateBeanList.add(privateBean)
+                mPrivateThumbMap[privateBean] = it
             }
         }
 
         PrivateHelper.unLockList(privateBeanList, object : UnLockListListener{
             override fun onStart() {}
 
-            override fun onSuccess() {
-                beanList.map {
-                    SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(it.path), null)
+            override fun onSuccess(successList: List<PrivateBean>) {
+                val successThumbnailBeanList = mutableListOf<ThumbnailBean>()
+                successList.map {
+                    val thumbnailBean = mPrivateThumbMap[it]
+                    if (thumbnailBean != null) {
+                        SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(thumbnailBean.path), null)
+                        successThumbnailBeanList.add(thumbnailBean)
+                        mThumbnailBeanList.remove(thumbnailBean)
+                        mGalleryData.remove(thumbnailBean)
+                        mExportThumbnailBeanList.remove(thumbnailBean)
+                    }
                 }
+                mGalleryAdapter.notifyDataSetChanged()
             }
 
             override fun onFailed(errors: List<PrivateBean>) {
-                privateBeanList.mapIndexed { index, privateBean ->
-
+                errors.map {
+                    val thumbnailBean = mPrivateThumbMap[it]
+                    if (thumbnailBean != null) {
+                        thumbnailBean.isChecked = false
+                    }
                 }
+                mExportThumbnailBeanList.clear()
+                mGalleryAdapter.notifyDataSetChanged()
             }
 
         })

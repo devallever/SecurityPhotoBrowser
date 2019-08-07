@@ -51,6 +51,6 @@ interface UnLockAndRestoreListener {
  */
 interface UnLockListListener {
     fun onStart()
-    fun onSuccess()
+    fun onSuccess(successList: List<PrivateBean>)
     fun onFailed(errors: List<PrivateBean>)
 }

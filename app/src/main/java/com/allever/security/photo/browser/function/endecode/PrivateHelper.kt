@@ -223,26 +223,36 @@ object PrivateHelper {
      */
     fun unLockList(heads: List<PrivateBean>, listener: UnLockListListener? = null) {
         val errors = arrayListOf<PrivateBean>()
+        val successList = arrayListOf<PrivateBean>()
         var fixSize = 0 //已经处理的数量
         val runnable = Runnable {
             run {
                 //start
-                mHandler?.post { listener?.onStart() }
+                mHandler.post { listener?.onStart() }
                 if (heads.isEmpty()) {
-                    mHandler?.post { listener?.onFailed(errors) }
+                    mHandler.post { listener?.onFailed(errors) }
                 }
                 heads.map { head ->
                     unLockAndRestore(head, object : UnLockAndRestoreListener {
                         override fun onStart() {}
                         override fun onSuccess() {
+                            successList.add(head)
                             if (fixSize == heads.size - 1) {
-                                if (errors.size == 0) {
-                                    //success.
-                                    mHandler?.post { listener?.onSuccess() }
-                                } else {
-                                    //failed
-                                    mHandler?.post { listener?.onFailed(errors) }
+                                //处理完成
+                                if (successList.size > 0) {
+                                    mHandler.post { listener?.onSuccess(successList) }
                                 }
+                                if (errors.size > 0) {
+                                    mHandler.post { listener?.onFailed(errors) }
+                                }
+
+//                                if (errors.size == 0) {
+//                                    //success.
+//                                    mHandler?.post { listener?.onSuccess() }
+//                                } else {
+//                                    //failed
+//                                    mHandler?.post { listener?.onFailed(errors) }
+//                                }
                             }
                             fixSize++
                         }
@@ -250,7 +260,15 @@ object PrivateHelper {
                         override fun onFailed(msg: String) {
                             errors.add(head)
                             if (fixSize == heads.size - 1) {
-                                mHandler?.post { listener?.onFailed(errors) }
+                                if (successList.size > 0) {
+                                    mHandler.post { listener?.onSuccess(successList) }
+                                }
+                                if (errors.size > 0) {
+                                    mHandler.post { listener?.onFailed(errors) }
+                                }
+
+
+//                                mHandler?.post { listener?.onFailed(errors) }
                             }
                             fixSize++
                         }
