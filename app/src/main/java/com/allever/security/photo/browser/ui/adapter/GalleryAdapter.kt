@@ -2,6 +2,7 @@ package com.allever.security.photo.browser.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.allever.lib.common.app.App.Companion.context
@@ -62,7 +63,12 @@ class GalleryAdapter(context: Context, data: MutableList<Any>, val multiItemType
         }
 
         holder.itemView.setOnLongClickListener {
-            itemClickListener?.onItemLongClick(position)
+            if (item is ThumbnailBean) {
+                val state = !item.isChecked
+                item.isChecked = state
+                holder.setVisible(R.id.gallery_iv_select, state)
+                itemClickListener?.onItemLongClick(position, item)
+            }
             return@setOnLongClickListener true
         }
     }

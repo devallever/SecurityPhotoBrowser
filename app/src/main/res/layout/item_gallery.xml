@@ -20,6 +20,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:scaleType="centerInside"
-        tools:ignore="RtlHardcoded"/>
+        tools:ignore="RtlHardcoded"
+		android:src="@drawable/icon_album_select"
+		android:visibility="gone"/>
 
 </RelativeLayout>

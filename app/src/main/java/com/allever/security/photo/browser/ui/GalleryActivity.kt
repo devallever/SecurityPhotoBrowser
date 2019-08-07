@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
+import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.SeparatorBean
@@ -25,13 +26,15 @@ import java.util.HashMap
 
 class GalleryActivity : Base2Activity(), View.OnClickListener {
 
-
+    private lateinit var mBtnExport: View
     private lateinit var mBtnPick: View
     private lateinit var mTvTitle: TextView
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mGalleryAdapter: GalleryAdapter
     private val mGalleryData = mutableListOf<Any>()
     private val mThumbnailBeanList = mutableListOf<ThumbnailBean>()
+    //多选导出
+    private val mExportThumbnailBeanList = mutableListOf<ThumbnailBean>()
 
     private var mAlbumName: String? = null
 
@@ -67,6 +70,8 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
         mTvTitle.text = mAlbumName
         mBtnPick = findViewById(R.id.gallery_btn_pick)
         mBtnPick.setOnClickListener(this)
+        mBtnExport = findViewById(R.id.gallery_iv_export)
+        mBtnExport.setOnClickListener(this)
         mRecyclerView = findViewById(R.id.gallery_recycler_view)
         val gridLayoutManager = GridLayoutManager(this, 3)
         //解决最后单个跨列问题
@@ -119,8 +124,24 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                 PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
             }
 
-            override fun onItemLongClick(position: Int) {
+            override fun onItemLongClick(position: Int, item: Any) {
+                if (item is ThumbnailBean) {
+                    if (item.isChecked) {
+                        //add
+                        mExportThumbnailBeanList.add(item)
+                    } else {
+                        //remove
+                        mExportThumbnailBeanList.remove(item)
+                    }
 
+                    if (mExportThumbnailBeanList.size > 0) {
+                        //show
+                        mBtnExport.visibility = View.VISIBLE
+                    } else {
+                        //hide
+                        mBtnExport.visibility = View.GONE
+                    }
+                }
             }
         }
 
@@ -135,6 +156,10 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
         when (v) {
             mBtnPick -> {
                 PickActivity.start(this, mAlbumName!!)
+            }
+
+            mBtnExport -> {
+                ToastUtils.show("Export")
             }
         }
     }

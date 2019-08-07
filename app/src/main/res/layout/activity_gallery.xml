@@ -39,6 +39,16 @@
                 android:textColor="@color/white"/>
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/gallery_iv_export"
+            android:layout_width="@dimen/default_icon_height"
+            android:layout_height="@dimen/default_icon_width"
+            android:src="@drawable/nav_button_export"
+            android:scaleType="centerInside"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

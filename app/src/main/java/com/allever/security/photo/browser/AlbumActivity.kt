@@ -272,6 +272,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                                 if (!thumbnailBean.isInvalid) {
                                     thumbnailBeans.add(thumbnailBean)
                                 }
+                                thumbnailBean.isChecked = false
                             }
 
                         }
