@@ -307,8 +307,11 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
         val imageFolder = mImageFolderList[mClickAlbumPosition]
-        imageFolder.data?.removeAt(decodeEvent.index)
-        imageFolder.count = imageFolder.data?.size?:0
+        decodeEvent.indexList.map {
+            imageFolder.data?.removeAt(it)
+            imageFolder.count = imageFolder.data?.size?:0
+        }
+
         //刷新界面
         mPrivateAlbumAdapter.notifyDataSetChanged()
     }

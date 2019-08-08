@@ -95,7 +95,8 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
                     decodeList.add(bean)
                     val decodeEvent = DecodeEvent()
                     decodeEvent.thumbnailBeanList = decodeList
-                    decodeEvent.index = mPosition
+                    decodeEvent.indexList.add(mPosition)
+//                    decodeEvent.index = mPosition
                     EventBus.getDefault().post(decodeEvent)
                     finish()
                     DLog.d("export onSuccess")

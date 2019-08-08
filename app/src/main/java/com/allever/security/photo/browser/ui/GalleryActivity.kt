@@ -26,6 +26,7 @@ import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
 import com.allever.security.photo.browser.ui.adapter.ItemClickListener
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+import kotlinx.android.synthetic.main.secret_vault_password_layout.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -44,6 +45,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
     private val mThumbnailBeanList = mutableListOf<ThumbnailBean>()
     //多选导出
     private val mExportThumbnailBeanList = mutableListOf<ThumbnailBean>()
+    private val mExportThumbnailBeanIndexList = mutableListOf<Int>()
 
     private var mAlbumName: String? = null
 
@@ -56,8 +58,6 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
 
-        var listData: MutableList<ThumbnailBean>? = null
-        listData = intent.getParcelableArrayListExtra(EXTRA_DATA)
         mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mGalleryData.map {
             if (it is ThumbnailBean) {
@@ -140,9 +140,11 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                     if (item.isChecked) {
                         //add
                         mExportThumbnailBeanList.add(item)
+                        mExportThumbnailBeanIndexList.add(position)
                     } else {
                         //remove
                         mExportThumbnailBeanList.remove(item)
+                        mExportThumbnailBeanIndexList.remove(position)
                     }
 
                     if (mExportThumbnailBeanList.size > 0) {
@@ -178,9 +180,16 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
-        val removeBean = mThumbnailBeanList[decodeEvent.index]
-        mThumbnailBeanList.remove(removeBean)
-        mGalleryData.remove(removeBean)
+        if (!decodeEvent.needRefresh) {
+            return
+        }
+
+        decodeEvent.indexList.map {
+            val removeBean = mThumbnailBeanList[it]
+            mThumbnailBeanList.remove(removeBean)
+            mGalleryData.remove(removeBean)
+        }
+
         mGalleryAdapter.notifyDataSetChanged()
     }
 
@@ -234,18 +243,23 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
             override fun onStart() {}
 
             override fun onSuccess(successList: List<PrivateBean>) {
-                val successThumbnailBeanList = mutableListOf<ThumbnailBean>()
+                val exportIndexList = mutableListOf<Int>()
                 successList.map {
                     val thumbnailBean = mPrivateThumbMap[it]
                     if (thumbnailBean != null) {
                         SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(thumbnailBean.path), null)
-                        successThumbnailBeanList.add(thumbnailBean)
+                        exportIndexList.add(mGalleryData.indexOf(thumbnailBean))
                         mThumbnailBeanList.remove(thumbnailBean)
                         mGalleryData.remove(thumbnailBean)
                         mExportThumbnailBeanList.remove(thumbnailBean)
                     }
                 }
                 mGalleryAdapter.notifyDataSetChanged()
+//
+//                val decodeEvent = DecodeEvent()
+//                decodeEvent.needRefresh = false
+//                decodeEvent.indexList = exportIndexList
+//                EventBus.getDefault().post(decodeEvent)
             }
 
             override fun onFailed(errors: List<PrivateBean>) {
