@@ -294,43 +294,41 @@ object PrivateHelper {
      */
     fun unLockAndRestore(head: PrivateBean, listener: UnLockAndRestoreListener? = null) {
         val runnable = Runnable {
-            run {
-                mHandler?.post {
-                    listener?.onStart()
-                }
-                try {
-                    val currentTimeMillis = System.currentTimeMillis()
-                    val tempFile = File(head.tempPath)
-                    if (tempFile.exists()) {
-                        val originalFile = File(head.originalPath)
-                        tempFile.copyTo(originalFile, true)
-                        if (originalFile.exists()) {
-                            FolderHelper.broadcastVideoFile(App.context, originalFile, null, null)
-                            //删除临时缓存文件
-                            tempFile.delete()
-                            //删除加密文件
-                            val encodeFile = File(head.encodePath)
-                            if (encodeFile.exists()) {
-                                encodeFile.delete()
-                            }
-                            mHandler?.post {
-                                listener?.onSuccess()
-                            }
-                        } else {
-                            mHandler?.post {
-                                listener?.onFailed("copy is failed")
-                            }
+            mHandler.post {
+                listener?.onStart()
+            }
+            try {
+                val currentTimeMillis = System.currentTimeMillis()
+                val tempFile = File(head.tempPath)
+                if (tempFile.exists()) {
+                    val originalFile = File(head.originalPath)
+                    tempFile.copyTo(originalFile, true)
+                    if (originalFile.exists()) {
+                        FolderHelper.broadcastVideoFile(App.context, originalFile, null, null)
+                        //删除临时缓存文件
+                        tempFile.delete()
+                        //删除加密文件
+                        val encodeFile = File(head.encodePath)
+                        if (encodeFile.exists()) {
+                            encodeFile.delete()
+                        }
+                        mHandler.post {
+                            listener?.onSuccess()
                         }
                     } else {
-                        mHandler?.post {
-                            listener?.onFailed("tempFile is not exist : path ${head.tempPath}")
+                        mHandler.post {
+                            listener?.onFailed("copy is failed")
                         }
                     }
-                    log("delete ${System.currentTimeMillis() - currentTimeMillis}")
-                } catch (e: Exception) {
-                    mHandler?.post {
-                        e.message?.let { listener?.onFailed(it) }
+                } else {
+                    mHandler.post {
+                        listener?.onFailed("tempFile is not exist : path ${head.tempPath}")
                     }
+                }
+                log("delete ${System.currentTimeMillis() - currentTimeMillis}")
+            } catch (e: Exception) {
+                mHandler.post {
+                    e.message?.let { listener?.onFailed(it) }
                 }
             }
         }
