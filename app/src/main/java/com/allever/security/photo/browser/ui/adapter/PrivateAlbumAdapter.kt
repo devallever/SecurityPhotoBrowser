@@ -1,6 +1,7 @@
 package com.allever.security.photo.browser.ui.adapter
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 
 import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
@@ -42,6 +43,12 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
             listener?.onItemClick(position)
         }
 
+        holder.setOnClickListener(R.id.item_private_album_iv_menu,
+            View.OnClickListener {
+                listener?.onMoreClick(position)
+            }
+        )
+
         if (item.data?.isNotEmpty() == true) {
             ImageUtil.loadEncodeImage(mContext, item.data!![0], holder.getView(R.id.iv_image)!!)
         }
@@ -50,5 +57,6 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
 
     interface ItemClickListener {
         fun onItemClick(position: Int)
+        fun onMoreClick(position: Int){}
     }
 }

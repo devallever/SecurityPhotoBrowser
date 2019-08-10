@@ -81,7 +81,7 @@ object DialogHelper {
         return editAlertDialog
     }
 
-    interface EditDialogCallback {
+    public interface EditDialogCallback {
         fun onOkClick(dialog: AlertDialog, etContent: String) {}
         fun onCancelClick(dialog: AlertDialog) {}
     }

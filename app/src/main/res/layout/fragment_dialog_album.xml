@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <com.android.absbase.ui.widget.RippleTextView
+        android:id="@+id/id_tv_rename"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Rename"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:drawablePadding="48dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:drawableStart="@drawable/icon_rename"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color" />
+
+    <com.android.absbase.ui.widget.RippleTextView
+        android:id="@+id/id_tv_delete"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/id_tv_rename"
+        android:layout_height="60dp"
+        android:text="Delete"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:drawablePadding="48dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:drawableStart="@drawable/icon_delete"
+        android:background="@color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/black"/>
+
+</LinearLayout>
