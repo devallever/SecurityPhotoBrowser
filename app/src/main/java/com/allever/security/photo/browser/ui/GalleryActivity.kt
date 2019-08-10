@@ -255,7 +255,6 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                         exportIndexList.add(mGalleryData.indexOf(thumbnailBean))
                         mThumbnailBeanList.remove(thumbnailBean)
                         mGalleryData.remove(thumbnailBean)
-                        mExportThumbnailBeanList.remove(thumbnailBean)
                         mPrivateThumbMap.remove(it)
                     }
 
@@ -266,6 +265,8 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 //                    }
                 }
                 mGalleryAdapter.notifyDataSetChanged()
+                mExportThumbnailBeanList.clear()
+                mBtnExport.visibility = View.GONE
 
                 val decodeEvent = DecodeEvent()
                 decodeEvent.needRefresh = false
@@ -280,10 +281,10 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                         thumbnailBean.isChecked = false
                     }
                 }
-                mExportThumbnailBeanList.clear()
                 mGalleryAdapter.notifyDataSetChanged()
+                mExportThumbnailBeanList.clear()
+                mBtnExport.visibility = View.GONE
             }
-
         })
     }
 
