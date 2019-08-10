@@ -5,6 +5,7 @@ import android.os.Environment
 import android.os.Handler
 import com.allever.lib.common.app.App
 import android.util.Log
+import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
@@ -148,6 +149,7 @@ object PrivateHelper {
                     /// 指定目录中写入新的链接文件
                     val alarmFilePath = File(head.albumPath, originalMD5)
                     alarmFilePath.createNewFile()
+                    DLog.d("linkFilePath = ${alarmFilePath.absoluteFile}")
 
                     mHandler?.post {
                         listener?.onEncodeSuccess(head)
@@ -286,7 +288,7 @@ object PrivateHelper {
      * 1 从临时缓存文件(已解密)获得源文件A
      * 2 A资源回到原路径
      * 3 成功后删除临时缓存文件A和加密文件A
-     *
+     * 4 删除链接文件
      * todo
      * 失败考虑一个特定目录
      *
@@ -312,6 +314,14 @@ object PrivateHelper {
                         if (encodeFile.exists()) {
                             encodeFile.delete()
                         }
+
+//                        //删除链接文件
+//                        val originalMD5 = MD5.getMD5Str(head.originalPath)
+//                        val linkFile = File(head.albumPath, originalMD5)
+//                        DLog.d("linkFilePath = ${linkFile.absoluteFile}")
+//                        if (linkFile.exists()) {
+//                            linkFile.delete()
+//                        }
                         mHandler.post {
                             listener?.onSuccess()
                         }

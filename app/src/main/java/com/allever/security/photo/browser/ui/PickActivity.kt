@@ -323,8 +323,8 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
                         val obj = SharePreferenceUtil.getObjectFromShare(applicationContext, name)
                         if (obj is LocalThumbnailBean) {
                             val thumb = obj as LocalThumbnailBean
-                            val thumbnailBean =
-                                PrivateHelper.changeLocalThumbnailBean2ThumbnailBean(thumb)
+                            val thumbnailBean = PrivateHelper.changeLocalThumbnailBean2ThumbnailBean(thumb)
+                            thumbnailBean.isChecked = false
                             if (!thumbnailBean.isInvalid) {
                                 thumbnailBeans.add(thumbnailBean)
                             }

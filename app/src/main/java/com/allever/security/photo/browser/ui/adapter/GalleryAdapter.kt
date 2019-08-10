@@ -56,6 +56,7 @@ class GalleryAdapter(context: Context, data: MutableList<Any>, val multiItemType
     override fun bindHolder(holder: BaseViewHolder, position: Int, item: Any) {
         if (item is ThumbnailBean) {
             ImageUtil.loadEncodeImage(context, item, holder.getView(R.id.gallery_iv_image)!!)
+            holder.setVisible(R.id.gallery_iv_select, item.isChecked)
         }
 
         holder.itemView.setOnClickListener {

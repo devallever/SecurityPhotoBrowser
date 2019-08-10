@@ -48,6 +48,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
     private val mExportThumbnailBeanIndexList = mutableListOf<Int>()
 
     private var mAlbumName: String? = null
+    private var mAlbumPath: String? = null
 
     private var mPrivateThumbMap = HashMap<PrivateBean, ThumbnailBean>()
 
@@ -57,6 +58,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
         setContentView(R.layout.activity_gallery)
 
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
+        mAlbumPath = intent.getStringExtra(EXTRA_ALBUM_PATH)
 
         mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mGalleryData.map {
@@ -247,19 +249,27 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                 successList.map {
                     val thumbnailBean = mPrivateThumbMap[it]
                     if (thumbnailBean != null) {
+                        thumbnailBean.isChecked = false
                         SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(thumbnailBean.path), null)
                         exportIndexList.add(mGalleryData.indexOf(thumbnailBean))
                         mThumbnailBeanList.remove(thumbnailBean)
                         mGalleryData.remove(thumbnailBean)
                         mExportThumbnailBeanList.remove(thumbnailBean)
+                        mPrivateThumbMap.remove(it)
                     }
+
+//                    val nameMd5 = MD5.getMD5Str(thumbnailBean?.path!!)
+//                    val linkFile = File(mAlbumPath, nameMd5)
+//                    if (linkFile.exists()) {
+//                        linkFile.delete()
+//                    }
                 }
                 mGalleryAdapter.notifyDataSetChanged()
-//
-//                val decodeEvent = DecodeEvent()
-//                decodeEvent.needRefresh = false
-//                decodeEvent.indexList = exportIndexList
-//                EventBus.getDefault().post(decodeEvent)
+
+                val decodeEvent = DecodeEvent()
+                decodeEvent.needRefresh = false
+                decodeEvent.indexList = exportIndexList
+                EventBus.getDefault().post(decodeEvent)
             }
 
             override fun onFailed(errors: List<PrivateBean>) {
@@ -306,9 +316,10 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
 
     companion object {
-        fun start(context: Context, albumName: String, data: ArrayList<ThumbnailBean>?) {
+        fun start(context: Context, albumName: String, albumPath: String, data: ArrayList<ThumbnailBean>?) {
             val intent = Intent(context, GalleryActivity::class.java)
             intent.putExtra(EXTRA_ALBUM_NAME, albumName)
+            intent.putExtra(EXTRA_ALBUM_PATH, albumPath)
             intent.putParcelableArrayListExtra(EXTRA_DATA, data)
             context.startActivity(intent)
         }
@@ -319,5 +330,6 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
         private const val EXTRA_ALBUM_NAME = "EXTRA_ALBUM_NAME"
         private const val EXTRA_DATA = "EXTRA_DATA"
+        private const val EXTRA_ALBUM_PATH = "EXTRA_ALBUM_PATH"
     }
 }

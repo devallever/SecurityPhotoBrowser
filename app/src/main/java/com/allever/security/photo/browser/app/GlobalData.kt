@@ -60,6 +60,7 @@ object GlobalData {
         cloneThumbnail.selectCount = thumbnail.selectCount
         cloneThumbnail.sourceType = thumbnail.sourceType
         cloneThumbnail.tempPath = thumbnail.tempPath
+        cloneThumbnail.isChecked = thumbnail.isChecked
         return cloneThumbnail
     }
 }

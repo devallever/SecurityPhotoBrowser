@@ -30,6 +30,7 @@ import com.allever.security.photo.browser.function.password.PasswordConfig
 import com.allever.security.photo.browser.ui.GalleryActivity
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.allever.security.photo.browser.util.DialogHelper
+import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 
 import com.android.absbase.ui.widget.RippleImageView
@@ -113,6 +114,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                 GalleryActivity.start(
                     this@AlbumActivity,
                     mImageFolderList[position].name!!,
+                    mImageFolderList[position].dir!!,
                     ArrayList(mImageFolderList[position].data)
                 )
                 mClickAlbumPosition = position
@@ -308,10 +310,15 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
         val imageFolder = mImageFolderList[mClickAlbumPosition]
         decodeEvent.indexList.map {
+            val thumbnailBean = imageFolder.data?.get(it)
+            val nameMd5 = MD5.getMD5Str(thumbnailBean?.path!!)
+            val linkFile = File(imageFolder.dir, nameMd5)
+            if (linkFile.exists()) {
+                linkFile.delete()
+            }
             imageFolder.data?.removeAt(it)
             imageFolder.count = imageFolder.data?.size?:0
         }
-
         //刷新界面
         mPrivateAlbumAdapter.notifyDataSetChanged()
     }
