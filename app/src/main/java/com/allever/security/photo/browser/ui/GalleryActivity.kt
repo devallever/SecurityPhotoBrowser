@@ -217,6 +217,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
         mGalleryData.clear()
         mGalleryData.addAll(sortThumbnailBeans)
 
+        mThumbnailBeanList.clear()
         mGalleryData.map {
             if (it is ThumbnailBean) {
                 mThumbnailBeanList.add(it)
