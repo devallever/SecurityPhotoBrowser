@@ -30,23 +30,23 @@ class PreviewFragment : Fragment() {
         }
 //
 
-//        val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.id_iv_video_controller)
-//
-//        if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
-//            //图片类型
-//            imageView?.visibility = View.VISIBLE
-//            ImageLoader.loadImage(mThumbnailBean?.path, imageView)
-//        } else if (MediaTypeUtil.isVideo(mThumbnailBean?.type ?: -1)) {
-//            //视频类型
-//            imageView?.visibility = View.GONE
-//
-//            mVideoViewHolder = VideoViewHolder()
-//            mVideoViewHolder?.initVideo(videoView, mThumbnailBean?.path, ivPlayAndPause)
-//        }
-//
-//        if (mThumbnailBean?.isAutoPlay == true){
-//            mVideoViewHolder?.play()
-//        }
+        val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.id_iv_video_controller)
+
+        if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
+            //图片类型
+            imageView?.visibility = View.VISIBLE
+            ImageUtil.loadEncodeImage(context!!, mThumbnailBean, imageView!!)
+        } else if (MediaTypeUtil.isVideo(mThumbnailBean?.type ?: -1)) {
+            //视频类型
+            imageView?.visibility = View.GONE
+
+            mVideoViewHolder = VideoViewHolder()
+            mVideoViewHolder?.initVideo(videoView, mThumbnailBean?.tempPath, ivPlayAndPause)
+        }
+
+        if (mThumbnailBean?.isAutoPlay == true){
+            mVideoViewHolder?.play()
+        }
 
         return rootView
     }

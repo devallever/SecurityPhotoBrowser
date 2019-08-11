@@ -54,4 +54,8 @@
     <string name="enter_new_pwd">@string/album_select_secret_vault_new_password_tip</string>
     <string name="enter_comfirm_pwd">@string/album_select_secret_vault_comfirm_password_tip</string>
 
+    <!-- 预览界面 -->
+    <string name="preview_video_unavailable_tips">Can not play this video.</string>
+    <string name="preview_boundary_error_tips">Can not display this photo or video.</string>
+
 </resources>

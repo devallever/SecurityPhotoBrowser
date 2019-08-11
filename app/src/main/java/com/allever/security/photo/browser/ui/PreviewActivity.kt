@@ -19,6 +19,8 @@ import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+import com.android.absbase.utils.ResourcesUtils
+import com.android.absbase.utils.ToastUtils
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 
@@ -70,7 +72,20 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
     }
 
     override fun onPageSelected(position: Int) {
+        if (checkOutOfBoundary()) {
+            return
+        }
+        val fragment = mPagerAdapter?.currentFragment as? PreviewFragment
+        fragment?.pause()
         mPosition = position
+    }
+
+    private fun checkOutOfBoundary(): Boolean {
+        val result = mPosition !in 0 until mThumbnailBeanList.size
+        if (result) {
+            ToastUtils.show(ResourcesUtils.getString(R.string.preview_boundary_error_tips))
+        }
+        return result
     }
 
 

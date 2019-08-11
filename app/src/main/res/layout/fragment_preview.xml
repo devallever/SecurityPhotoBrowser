@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerInside"
-        android:src="@drawable/test"/>
+        android:visibility="visible"/>
 
     <View
         android:id="@+id/id_video_mark"

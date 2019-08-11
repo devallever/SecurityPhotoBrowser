@@ -33,28 +33,19 @@ class VideoViewHolder
 
     private var mAnimListener = object : Animator.AnimatorListener {
         override fun onAnimationRepeat(animation: Animator?) {
-//            DLog.d(TAG, "onAnimationRepeat")
         }
 
         override fun onAnimationEnd(animation: Animator?) {
-//            DLog.d(TAG, "onAnimationEnd")
         }
 
         override fun onAnimationCancel(animation: Animator?) {
-//            DLog.d(TAG, "onAnimationCancel")
             mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
             mIvPlay?.visibility = View.VISIBLE
         }
 
         override fun onAnimationStart(animation: Animator?) {
             mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
-//            DLog.d(TAG, "onAnimationStart")
         }
-    }
-
-
-    init {
-//        initVideoView()
     }
 
     private fun initVideoView() {
@@ -82,10 +73,10 @@ class VideoViewHolder
     }
 
     fun play() {
-//        mVideoView?.start()
-//        mVideoView?.visibility = View.VISIBLE
-//        mIvPlay?.visibility = View.GONE
-        checkAndPlay()
+        mVideoView?.start()
+        mVideoView?.visibility = View.VISIBLE
+        mIvPlay?.setImageResource(R.drawable.icon_album_video_preview_pause)
+        mAlphaAnimator?.start()
     }
 
     fun pause() {
