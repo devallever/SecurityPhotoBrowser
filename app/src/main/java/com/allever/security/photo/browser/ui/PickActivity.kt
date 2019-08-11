@@ -89,6 +89,13 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mSelectedData.map {
+            it.isChecked = false
+        }
+    }
+
     override fun onBackPressed() {
         if (mFlSelectAlbumContainer.visibility == View.VISIBLE) {
             showSelectAlbumContainer(false)
@@ -203,6 +210,15 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
     }
 
     private fun initData() {
+        if (GlobalData.albumData.isNotEmpty()) {
+            //默认显示第一个相册的数据
+            val firstImageFolder = GlobalData.albumData[0]
+            updateData(firstImageFolder)
+            updateFragmentUI()
+            mAlbumAdapter.mData = GlobalData.albumData
+            mAlbumAdapter.notifyDataSetChanged()
+            return
+        }
 
         PermissionManager.request(object : PermissionListener {
             override fun onGranted(grantedList: MutableList<String>) {
