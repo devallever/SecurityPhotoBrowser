@@ -41,7 +41,11 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
 
-class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragment.PickCallback, View.OnClickListener {
+class PickActivity : Base2Activity(),
+    TabLayout.OnTabSelectedListener,
+    PickFragment.PickCallback,
+    View.OnClickListener,
+    SelectAlbumAdapter.OnItemClickListener{
 
     private lateinit var mTabs: TabLayout
     private lateinit var mViewPager: ViewPager
@@ -51,6 +55,7 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
     private lateinit var mIvSelectAlbum: ImageView
     private lateinit var mAlbumRecyclerView: RecyclerView
     private lateinit var mBtnImport: RippleTextView
+    private lateinit var mTvTitle: TextView
 
     private lateinit var mAlbumAdapter: SelectAlbumAdapter
 
@@ -112,6 +117,7 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
 
         mBtnImport = findViewById(R.id.btn_import)
         mBtnImport.setOnClickListener(this)
+        mTvTitle = findViewById(R.id.tv_title)
     }
 
     private fun initTabs() {
@@ -206,6 +212,7 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
         mAlbumRecyclerView = findViewById(R.id.select_album_recycler_view)
         mAlbumRecyclerView.layoutManager = LinearLayoutManager(this)
         mAlbumAdapter = SelectAlbumAdapter(this, R.layout.item_slect_album, mAlbumData)
+        mAlbumAdapter?.setOnItemClickListener(this)
         mAlbumRecyclerView.adapter = mAlbumAdapter
     }
 
@@ -236,6 +243,15 @@ class PickActivity : Base2Activity(), TabLayout.OnTabSelectedListener, PickFragm
         }, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 
+    }
+
+    override fun onChooseAlbumAdapterItemClick(imageFolder: ImageFolder, position: Int) {
+        showSelectAlbumContainer(false)
+
+        mTvTitle.text = imageFolder.name
+
+        updateData(imageFolder)
+        updateFragmentUI()
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
