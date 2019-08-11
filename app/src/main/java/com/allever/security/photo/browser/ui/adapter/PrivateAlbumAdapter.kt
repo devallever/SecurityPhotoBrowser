@@ -49,10 +49,11 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
             }
         )
 
+        holder.setVisible(R.id.iv_image, item.data?.isNotEmpty() == true)
+        holder.setVisible(R.id.id_iv_default_cover, item.data?.isEmpty() == true)
         if (item.data?.isNotEmpty() == true) {
             ImageUtil.loadEncodeImage(mContext, item.data!![0], holder.getView(R.id.iv_image)!!)
         }
-
     }
 
     interface ItemClickListener {

@@ -26,6 +26,7 @@
     <color name="password_view_key_board_bg">#B2161616</color>
 
     <color name="divider_color">#19474747</color>
+    <color name="private_album_item_bg">#66000000</color>
 
 
 </resources>
