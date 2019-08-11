@@ -75,7 +75,7 @@ class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.On
         if (checkOutOfBoundary()) {
             return
         }
-        val fragment = mPagerAdapter?.currentFragment as? PreviewFragment
+        val fragment = mPagerAdapter?.instantiateItem(mPosition) as? PreviewFragment
         fragment?.pause()
         mPosition = position
     }

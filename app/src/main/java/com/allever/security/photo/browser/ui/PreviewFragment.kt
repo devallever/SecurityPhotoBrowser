@@ -16,8 +16,6 @@ class PreviewFragment : Fragment() {
         private val TAG = PreviewFragment::class.java.simpleName
     }
 
-    //    private var mVideoMark: View? = null
-
     private var mThumbnailBean: ThumbnailBean? = null
     private var mVideoViewHolder: VideoViewHolder? = null
 
