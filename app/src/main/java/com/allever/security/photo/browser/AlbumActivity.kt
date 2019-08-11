@@ -22,6 +22,7 @@ import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 
 import com.allever.security.photo.browser.app.Base2Activity
+import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
@@ -98,6 +99,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
         super.onDestroy()
         mAlbumDataTask.cancel(true)
         EventBus.getDefault().unregister(this)
+        GlobalData.albumData.clear()
     }
 
     private fun initView() {
@@ -536,6 +538,8 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
         }
         //刷新界面
         mPrivateAlbumAdapter.notifyDataSetChanged()
+
+        GlobalData.albumData.clear()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -557,6 +561,8 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
 
         //刷新界面
         mPrivateAlbumAdapter.notifyDataSetChanged()
+
+        GlobalData.albumData.clear()
     }
 
     companion object {
