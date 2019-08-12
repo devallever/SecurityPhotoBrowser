@@ -36,7 +36,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                 ToastUtils.show("feedback")
             }
             R.id.setting_tv_about -> {
-                ToastUtils.show("about")
+                AboutActivity.start(this)
             }
             R.id.iv_back -> {
                 finish()
