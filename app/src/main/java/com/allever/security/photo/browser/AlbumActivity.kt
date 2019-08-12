@@ -31,6 +31,7 @@ import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.password.PasswordConfig
 import com.allever.security.photo.browser.ui.GalleryActivity
+import com.allever.security.photo.browser.ui.SettingActivity
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
 import com.allever.security.photo.browser.ui.dialog.AlbumDialog
 import com.allever.security.photo.browser.util.DialogHelper
@@ -256,7 +257,7 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v) {
             mIvSetting -> {
-                ToastUtils.show("setting")
+                SettingActivity.start(this)
             }
             mBtnAddAlbum -> {
                 PermissionManager.request(object : PermissionListener {

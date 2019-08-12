@@ -28,6 +28,7 @@
         <activity android:name=".ui.PickActivity"/>
         <activity android:name=".ui.GalleryActivity"/>
         <activity android:name=".ui.PreviewActivity"/>
+        <activity android:name=".ui.SettingActivity"/>
     </application>
 
 </manifest>

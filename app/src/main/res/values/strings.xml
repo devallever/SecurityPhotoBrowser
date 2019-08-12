@@ -58,4 +58,11 @@
     <string name="preview_video_unavailable_tips">Can not play this video.</string>
     <string name="preview_boundary_error_tips">Can not display this photo or video.</string>
 
+    <!-- 设置 -->
+    <string name="setting">Setting</string>
+	<string name="setting_modify_password">Change Password</string>
+
+    <string name="about">About</string>
+    <string name="feedback">Feedback</string>
+
 </resources>
