@@ -30,7 +30,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.setting_tv_modify_password -> {
-
+                ChangePasswordActivity.start(this, true)
             }
             R.id.setting_tv_feedback -> {
                 ToastUtils.show("feedback")
