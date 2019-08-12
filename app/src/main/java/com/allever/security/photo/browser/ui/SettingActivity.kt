@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.util.FeedbackHelper
 
 class SettingActivity : BaseActivity(), View.OnClickListener {
 
@@ -33,7 +35,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                 ChangePasswordActivity.start(this, true)
             }
             R.id.setting_tv_feedback -> {
-                ToastUtils.show("feedback")
+                FeedbackHelper.feedback(this)
             }
             R.id.setting_tv_about -> {
                 AboutActivity.start(this)
