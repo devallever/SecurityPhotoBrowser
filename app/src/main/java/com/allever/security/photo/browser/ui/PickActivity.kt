@@ -547,7 +547,12 @@ class PickActivity : Base2Activity(),
         updateFragmentUI(thumbnailBean)
     }
 
-    override fun onPickItemLongClick(thumbnailBean: ThumbnailBean) {
+    override fun onPickItemLongClick(position: Int, thumbnailBean: ThumbnailBean) {
+        val data = mFragmentDataMap[TabModel.selectedTab]
+        val index = data?.indexOf(thumbnailBean) ?: 0
+        if (data != null) {
+            PreviewActivity.start(this, ArrayList(data), index)
+        }
     }
 
     companion object {
