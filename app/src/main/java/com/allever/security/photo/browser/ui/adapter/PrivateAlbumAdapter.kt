@@ -39,10 +39,6 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
         holder.setText(R.id.item_tv_album_video_count, videoCount.toString())
         holder.setText(R.id.item_tv_album_image_count, imageCount.toString())
 
-        holder.itemView.setOnClickListener {
-            listener?.onItemClick(position)
-        }
-
         holder.setOnClickListener(R.id.item_private_album_iv_menu,
             View.OnClickListener {
                 listener?.onMoreClick(position)
@@ -57,7 +53,6 @@ class PrivateAlbumAdapter(context: Context, layoutResId: Int, data: MutableList<
     }
 
     interface ItemClickListener {
-        fun onItemClick(position: Int)
         fun onMoreClick(position: Int){}
     }
 }

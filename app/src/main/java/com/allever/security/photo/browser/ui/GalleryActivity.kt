@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
+import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
@@ -131,14 +133,19 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
             }
         })
 
-        mGalleryAdapter.itemClickListener = object : ItemClickListener {
-            override fun onItemClick(position: Int) {
+        mGalleryAdapter.mItemListener = object : ItemListener{
+            override fun onItemClick(position: Int, holder: BaseViewHolder) {
                 val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
                 PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
             }
 
-            override fun onItemLongClick(position: Int, item: Any) {
+            override fun onItemLongClick(position: Int, holder: BaseViewHolder): Boolean {
+                val item = mGalleryData[position]
                 if (item is ThumbnailBean) {
+                    val state = !item.isChecked
+                    item.isChecked = state
+                    holder.setVisible(R.id.gallery_iv_select, state)
+
                     if (item.isChecked) {
                         //add
                         mExportThumbnailBeanList.add(item)
@@ -157,7 +164,9 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
                         mBtnExport.visibility = View.GONE
                     }
                 }
+                return true
             }
+
         }
 
         mRecyclerView.adapter = mGalleryAdapter

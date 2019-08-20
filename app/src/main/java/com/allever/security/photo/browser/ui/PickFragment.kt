@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.allever.lib.common.app.BaseFragment
 import com.allever.lib.common.app.App
+import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
@@ -43,18 +45,22 @@ class PickFragment : BaseFragment() {
 
         mPickImageAdapter = PickImageAdapter(App.context, R.layout.item_pick, mData)
         mRecyclerView.adapter = mPickImageAdapter
-        mPickImageAdapter?.optionListener = object : PickImageAdapter.OptionListener {
-            override fun onItemClick(position: Int, item: ThumbnailBean) {
-                ToastUtils.show("onItem click ${item.path}")
+        mPickImageAdapter?.mItemListener = object : ItemListener {
+            override fun onItemClick(position: Int, holder: BaseViewHolder) {
+                val item = mData[position]
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    holder.setImageResource(R.id.pick_iv_select, R.drawable.icon_album_select)
+                } else {
+                    holder.setImageResource(R.id.pick_iv_select, R.drawable.icon_album_unselected)
+                }
                 callback?.onPickItemClick(item)
             }
-
-            override fun onItemLongClick(position: Int, item: ThumbnailBean): Boolean {
-                ToastUtils.show("onItem onPickItemLongClick ${item.path}")
-                callback?.onPickItemLongClick(item)
+            override fun onItemLongClick(position: Int, holder: BaseViewHolder): Boolean {
+                val item = mData[position]
+                callback?.onPickItemLongClick(position, item)
                 return true
             }
-
         }
 //        val emptyView = mView.findViewById<View>(R.id.empty_view)
 //        val emptyIcon = mView.findViewById<ImageView>(R.id.iv_empty_type)
@@ -85,6 +91,6 @@ class PickFragment : BaseFragment() {
 
     interface PickCallback {
         fun onPickItemClick(thumbnailBean: ThumbnailBean)
-        fun onPickItemLongClick(thumbnailBean: ThumbnailBean)
+        fun onPickItemLongClick(position: Int, thumbnailBean: ThumbnailBean)
     }
 }

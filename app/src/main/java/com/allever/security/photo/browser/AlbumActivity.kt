@@ -1,7 +1,6 @@
 package com.allever.security.photo.browser
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
@@ -15,6 +14,8 @@ import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import com.allever.lib.common.app.App
+import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.lib.common.ui.widget.recycler.ItemListener
 
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
@@ -118,8 +119,8 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
     private fun initData() {
         mPrivateAlbumAdapter = PrivateAlbumAdapter(this, R.layout.item_private_album, mImageFolderList)
         mRecyclerView.adapter = mPrivateAlbumAdapter
-        mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
-            override fun onItemClick(position: Int) {
+        mPrivateAlbumAdapter.mItemListener = object : ItemListener {
+            override fun onItemClick(position: Int, holder: BaseViewHolder) {
                 GalleryActivity.start(
                     this@AlbumActivity,
                     mImageFolderList[position].name!!,
@@ -128,13 +129,13 @@ class AlbumActivity : Base2Activity(), View.OnClickListener {
                 )
                 mClickAlbumPosition = position
             }
-
+        }
+        mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onMoreClick(position: Int) {
                 mMorePosition = position
                 if (mAlbumBottomDialog == null) {
                     mAlbumBottomDialog = AlbumDialog(mAlbumBottomDialogCallback)
                 }
-
                 mAlbumBottomDialog?.show(supportFragmentManager, AlbumActivity::class.java.simpleName)
             }
         }

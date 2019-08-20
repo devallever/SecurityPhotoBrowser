@@ -14,9 +14,6 @@ import com.android.absbase.utils.DeviceUtils
 
 class GalleryAdapter(context: Context, data: MutableList<Any>, val multiItemTypeSupport: MultiItemTypeSupport<Any>) :
     MultiItemCommonAdapter<Any>(context, data, multiItemTypeSupport) {
-
-    var itemClickListener: ItemClickListener? = null
-
     private var mItemWidth = 0
 
     init {
@@ -48,20 +45,6 @@ class GalleryAdapter(context: Context, data: MutableList<Any>, val multiItemType
         if (item is ThumbnailBean) {
             ImageUtil.loadEncodeImage(context, item, holder.getView(R.id.gallery_iv_image)!!)
             holder.setVisible(R.id.gallery_iv_select, item.isChecked)
-        }
-
-        holder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick(position)
-        }
-
-        holder.itemView.setOnLongClickListener {
-            if (item is ThumbnailBean) {
-                val state = !item.isChecked
-                item.isChecked = state
-                holder.setVisible(R.id.gallery_iv_select, state)
-                itemClickListener?.onItemLongClick(position, item)
-            }
-            return@setOnLongClickListener true
         }
     }
 
