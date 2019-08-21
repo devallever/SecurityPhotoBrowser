@@ -39,7 +39,12 @@ class PreviewFragment : Fragment() {
             imageView?.visibility = View.GONE
 
             mVideoViewHolder = VideoViewHolder()
-            mVideoViewHolder?.initVideo(videoView, mThumbnailBean?.tempPath, ivPlayAndPause)
+            //判断资源类型，系统资源还是加密资源
+            if (mThumbnailBean?.sourceType == ThumbnailBean.DECODE) {
+                mVideoViewHolder?.initVideo(videoView, mThumbnailBean?.tempPath, ivPlayAndPause)
+            } else {
+                mVideoViewHolder?.initVideo(videoView, mThumbnailBean?.path, ivPlayAndPause)
+            }
         }
 
         if (mThumbnailBean?.isAutoPlay == true){

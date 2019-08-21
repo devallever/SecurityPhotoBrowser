@@ -51,6 +51,10 @@ object ImageUtil {
 
     fun loadEncodeImage(context: Context, thumbnailBean: ThumbnailBean?, imageView: ImageView) {
         thumbnailBean ?: return
+        if (thumbnailBean.sourceType == ThumbnailBean.SYSTEM) {
+            Glide.with(context).load(thumbnailBean.path).into(imageView)
+            return
+        }
         val tempFile = File(thumbnailBean.tempPath)
         if (tempFile.exists()) {
             Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
