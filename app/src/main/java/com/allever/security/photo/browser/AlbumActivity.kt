@@ -53,12 +53,7 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private lateinit var mIvSetting: RippleImageView
     private lateinit var mBtnAddAlbum: View
-
-    private val mAlbumImageFolderMap = LinkedHashMap<String, ImageFolder>()
     private var mImageFolderList = mutableListOf<ImageFolder>()
-    private var mAddAlbumDialog: AlertDialog? = null
-    //修改相册名称弹窗
-    private var mRenameAlbumDialog: AlertDialog? = null
 
     private var mClickAlbumPosition = 0
 
@@ -91,12 +86,14 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
 
     private fun initView() {
         mRecyclerView = findViewById(R.id.album_recycler_view)
-        mRecyclerView.layoutManager = GridLayoutManager(this, 2) as RecyclerView.LayoutManager?
+        mRecyclerView.layoutManager = GridLayoutManager(this, 2)
 
         mIvSetting = findViewById(R.id.album_iv_setting)
         mIvSetting.setOnClickListener(this)
         mBtnAddAlbum = findViewById(R.id.album_btn_add_album)
         mBtnAddAlbum.setOnClickListener(this)
+
+        mAlbumBottomDialog = AlbumDialog(mAlbumBottomDialogCallback)
     }
 
     private fun initData() {
@@ -116,9 +113,6 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onMoreClick(position: Int) {
                 mMorePosition = position
-                if (mAlbumBottomDialog == null) {
-                    mAlbumBottomDialog = AlbumDialog(mAlbumBottomDialogCallback)
-                }
                 mAlbumBottomDialog?.show(supportFragmentManager, AlbumActivity::class.java.simpleName)
             }
         }
@@ -131,103 +125,12 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     private val mAlbumBottomDialogCallback = object : AlbumDialog.Callback {
         override fun onDeleteClick(dialog: AppCompatDialogFragment) {
             dialog.dismissAllowingStateLoss()
-
-            //删除提示弹窗
-            val builder = AlertDialog.Builder(this@AlbumActivity)
-                .setMessage(R.string.tips_dialog_delete_resource)
-                .setNegativeButton(R.string.cancel) { dialog, which ->
-                    dialog.dismiss()
-                    dialog.dismiss()
-                }
-                .setPositiveButton(R.string.delete, DialogInterface.OnClickListener { dialog, which ->
-                    //启动一个Task删除， 遍历删除
-
-                    if (mMorePosition < 0 || mMorePosition >= mImageFolderList.size) {
-                        return@OnClickListener
-                    }
-                    val imageFolder = mImageFolderList[mMorePosition]
-                    getDeleteAlbumTask().execute(imageFolder)
-                    dialog.dismiss()
-                })
-            builder.show()
-
+            mPresenter.deleteAlbum(this@AlbumActivity, mMorePosition)
         }
 
         override fun onRenameClick(dialog: AppCompatDialogFragment) {
-            if (mAlbumBottomDialog != null) {
-                mAlbumBottomDialog!!.dismissAllowingStateLoss()
-            }
-
-            val imageFolder = mImageFolderList[mMorePosition] ?: return
-
-            val albumName = imageFolder.name
-
-            val builder = DialogHelper.Builder()
-                .setTitleContent(getString(R.string.rename_album))
-                .isShowMessage(false)
-                .isShowEditText(true)
-                .setOkContent(getString(R.string.save))
-                .setCancelContent(getString(R.string.cancel))
-                .setEditTextContent(albumName?:"")
-
-            mRenameAlbumDialog = DialogHelper.createEditTextDialog(
-                this@AlbumActivity,
-                builder,
-                object : DialogHelper.EditDialogCallback{
-                    override fun onOkClick(dialog: AlertDialog, etContent: String) {
-                        if (TextUtils.isEmpty(etContent)) {
-                            ToastUtils.show(getString(R.string.tips_please_input_album_name))
-                            return
-                        }
-
-                        val albumPath = PrivateHelper.PATH_ALBUM + File.separator + etContent
-
-                        //判断相册是是否重复
-                        if (FileUtil.isExistsFile(albumPath)) {
-                            //已存在，
-                            ToastUtils.show(getString(R.string.already_exist_album))
-                            return
-                        }
-
-                        if (mMorePosition >= mImageFolderList.size) {
-                            return
-                        }
-
-                        val imageFolder = mImageFolderList.get(mMorePosition) ?: return
-
-                        val albumDir = imageFolder.dir
-                        val albumDirFile = File(albumDir)
-                        val albumDesDirFile = File(albumPath)
-                        var renameOk = false
-                        try {
-                            renameOk = albumDirFile.renameTo(albumDesDirFile)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-                        if (!renameOk) {
-                            com.android.absbase.utils.ToastUtils.show(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
-                            dialog.dismiss()
-                            mAlbumBottomDialog?.dismiss()
-                            return
-                        }
-
-                        dialog.dismiss()
-                        mAlbumBottomDialog?.dismiss()
-
-                        mAlbumImageFolderMap.remove(albumDir)
-                        imageFolder.dir = (albumPath)
-                        imageFolder.name = (albumDesDirFile.name)
-                        mAlbumImageFolderMap[albumPath] = imageFolder
-                        mPrivateAlbumAdapter.notifyDataSetChanged()
-
-                    }
-
-                    override fun onCancelClick(dialog: AlertDialog) {
-                        mAlbumBottomDialog?.dismiss()
-                    }
-                })
-            mRenameAlbumDialog?.show()
+            dialog.dismissAllowingStateLoss()
+            mPresenter.renameAlbum(this@AlbumActivity, mMorePosition)
         }
     }
 
@@ -252,7 +155,7 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mPrivateAlbumAdapter.notifyDataSetChanged()
     }
 
-    override fun addAlbum(data: ImageFolder) {
+    override fun updateAddAlbum(data: ImageFolder) {
         mPrivateAlbumAdapter.addData(mImageFolderList.size, data)
         //滚动到底部
         mHandler.postDelayed({
@@ -260,8 +163,24 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         }, 200)
     }
 
-    private fun handleAddAlbum() {
-        mPresenter.handleAddAlbum(this)
+    override fun showBottomDialog() {
+        mAlbumBottomDialog?.show(supportFragmentManager, AlbumActivity::class.java.simpleName)
+    }
+
+    override fun hideBottomDialog() {
+        mAlbumBottomDialog?.dismiss()
+    }
+
+    override fun updateDeleteAlbum() {
+        mImageFolderList.removeAt(mMorePosition)
+        mPrivateAlbumAdapter.notifyDataSetChanged()
+    }
+
+    override fun updateRenameAlbum(albumName: String, dir: String) {
+        val imageFolder = mImageFolderList[mMorePosition]
+        imageFolder.dir = dir
+        imageFolder.name = albumName
+        mPrivateAlbumAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -282,55 +201,6 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
                         mPresenter.handleAddAlbum(this)
                     }
                 }
-            }
-        }
-    }
-
-    /***
-     * 删除相册异步任务
-     * @return
-     */
-    fun getDeleteAlbumTask(): AsyncTask<ImageFolder, Void, Boolean> {
-        return object : AsyncTask<ImageFolder, Void, Boolean>() {
-            override fun doInBackground(vararg imageFolders: ImageFolder): Boolean? {
-                if (imageFolders.isEmpty()) {
-                    return null
-                }
-
-                val imageFolder = imageFolders[0] ?: return null
-
-                val thumbnailBeanList = imageFolder.data
-                if (thumbnailBeanList != null) {
-                    if (thumbnailBeanList.size > 0) {
-                        //有内容，遍历删除加密文件，
-                        for (bean in thumbnailBeanList!!) {
-                            //
-                            val fileNameMd5 = MD5.getMD5Str(bean.path)
-                            FileUtil.deleteFile(PrivateHelper.PATH_ENCODE_ORIGINAL + File.separator + fileNameMd5)
-                        }
-                    }
-
-                    //删除目录
-                    FileUtil.deleteFolder(imageFolder.dir)
-                    return true
-                }
-
-                return false
-            }
-
-            override fun onPostExecute(isSuccess: Boolean?) {
-                if (isSuccess!!) {
-                    //已删除，刷新数据
-                    com.android.absbase.utils.ToastUtils.show(getString(R.string.delete_finish))
-
-                    mImageFolderList.removeAt(mMorePosition)
-                    mPrivateAlbumAdapter.notifyDataSetChanged()
-
-                } else {
-                    //失败，不做处理
-                }
-                //弹窗消失
-                mAlbumBottomDialog?.dismiss()
             }
         }
     }

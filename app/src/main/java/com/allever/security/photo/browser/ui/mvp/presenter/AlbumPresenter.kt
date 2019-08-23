@@ -13,7 +13,6 @@ import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
-import com.allever.security.photo.browser.AlbumActivity
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
@@ -21,6 +20,8 @@ import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.ui.mvp.view.AlbumView
 import com.allever.security.photo.browser.util.DialogHelper
+import com.allever.security.photo.browser.util.FileUtil
+import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import java.io.File
 
@@ -77,7 +78,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         val albumPath = PrivateHelper.PATH_ALBUM + File.separator + albumName
         mAlbumImageFolderMap[albumPath] = imageFolder
 
-        mViewRef.get()?.addAlbum(imageFolder)
+        mViewRef.get()?.updateAddAlbum(imageFolder)
     }
 
     fun handleAddAlbum(activity: Activity) {
@@ -100,6 +101,25 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                 override fun onCancelClick(dialog: AlertDialog) {}
             })
         addAlbumDialog.show()
+    }
+
+    fun deleteAlbum(activity: Activity, position:Int) {
+        //删除提示弹窗
+        val builder = AlertDialog.Builder(activity)
+            .setMessage(R.string.tips_dialog_delete_resource)
+            .setNegativeButton(R.string.cancel) { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(R.string.delete, DialogInterface.OnClickListener { dialog, which ->
+                //启动一个Task删除， 遍历删除
+                if (position < 0 || position >= mImageFolderList.size) {
+                    return@OnClickListener
+                }
+                val imageFolder = mImageFolderList[position]
+                getDeleteAlbumTask().execute(imageFolder)
+                dialog.dismiss()
+            })
+        builder.show()
     }
 
     /***
@@ -188,5 +208,122 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
             mImageFolderList = result
             mViewRef.get()?.updateAlbumList(mImageFolderList)
         }
+    }
+
+    /***
+     * 删除相册异步任务
+     * @return
+     */
+    fun getDeleteAlbumTask(): AsyncTask<ImageFolder, Void, Boolean> {
+        return object : AsyncTask<ImageFolder, Void, Boolean>() {
+            override fun doInBackground(vararg imageFolders: ImageFolder): Boolean? {
+                if (imageFolders.isEmpty()) {
+                    return null
+                }
+
+                val imageFolder = imageFolders[0]
+
+                val thumbnailBeanList = imageFolder.data
+                if (thumbnailBeanList != null) {
+                    if (thumbnailBeanList.size > 0) {
+                        //有内容，遍历删除加密文件，
+                        for (bean in thumbnailBeanList!!) {
+                            //
+                            val fileNameMd5 = MD5.getMD5Str(bean.path)
+                            FileUtil.deleteFile(PrivateHelper.PATH_ENCODE_ORIGINAL + File.separator + fileNameMd5)
+                        }
+                    }
+
+                    //删除目录
+                    FileUtil.deleteFolder(imageFolder.dir)
+                    return true
+                }
+
+                return false
+            }
+
+            override fun onPostExecute(isSuccess: Boolean?) {
+                if (isSuccess!!) {
+                    //已删除，刷新数据
+                    ToastUtils.show(App.context.getString(R.string.delete_finish))
+                   mViewRef.get()?.updateDeleteAlbum()
+                } else {
+                    //失败，不做处理
+                }
+                //弹窗消失
+                mViewRef.get()?.hideBottomDialog()
+            }
+        }
+    }
+
+    fun renameAlbum(activity: Activity, position: Int) {
+        val imageFolder = mImageFolderList[position]
+
+        val albumName = imageFolder.name
+
+        val builder = DialogHelper.Builder()
+            .setTitleContent(App.context.getString(R.string.rename_album))
+            .isShowMessage(false)
+            .isShowEditText(true)
+            .setOkContent(App.context.getString(R.string.save))
+            .setCancelContent(App.context.getString(R.string.cancel))
+            .setEditTextContent(albumName?:"")
+
+        val mRenameAlbumDialog = DialogHelper.createEditTextDialog(
+            activity,
+            builder,
+            object : DialogHelper.EditDialogCallback{
+                override fun onOkClick(dialog: AlertDialog, etContent: String) {
+                    if (TextUtils.isEmpty(etContent)) {
+                        ToastUtils.show(App.context.getString(R.string.tips_please_input_album_name))
+                        return
+                    }
+
+                    val albumPath = PrivateHelper.PATH_ALBUM + File.separator + etContent
+
+                    //判断相册是是否重复
+                    if (FileUtil.isExistsFile(albumPath)) {
+                        //已存在，
+                        ToastUtils.show(App.context.getString(R.string.already_exist_album))
+                        return
+                    }
+
+                    if (position >= mImageFolderList.size) {
+                        return
+                    }
+
+                    val imageFolder = mImageFolderList[position]
+
+                    val albumDir = imageFolder.dir
+                    val albumDirFile = File(albumDir)
+                    val albumDesDirFile = File(albumPath)
+                    var renameOk = false
+                    try {
+                        renameOk = albumDirFile.renameTo(albumDesDirFile)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    if (!renameOk) {
+                        com.android.absbase.utils.ToastUtils.show(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
+                        dialog.dismiss()
+                        return
+                    }
+
+                    dialog.dismiss()
+
+                    mAlbumImageFolderMap.remove(albumDir)
+                    imageFolder.dir = (albumPath)
+                    imageFolder.name = (albumDesDirFile.name)
+                    mAlbumImageFolderMap[albumPath] = imageFolder
+                    mViewRef.get()?.updateRenameAlbum(imageFolder.name!!, imageFolder.dir!!)
+
+                }
+
+                override fun onCancelClick(dialog: AlertDialog) {
+                    dialog.dismiss()
+                }
+            })
+        mRenameAlbumDialog.show()
     }
 }
