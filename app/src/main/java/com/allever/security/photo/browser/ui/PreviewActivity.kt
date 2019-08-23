@@ -2,13 +2,11 @@ package com.allever.security.photo.browser.ui
 
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.ImageView
 import com.allever.lib.common.app.App
-import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
@@ -17,6 +15,8 @@ import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
+import com.allever.security.photo.browser.ui.mvp.presenter.PreviewPresenter
+import com.allever.security.photo.browser.ui.mvp.view.PreviewView
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import com.android.absbase.utils.ResourcesUtils
@@ -24,7 +24,8 @@ import com.android.absbase.utils.ToastUtils
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 
-class PreviewActivity : Base2Activity(), ViewPager.OnPageChangeListener, View.OnClickListener {
+class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener, View.OnClickListener {
+    override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     private var mViewPager: ViewPager? = null
     private var mIvBack: ImageView? = null
     private var mIvSelect: ImageView? = null

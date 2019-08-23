@@ -10,9 +10,13 @@ import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.app.Base2Activity
+import com.allever.security.photo.browser.ui.mvp.presenter.SettingPresenter
+import com.allever.security.photo.browser.ui.mvp.view.SettingView
 import com.allever.security.photo.browser.util.FeedbackHelper
 
-class SettingActivity : BaseActivity(), View.OnClickListener {
+class SettingActivity : Base2Activity<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
+    override fun createPresenter(): SettingPresenter = SettingPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

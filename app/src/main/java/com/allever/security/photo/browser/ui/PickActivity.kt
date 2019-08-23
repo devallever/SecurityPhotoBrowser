@@ -32,6 +32,8 @@ import com.allever.security.photo.browser.function.endecode.EncodeListListener
 import com.allever.security.photo.browser.function.endecode.PrivateBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.ui.adapter.SelectAlbumAdapter
+import com.allever.security.photo.browser.ui.mvp.presenter.PickPresenter
+import com.allever.security.photo.browser.ui.mvp.view.PickView
 import com.allever.security.photo.browser.ui.widget.tab.TabLayout
 import com.allever.security.photo.browser.util.*
 import com.android.absbase.ui.widget.RippleTextView
@@ -41,11 +43,13 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
 
-class PickActivity : Base2Activity(),
+class PickActivity : Base2Activity<PickView, PickPresenter>(),
+    PickView,
     TabLayout.OnTabSelectedListener,
     PickFragment.PickCallback,
     View.OnClickListener,
     SelectAlbumAdapter.OnItemClickListener{
+    override fun createPresenter(): PickPresenter = PickPresenter()
 
     private lateinit var mTabs: TabLayout
     private lateinit var mViewPager: ViewPager

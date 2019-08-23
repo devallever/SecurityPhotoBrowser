@@ -2,10 +2,12 @@ package com.allever.security.photo.browser.app
 
 import android.os.Bundle
 import com.allever.lib.common.app.BaseActivity
+import com.allever.lib.common.mvp.BaseMvpActivity
+import com.allever.lib.common.mvp.BasePresenter
 import com.allever.security.photo.browser.function.password.PrivateViewManager
 import com.allever.security.photo.browser.function.password.PrivateViewProxy
 
-open class Base2Activity : BaseActivity() {
+abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     protected lateinit var mPrivateViewProxy: PrivateViewProxy
 

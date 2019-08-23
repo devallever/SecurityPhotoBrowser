@@ -26,6 +26,8 @@ import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreList
 import com.allever.security.photo.browser.function.endecode.UnLockListListener
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
 import com.allever.security.photo.browser.ui.adapter.ItemClickListener
+import com.allever.security.photo.browser.ui.mvp.presenter.GalleryPresenter
+import com.allever.security.photo.browser.ui.mvp.view.GalleryView
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.secret_vault_password_layout.*
@@ -36,7 +38,8 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
-class GalleryActivity : Base2Activity(), View.OnClickListener {
+class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
+    override fun createPresenter(): GalleryPresenter = GalleryPresenter()
 
     private lateinit var mBtnExport: View
     private lateinit var mBtnPick: View

@@ -11,9 +11,13 @@ import android.widget.TextView
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.function.password.PasswordHelper
+import com.allever.security.photo.browser.ui.mvp.presenter.ChangePasswordPresenter
+import com.allever.security.photo.browser.ui.mvp.view.ChangePasswordView
 
 
-class ChangePasswordActivity : Base2Activity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordPresenter>(), ChangePasswordView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    override fun createPresenter(): ChangePasswordPresenter = ChangePasswordPresenter()
+
     private var mLlPwdContainer: LinearLayout? = null
     private var mPwdView: View? = null
 //    private var mItemContainer: View? = null
