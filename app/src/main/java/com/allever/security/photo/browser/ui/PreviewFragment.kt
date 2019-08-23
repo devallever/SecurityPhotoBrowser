@@ -9,6 +9,8 @@ import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.util.ImageUtil
 import com.allever.security.photo.browser.util.MediaTypeUtil
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.github.chrisbanes.photoview.PhotoView
 
 class PreviewFragment : Fragment() {
 
@@ -21,22 +23,25 @@ class PreviewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_preview, container, false)
-        val imageView = rootView?.findViewById<ImageView>(R.id.id_iv_image)
+        val imageView = rootView?.findViewById<SubsamplingScaleImageView>(R.id.id_iv_image)
+        imageView?.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM)
+        val gifView = rootView.findViewById<PhotoView>(R.id.id_iv_image_gif)
         val videoView = rootView?.findViewById<VideoView>(R.id.id_video_view)
-        if (MediaTypeUtil.isImage(mThumbnailBean?.type!!)) {
-            ImageUtil.loadEncodeImage(context!!, mThumbnailBean, imageView!!)
-        }
-//
-
         val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.id_iv_video_controller)
 
         if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
             //图片类型
-            imageView?.visibility = View.VISIBLE
-            ImageUtil.loadEncodeImage(context!!, mThumbnailBean, imageView!!)
+            if (MediaTypeUtil.isGif(mThumbnailBean?.type!!)) {
+                ImageUtil.loadEncodeImage(context!!, mThumbnailBean, gifView)
+                imageView?.visibility = View.GONE
+            } else {
+                ImageUtil.loadBigImage(context!!, mThumbnailBean, imageView!!)
+                gifView.visibility = View.GONE
+            }
         } else if (MediaTypeUtil.isVideo(mThumbnailBean?.type ?: -1)) {
             //视频类型
             imageView?.visibility = View.GONE
+            gifView.visibility = View.GONE
 
             mVideoViewHolder = VideoViewHolder()
             //判断资源类型，系统资源还是加密资源

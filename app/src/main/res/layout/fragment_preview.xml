@@ -10,13 +10,21 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/id_iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerInside"
         android:visibility="visible"/>
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/id_iv_image_gif"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/id_video_mark"

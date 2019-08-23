@@ -18,16 +18,17 @@ package com.allever.security.photo.browser.util
 
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
-import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.function.endecode.DecodeListener
 import com.allever.security.photo.browser.function.endecode.PrivateBean
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.android.absbase.utils.DeviceUtils
 import com.bumptech.glide.Glide
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import java.io.File
-
+import com.davemorrissey.labs.subscaleview.ImageSource
 
 object ImageUtil {
     val EXIF_TAG_MAKE = "PhotoEditor"
@@ -49,8 +50,42 @@ object ImageUtil {
         )
 
 
+    fun loadBigImage(context: Context, thumbnailBean: ThumbnailBean?, imageView: SubsamplingScaleImageView) {
+        thumbnailBean ?: return
+        if (thumbnailBean.sourceType == ThumbnailBean.SYSTEM) {
+            if (MediaTypeUtil.isGif(thumbnailBean.type)) {
+
+            } else {
+                imageView.setImage(ImageSource.uri(thumbnailBean.path))
+            }
+            return
+        }
+        val tempFile = File(thumbnailBean.tempPath)
+        if (tempFile.exists()) {
+            imageView.setImage(ImageSource.uri(thumbnailBean.tempPath))
+//            Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
+        } else {
+            //解码
+            val md5Path = MD5.getMD5Str(thumbnailBean.path) ?: return
+            PrivateHelper.decode(
+                File(
+                    PrivateHelper.PATH_ENCODE_ORIGINAL,
+                    md5Path
+                ).absolutePath, object : DecodeListener {
+                    override fun onDecodeStart() {}
+                    override fun onDecodeSuccess(privateBean: PrivateBean) {
+                        imageView.setImage(ImageSource.uri(thumbnailBean.tempPath))
+//                        Glide.with(context).load(thumbnailBean.tempPath).into(imageView)
+                    }
+
+                    override fun onDecodeFailed(msg: String) {}
+                })
+        }
+    }
+
     fun loadEncodeImage(context: Context, thumbnailBean: ThumbnailBean?, imageView: ImageView) {
         thumbnailBean ?: return
+        imageView.visibility = View.VISIBLE
         if (thumbnailBean.sourceType == ThumbnailBean.SYSTEM) {
             Glide.with(context).load(thumbnailBean.path).into(imageView)
             return
