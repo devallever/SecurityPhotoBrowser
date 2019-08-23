@@ -229,10 +229,10 @@ public class MediaFile {
      */
     public static boolean isGifFileType(String path) {
         // TODO：暂时屏蔽gif
-//    	 MediaFileType type = getFileType(path);
-//         if(null != type) {
-//             return (type.fileType == FILE_TYPE_GIF);
-//         }
+    	 MediaFileType type = getFileType(path);
+         if(null != type) {
+             return (type.fileType == FILE_TYPE_GIF);
+         }
         return false;
     }
 
