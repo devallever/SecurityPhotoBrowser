@@ -54,6 +54,7 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
     private var mPrivateThumbMap = HashMap<PrivateBean, ThumbnailBean>()
 
+    private var mSelectMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,35 +136,17 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
 
         mGalleryAdapter.mItemListener = object : ItemListener{
             override fun onItemClick(position: Int, holder: BaseViewHolder) {
-                val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
-                PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
+                if (mSelectMode) {
+                    selectItem(position, holder)
+                } else {
+                    val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
+                    PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
+                }
             }
 
             override fun onItemLongClick(position: Int, holder: BaseViewHolder): Boolean {
-                val item = mGalleryData[position]
-                if (item is ThumbnailBean) {
-                    val state = !item.isChecked
-                    item.isChecked = state
-                    holder.setVisible(R.id.gallery_iv_select, state)
-
-                    if (item.isChecked) {
-                        //add
-                        mExportThumbnailBeanList.add(item)
-                        mExportThumbnailBeanIndexList.add(position)
-                    } else {
-                        //remove
-                        mExportThumbnailBeanList.remove(item)
-                        mExportThumbnailBeanIndexList.remove(position)
-                    }
-
-                    if (mExportThumbnailBeanList.size > 0) {
-                        //show
-                        mBtnExport.visibility = View.VISIBLE
-                    } else {
-                        //hide
-                        mBtnExport.visibility = View.GONE
-                    }
-                }
+                mSelectMode = true
+                selectItem(position, holder)
                 return true
             }
 
@@ -185,6 +168,50 @@ class GalleryActivity : Base2Activity(), View.OnClickListener {
             mBtnExport -> {
                 ToastUtils.show("Export")
                 restoreResourceList(mExportThumbnailBeanList)
+                mSelectMode = false
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (mSelectMode) {
+            mSelectMode = false
+            //清空选中状态
+            mExportThumbnailBeanList.map {
+                it.isChecked = false
+            }
+            mExportThumbnailBeanList.clear()
+            mExportThumbnailBeanIndexList.clear()
+            mGalleryAdapter.notifyDataSetChanged()
+            mBtnExport.visibility = View.GONE
+            return
+        }
+        super.onBackPressed()
+    }
+
+    private fun selectItem(position: Int, holder: BaseViewHolder) {
+        val item = mGalleryData[position]
+        if (item is ThumbnailBean) {
+            val state = !item.isChecked
+            item.isChecked = state
+            holder.setVisible(R.id.gallery_iv_select, state)
+
+            if (item.isChecked) {
+                //add
+                mExportThumbnailBeanList.add(item)
+                mExportThumbnailBeanIndexList.add(position)
+            } else {
+                //remove
+                mExportThumbnailBeanList.remove(item)
+                mExportThumbnailBeanIndexList.remove(position)
+            }
+
+            if (mExportThumbnailBeanList.size > 0) {
+                //show
+                mBtnExport.visibility = View.VISIBLE
+            } else {
+                //hide
+                mBtnExport.visibility = View.GONE
             }
         }
     }
