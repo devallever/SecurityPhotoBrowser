@@ -60,6 +60,11 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
 
     override fun getContentView(): Int = R.layout.activity_gallery
     override fun createPresenter(): GalleryPresenter = GalleryPresenter()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
+        mAlbumPath = intent.getStringExtra(EXTRA_ALBUM_PATH)
+        super.onCreate(savedInstanceState)
+    }
     override fun initView() {
         mTvTitle = findViewById(R.id.gallery_tv_album_name)
         mTvTitle.text = mAlbumName
@@ -135,9 +140,6 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
     }
 
     override fun initData() {
-        mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
-        mAlbumPath = intent.getStringExtra(EXTRA_ALBUM_PATH)
-
         mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mGalleryData.map {
             if (it is ThumbnailBean) {
