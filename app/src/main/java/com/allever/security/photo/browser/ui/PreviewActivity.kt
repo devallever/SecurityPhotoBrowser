@@ -26,9 +26,6 @@ import java.io.File
 
 class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener, View.OnClickListener {
     private var mViewPager: ViewPager? = null
-    private var mIvBack: ImageView? = null
-    private var mIvSelect: ImageView? = null
-    private lateinit var mIvExport: ImageView
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0
@@ -39,9 +36,6 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
         mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mPosition = intent.getIntExtra(EXTRA_POSITION, 0)
 
-        mIvExport = findViewById(R.id.preview_iv_export)
-        mIvExport.setOnClickListener(this)
-
         mViewPager = findViewById(R.id.preview_view_pager)
         mPagerAdapter = PreviewFragmentPagerAdapter(supportFragmentManager, mThumbnailBeanList)
         mViewPager?.adapter = mPagerAdapter
@@ -49,11 +43,17 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
 
         mViewPager?.currentItem = mPosition
     }
-    override fun initView() {}
+    override fun initView() {
+        findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
+        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+    }
 
     override fun onClick(v: View?) {
-        when (v) {
-            mIvExport -> {
+        when (v?.id) {
+            R.id.iv_back -> {
+                finish()
+            }
+            R.id.preview_iv_export -> {
                 DLog.d("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
                 restoreResource(mThumbnailBeanList[mPosition])
             }
