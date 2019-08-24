@@ -3,6 +3,7 @@ package com.allever.security.photo.browser.util
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,18 @@ import com.android.absbase.ui.widget.RippleButton
 import java.lang.Exception
 
 object DialogHelper {
+
+    fun createMessageDialog(activity: Activity, msg: String, listener: DialogInterface.OnClickListener): AlertDialog {
+        val builder = AlertDialog.Builder(activity)
+            .setMessage(msg)
+            .setNegativeButton(R.string.cancel) { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(R.string.confirm) { dialog, which ->
+                listener.onClick(dialog, which)
+            }
+        return builder.create()
+    }
 
     @SuppressLint("InflateParams")
     fun createLoadingDialog(activity: Activity, msg: String, cancelAble: Boolean = true): AlertDialog {
