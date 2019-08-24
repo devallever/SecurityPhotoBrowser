@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.ImageView
 import com.allever.lib.common.app.App
@@ -17,6 +18,7 @@ import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
 import com.allever.security.photo.browser.ui.mvp.presenter.PreviewPresenter
 import com.allever.security.photo.browser.ui.mvp.view.PreviewView
+import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import com.android.absbase.utils.ResourcesUtils
@@ -29,6 +31,7 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0
+    private lateinit var mLoadingDialog: AlertDialog
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     override fun getContentView(): Int = R.layout.activity_priview
@@ -46,6 +49,8 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     override fun initView() {
         findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        //正在为您导出资源..."
+        mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)
     }
 
     override fun onClick(v: View?) {
@@ -99,9 +104,11 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
                 override fun onStart() {
 //                    showVideoSavingAnim()
                     DLog.d("export onStart")
+                    showLoading()
                 }
 
                 override fun onSuccess() {
+                    hideLoading()
                     SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
 
                     val decodeList = mutableListOf<ThumbnailBean>()
@@ -116,11 +123,20 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
                 }
 
                 override fun onFailed(msg: String) {
+                    hideLoading()
                     DLog.d("export onFailed")
                 }
             })
         }
 
+    }
+
+    override fun showLoading() {
+        mLoadingDialog.show()
+    }
+
+    override fun hideLoading() {
+        mLoadingDialog.dismiss()
     }
 
 
