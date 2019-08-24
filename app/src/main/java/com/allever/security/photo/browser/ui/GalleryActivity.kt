@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.allever.lib.common.app.App
-import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
@@ -25,12 +25,10 @@ import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
 import com.allever.security.photo.browser.function.endecode.UnLockListListener
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
-import com.allever.security.photo.browser.ui.adapter.ItemClickListener
 import com.allever.security.photo.browser.ui.mvp.presenter.GalleryPresenter
 import com.allever.security.photo.browser.ui.mvp.view.GalleryView
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
-import kotlinx.android.synthetic.main.secret_vault_password_layout.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -40,7 +38,7 @@ import java.util.HashMap
 
 class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
 
-    private lateinit var mBtnExport: View
+    private lateinit var mBtnExport: ImageView
     private lateinit var mBtnPick: View
     private lateinit var mTvTitle: TextView
     private lateinit var mRecyclerView: RecyclerView
@@ -66,12 +64,13 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
-        mTvTitle = findViewById(R.id.gallery_tv_album_name)
+        mTvTitle = findViewById(R.id.tv_label)
         mTvTitle.text = mAlbumName
         mBtnPick = findViewById(R.id.gallery_btn_pick)
         mBtnPick.setOnClickListener(this)
-        mBtnExport = findViewById(R.id.gallery_iv_export)
+        mBtnExport = findViewById(R.id.iv_right)
         mBtnExport.setOnClickListener(this)
+        mBtnExport.setImageResource(R.drawable.nav_button_export)
         mRecyclerView = findViewById(R.id.gallery_recycler_view)
         val gridLayoutManager = GridLayoutManager(this, 3)
         //解决最后单个跨列问题

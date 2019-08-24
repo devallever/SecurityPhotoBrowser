@@ -33,5 +33,14 @@
 				android:textStyle="bold"
 				android:textColor="@color/white"/>
 		</LinearLayout>
+
+		<ImageView
+			android:id="@+id/iv_right"
+			android:layout_width="@dimen/default_icon_height"
+			android:layout_height="@dimen/default_icon_width"
+			android:scaleType="centerInside"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:visibility="gone"/>
 	</RelativeLayout>
 </merge>

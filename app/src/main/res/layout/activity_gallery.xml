@@ -6,50 +6,7 @@
     android:background="@color/default_background">
 
     <!-- 标题栏 -->
-    <RelativeLayout
-        android:id="@+id/top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/default_top_bar_height"
-        android:background="@color/black">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/default_icon_width"
-            android:layout_height="@dimen/default_icon_height"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_back"
-            android:scaleType="centerInside"/>
-
-        <!-- 相册标题 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/iv_back"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/gallery_tv_album_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AlbumName"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/gallery_iv_export"
-            android:layout_width="@dimen/default_icon_height"
-            android:layout_height="@dimen/default_icon_width"
-            android:src="@drawable/nav_button_export"
-            android:scaleType="centerInside"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
+    <include layout="@layout/include_top_bar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gallery_recycler_view"
