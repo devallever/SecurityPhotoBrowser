@@ -39,9 +39,6 @@ import java.util.HashMap
 class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
 
     private lateinit var mBtnExport: ImageView
-    private lateinit var mBtnPick: View
-    private lateinit var mTvTitle: TextView
-    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mGalleryAdapter: GalleryAdapter
     private val mGalleryData = mutableListOf<Any>()
     private val mThumbnailBeanList = mutableListOf<ThumbnailBean>()
@@ -64,14 +61,13 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
-        mTvTitle = findViewById(R.id.tv_label)
-        mTvTitle.text = mAlbumName
-        mBtnPick = findViewById(R.id.gallery_btn_pick)
-        mBtnPick.setOnClickListener(this)
+        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<TextView>(R.id.tv_label).text = mAlbumName
+        findViewById<View>(R.id.gallery_btn_pick).setOnClickListener(this)
         mBtnExport = findViewById(R.id.iv_right)
         mBtnExport.setOnClickListener(this)
         mBtnExport.setImageResource(R.drawable.nav_button_export)
-        mRecyclerView = findViewById(R.id.gallery_recycler_view)
+        val recyclerView = findViewById<RecyclerView>(R.id.gallery_recycler_view)
         val gridLayoutManager = GridLayoutManager(this, 3)
         //解决最后单个跨列问题
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -84,7 +80,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
                 }
             }
         }
-        mRecyclerView.layoutManager = gridLayoutManager
+        recyclerView.layoutManager = gridLayoutManager
         mGalleryAdapter = GalleryAdapter(this, mGalleryData, object : MultiItemTypeSupport<Any> {
             override fun getLayoutId(itemType: Int): Int {
                 return when (itemType) {
@@ -135,7 +131,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
 
         }
 
-        mRecyclerView.adapter = mGalleryAdapter
+        recyclerView.adapter = mGalleryAdapter
     }
 
     override fun initData() {
@@ -155,12 +151,15 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
     }
 
     override fun onClick(v: View?) {
-        when (v) {
-            mBtnPick -> {
+        when (v?.id) {
+            R.id.iv_back -> {
+                finish()
+            }
+            R.id.gallery_btn_pick -> {
                 PickActivity.start(this, mAlbumName!!)
             }
 
-            mBtnExport -> {
+            R.id.iv_right -> {
                 ToastUtils.show("Export")
                 restoreResourceList(mExportThumbnailBeanList)
                 mSelectMode = false
