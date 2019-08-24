@@ -2,11 +2,9 @@ package com.allever.security.photo.browser.ui
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.ImageView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
@@ -32,6 +30,7 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0
     private lateinit var mLoadingDialog: AlertDialog
+    private var mSourceType = TYPE_ENCODE
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     override fun getContentView(): Int = R.layout.activity_priview
@@ -49,8 +48,15 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     override fun initView() {
         findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
-        //正在为您导出资源..."
         mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)
+
+        val bottomBar = findViewById<View>(R.id.preview_bottom_bar)
+        mSourceType = intent.getIntExtra(EXTRA_SOURCE_TYPE, TYPE_ENCODE)
+        if (mSourceType == TYPE_ENCODE) {
+            bottomBar.visibility = View.VISIBLE
+        } else {
+            bottomBar.visibility = View.GONE
+        }
     }
 
     override fun onClick(v: View?) {
@@ -141,14 +147,19 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
 
 
     companion object {
-        fun start(context: Context, thumbnailBean: ArrayList<ThumbnailBean>, position: Int) {
+        fun start(context: Context, thumbnailBean: ArrayList<ThumbnailBean>, position: Int, sourceType: Int) {
             val intent = Intent(context, PreviewActivity::class.java)
             intent.putParcelableArrayListExtra(EXTRA_DATA, thumbnailBean)
             intent.putExtra(EXTRA_POSITION, position)
+            intent.putExtra(EXTRA_SOURCE_TYPE, sourceType)
             context.startActivity(intent)
         }
 
         private const val EXTRA_DATA = "EXTRA_DATA"
         private const val EXTRA_POSITION = "EXTRA_POSITION"
+        private const val EXTRA_SOURCE_TYPE = "EXTRA_SOURCE_TYPE"
+
+        public const val TYPE_SYSTEM = 1
+        public const val TYPE_ENCODE = 2
     }
 }

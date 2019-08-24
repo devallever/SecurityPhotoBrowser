@@ -124,7 +124,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
                     selectItem(position, holder)
                 } else {
                     val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
-                    PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
+                    PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition, PreviewActivity.TYPE_ENCODE)
                 }
             }
 

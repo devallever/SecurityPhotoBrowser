@@ -545,7 +545,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         val data = mFragmentDataMap[TabModel.selectedTab]
         val index = data?.indexOf(thumbnailBean) ?: 0
         if (data != null) {
-            PreviewActivity.start(this, ArrayList(data), index)
+            PreviewActivity.start(this, ArrayList(data), index, PreviewActivity.TYPE_SYSTEM)
         }
     }
 
