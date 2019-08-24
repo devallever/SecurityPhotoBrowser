@@ -42,6 +42,7 @@
 			android:scaleType="centerInside"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
+			android:tint="@color/default_icon_color_filter"
 			android:visibility="gone"/>
 	</RelativeLayout>
 </merge>
