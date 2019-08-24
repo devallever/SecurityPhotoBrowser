@@ -95,6 +95,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         mBtnImport = findViewById(R.id.btn_import)
         mBtnImport.setOnClickListener(this)
         mTvTitle = findViewById(R.id.tv_title)
+        findViewById<View>(R.id.iv_back).setOnClickListener(this)
     }
 
     override fun initData() {
@@ -266,10 +267,12 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     override fun onTabReselected(tab: TabLayout.Tab?) {}
 
     override fun onClick(v: View?) {
-        when (v) {
-            mLlAlbumTitleContainer, mIvSelectAlbum -> {
-                val visibility = mFlSelectAlbumContainer.visibility
-                when (visibility) {
+        when (v?.id) {
+            R.id.iv_back -> {
+                finish()
+            }
+            R.id.ll_album_title_container, R.id.iv_select_album -> {
+                when (mFlSelectAlbumContainer.visibility) {
                     View.VISIBLE -> {
                         showSelectAlbumContainer(false)
                     }
@@ -279,11 +282,11 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
                 }
             }
 
-            mFlSelectAlbumContainer -> {
+            R.id.fl_select_album_container -> {
                 showSelectAlbumContainer(false)
             }
 
-            mBtnImport -> {
+            R.id.btn_import -> {
                 for (index in mSelectedData.indices) {
                     val bean = mSelectedData[index]
                     bean.sourceType = ThumbnailBean.DECODE
