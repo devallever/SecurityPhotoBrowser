@@ -120,7 +120,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
     fun deleteAlbum(activity: Activity) {
         //删除提示弹窗
         val builder = AlertDialog.Builder(activity)
-            .setMessage(R.string.tips_dialog_delete_resource)
+            .setMessage(R.string.tips_dialog_delete_album_resource)
             .setNegativeButton(R.string.cancel) { dialog, which ->
                 dialog.dismiss()
             }

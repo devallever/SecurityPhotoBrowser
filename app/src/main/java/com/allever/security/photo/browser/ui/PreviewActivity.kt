@@ -1,6 +1,7 @@
 package com.allever.security.photo.browser.ui
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -17,6 +18,7 @@ import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreList
 import com.allever.security.photo.browser.ui.mvp.presenter.PreviewPresenter
 import com.allever.security.photo.browser.ui.mvp.view.PreviewView
 import com.allever.security.photo.browser.util.DialogHelper
+import com.allever.security.photo.browser.util.FileUtil
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import com.android.absbase.utils.ResourcesUtils
@@ -24,12 +26,14 @@ import com.android.absbase.utils.ToastUtils
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 
-class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener, View.OnClickListener {
+class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener,
+    View.OnClickListener {
     private var mViewPager: ViewPager? = null
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0
     private lateinit var mLoadingDialog: AlertDialog
+    private lateinit var mDeleteDialog: AlertDialog
     private var mSourceType = TYPE_ENCODE
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
@@ -45,11 +49,29 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
 
         mViewPager?.currentItem = mPosition
     }
+
     override fun initView() {
         findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<View>(R.id.preview_iv_delete).setOnClickListener(this)
         mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)
-
+        mDeleteDialog = DialogHelper.createMessageDialog(this, getString(R.string.tips_dialog_delete_resource),
+            DialogInterface.OnClickListener { dialog, which ->
+                val fileNameMd5 = MD5.getMD5Str(mThumbnailBeanList[mPosition].path)
+                FileUtil.deleteFile(PrivateHelper.PATH_ENCODE_ORIGINAL + File.separator + fileNameMd5)
+                mHandler.postDelayed({
+                    ToastUtils.show(getString(R.string.delete_finish))
+                    val decodeList = mutableListOf<ThumbnailBean>()
+                    decodeList.add(mThumbnailBeanList[mPosition])
+                    val decodeEvent = DecodeEvent()
+                    decodeEvent.thumbnailBeanList = decodeList
+                    decodeEvent.indexList.add(mPosition)
+                    //删除后的行为和导出的行为一致
+                    EventBus.getDefault().post(decodeEvent)
+                    hideDeleteDialog()
+                    finish()
+                }, 500)
+            })
         val bottomBar = findViewById<View>(R.id.preview_bottom_bar)
         mSourceType = intent.getIntExtra(EXTRA_SOURCE_TYPE, TYPE_ENCODE)
         if (mSourceType == TYPE_ENCODE) {
@@ -67,6 +89,9 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
             R.id.preview_iv_export -> {
                 DLog.d("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
                 restoreResource(mThumbnailBeanList[mPosition])
+            }
+            R.id.preview_iv_delete -> {
+                showDeleteDialog()
             }
         }
 
@@ -143,6 +168,14 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
 
     override fun hideLoading() {
         mLoadingDialog.dismiss()
+    }
+
+    override fun showDeleteDialog() {
+        mDeleteDialog.show()
+    }
+
+    override fun hideDeleteDialog() {
+        mDeleteDialog.dismiss()
     }
 
 

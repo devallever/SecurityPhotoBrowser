@@ -39,7 +39,8 @@
     <string name="add_album">Add Album</string>
     <string name="input_album_name">Input album name</string>
     <string name="tips_please_input_album_name">Please input album name.</string>
-    <string name="tips_dialog_delete_resource">This album will be deleted.  This action cannot be undone.</string>
+    <string name="tips_dialog_delete_album_resource">This album will be deleted.  This action cannot be undone.</string>
+    <string name="tips_dialog_delete_resource">This resource will be deleted.  This action cannot be undone.</string>
     <string name="delete">Delete</string>
     <string name="delete_finish">Delete Finish</string>
     <string name="set_album_cover">Set Album cover</string>
