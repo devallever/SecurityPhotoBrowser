@@ -16,22 +16,17 @@ import com.allever.security.photo.browser.ui.mvp.view.ChangePasswordView
 
 
 class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordPresenter>(), ChangePasswordView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    override fun createPresenter(): ChangePasswordPresenter = ChangePasswordPresenter()
-
     private var mLlPwdContainer: LinearLayout? = null
     private var mPwdView: View? = null
-//    private var mItemContainer: View? = null
 
     private var mPasswordHelper: PasswordHelper? = null
 
     private var mShowPasswordViewFirst: Boolean = false
 
+    override fun getContentView(): Int = R.layout.activity_modify_password
+    override fun createPresenter(): ChangePasswordPresenter = ChangePasswordPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_modify_password)
-
         mShowPasswordViewFirst = intent?.getBooleanExtra(EXTRA_SHOW_PASSWORD_VIEW_FIRST, false) ?: false
-
         mPasswordHelper = PasswordHelper(mHandler, object : PasswordHelper.PasswordCallback {
             override fun checkPwdRight() {
                 super.checkPwdRight()
@@ -45,12 +40,9 @@ class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordP
                 }
             }
         })
-
-        initView()
-
+        super.onCreate(savedInstanceState)
     }
-
-    private fun initView() {
+    override fun initView() {
         findViewById<ImageView>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting_modify_password)
         mLlPwdContainer = findViewById(R.id.id_setting_secret_vault_pwd_container)
@@ -63,6 +55,9 @@ class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordP
             findViewById<View>(R.id.id_bg_mask)?.visibility = View.GONE
             findViewById<View>(R.id.id_iv_bg)?.visibility = View.GONE
         }
+
+    }
+    override fun initData() {
 
     }
 

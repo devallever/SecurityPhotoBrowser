@@ -39,7 +39,6 @@ import java.util.ArrayList
 import java.util.HashMap
 
 class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
-    override fun createPresenter(): GalleryPresenter = GalleryPresenter()
 
     private lateinit var mBtnExport: View
     private lateinit var mBtnPick: View
@@ -59,32 +58,9 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
 
     private var mSelectMode = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-
-        mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
-        mAlbumPath = intent.getStringExtra(EXTRA_ALBUM_PATH)
-
-        mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
-        mGalleryData.map {
-            if (it is ThumbnailBean) {
-                mThumbnailBeanList.add(it)
-            }
-        }
-        initView()
-
-        initData()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
-    }
-
-    private fun initView() {
+    override fun getContentView(): Int = R.layout.activity_gallery
+    override fun createPresenter(): GalleryPresenter = GalleryPresenter()
+    override fun initView() {
         mTvTitle = findViewById(R.id.gallery_tv_album_name)
         mTvTitle.text = mAlbumName
         mBtnPick = findViewById(R.id.gallery_btn_pick)
@@ -158,8 +134,23 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         mRecyclerView.adapter = mGalleryAdapter
     }
 
-    private fun initData() {
+    override fun initData() {
+        mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
+        mAlbumPath = intent.getStringExtra(EXTRA_ALBUM_PATH)
 
+        mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
+        mGalleryData.map {
+            if (it is ThumbnailBean) {
+                mThumbnailBeanList.add(it)
+            }
+        }
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onClick(v: View?) {

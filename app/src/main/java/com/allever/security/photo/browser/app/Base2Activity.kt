@@ -1,6 +1,7 @@
 package com.allever.security.photo.browser.app
 
 import android.os.Bundle
+import android.view.View
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.mvp.BaseMvpActivity
 import com.allever.lib.common.mvp.BasePresenter
@@ -13,7 +14,9 @@ abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(getContentView())
+        initView()
+        initData()
         mPrivateViewProxy = PrivateViewManager.getProxy(this)
         mPrivateViewProxy.init()
     }
@@ -36,4 +39,8 @@ abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
     protected fun isPasswordViewShowing(): Boolean {
         return mPrivateViewProxy.passwordViewShowing
     }
+
+    abstract fun initView()
+    abstract fun initData()
+    abstract fun getContentView(): Int
 }

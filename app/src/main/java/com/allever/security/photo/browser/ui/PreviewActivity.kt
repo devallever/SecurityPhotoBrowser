@@ -25,7 +25,6 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 
 class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener, View.OnClickListener {
-    override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     private var mViewPager: ViewPager? = null
     private var mIvBack: ImageView? = null
     private var mIvSelect: ImageView? = null
@@ -34,11 +33,9 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_priview)
-
+    override fun createPresenter(): PreviewPresenter = PreviewPresenter()
+    override fun getContentView(): Int = R.layout.activity_priview
+    override fun initData() {
         mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
         mPosition = intent.getIntExtra(EXTRA_POSITION, 0)
 
@@ -51,8 +48,8 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
         mViewPager?.addOnPageChangeListener(this)
 
         mViewPager?.currentItem = mPosition
-
     }
+    override fun initView() {}
 
     override fun onClick(v: View?) {
         when (v) {

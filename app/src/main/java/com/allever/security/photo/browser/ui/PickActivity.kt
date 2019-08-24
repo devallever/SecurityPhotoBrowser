@@ -49,7 +49,6 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     PickFragment.PickCallback,
     View.OnClickListener,
     SelectAlbumAdapter.OnItemClickListener{
-    override fun createPresenter(): PickPresenter = PickPresenter()
 
     private lateinit var mTabs: TabLayout
     private lateinit var mViewPager: ViewPager
@@ -85,17 +84,39 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
 
     private var mAlbumName: String? = null
 
+    override fun getContentView(): Int = R.layout.activity_pick
+    override fun createPresenter(): PickPresenter = PickPresenter()
+    override fun initView() {
+        initTabs()
+        initViewPager()
+        initAnim()
+        initAlbumRecyclerView()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pick)
+        mBtnImport = findViewById(R.id.btn_import)
+        mBtnImport.setOnClickListener(this)
+        mTvTitle = findViewById(R.id.tv_title)
+    }
 
+    override fun initData() {
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
+        if (GlobalData.albumData.isNotEmpty()) {
+            //默认显示第一个相册的数据
+            val firstImageFolder = GlobalData.albumData[0]
+            updateData(firstImageFolder)
+            updateFragmentUI()
+            mAlbumAdapter.mData = GlobalData.albumData
+            mAlbumAdapter.notifyDataSetChanged()
+            return
+        }
 
-        initView()
+        PermissionManager.request(object : PermissionListener {
+            override fun onGranted(grantedList: MutableList<String>) {
+                getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
+            }
+            override fun onDenied(deniedList: MutableList<String>) {}
+            override fun alwaysDenied(deniedList: MutableList<String>) {}
 
-        initData()
-
+        }, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     override fun onDestroy() {
@@ -113,16 +134,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         super.onBackPressed()
     }
 
-    private fun initView() {
-        initTabs()
-        initViewPager()
-        initAnim()
-        initAlbumRecyclerView()
 
-        mBtnImport = findViewById(R.id.btn_import)
-        mBtnImport.setOnClickListener(this)
-        mTvTitle = findViewById(R.id.tv_title)
-    }
 
     private fun initTabs() {
         //Tab
@@ -220,34 +232,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         mAlbumRecyclerView.adapter = mAlbumAdapter
     }
 
-    private fun initData() {
-        if (GlobalData.albumData.isNotEmpty()) {
-            //默认显示第一个相册的数据
-            val firstImageFolder = GlobalData.albumData[0]
-            updateData(firstImageFolder)
-            updateFragmentUI()
-            mAlbumAdapter.mData = GlobalData.albumData
-            mAlbumAdapter.notifyDataSetChanged()
-            return
-        }
 
-        PermissionManager.request(object : PermissionListener {
-            override fun onGranted(grantedList: MutableList<String>) {
-                getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-            }
-
-            override fun onDenied(deniedList: MutableList<String>) {
-
-            }
-
-            override fun alwaysDenied(deniedList: MutableList<String>) {
-
-            }
-
-        }, Manifest.permission.READ_EXTERNAL_STORAGE)
-
-
-    }
 
     override fun onChooseAlbumAdapterItemClick(imageFolder: ImageFolder, position: Int) {
         showSelectAlbumContainer(false)

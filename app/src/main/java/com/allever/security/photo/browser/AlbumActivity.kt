@@ -21,7 +21,6 @@ import com.allever.security.photo.browser.ui.mvp.view.AlbumView
 import kotlin.collections.ArrayList
 
 class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, View.OnClickListener, AlbumDialog.Callback {
-
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, AlbumActivity::class.java)
@@ -34,30 +33,9 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAlbumBottomDialog: AlbumDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_album)
-
-        //清除私密相册密码验证记录
-        mPresenter.clearPasswordStatus()
-
-        initView()
-
-        initData()
-
-        mPresenter.requestPermission(this, Runnable {
-            mPresenter.getPrivateAlbumData()
-        })
-    }
-
+    override fun getContentView(): Int = R.layout.activity_album
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mPresenter.destroy()
-    }
-
-    private fun initView() {
+    override fun initView() {
         mRecyclerView = findViewById(R.id.album_recycler_view)
         mRecyclerView.layoutManager = GridLayoutManager(this, 2)
 
@@ -67,7 +45,10 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mAlbumBottomDialog = AlbumDialog(this)
     }
 
-    private fun initData() {
+    override fun initData() {
+        //清除私密相册密码验证记录
+        mPresenter.clearPasswordStatus()
+
         mPrivateAlbumAdapter = PrivateAlbumAdapter(this, R.layout.item_private_album, mImageFolderList)
         mRecyclerView.adapter = mPrivateAlbumAdapter
         mPrivateAlbumAdapter.mItemListener = object : ItemListener {
@@ -87,6 +68,15 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
                 mAlbumBottomDialog?.show(supportFragmentManager, AlbumActivity::class.java.simpleName)
             }
         }
+
+        mPresenter.requestPermission(this, Runnable {
+            mPresenter.getPrivateAlbumData()
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.destroy()
     }
 
     override fun onClick(v: View?) {

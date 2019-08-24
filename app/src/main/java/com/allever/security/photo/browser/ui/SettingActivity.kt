@@ -16,22 +16,17 @@ import com.allever.security.photo.browser.ui.mvp.view.SettingView
 import com.allever.security.photo.browser.util.FeedbackHelper
 
 class SettingActivity : Base2Activity<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
+
+    override fun getContentView(): Int = R.layout.activity_setting
     override fun createPresenter(): SettingPresenter = SettingPresenter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
-
-        initView()
-    }
-
-    private fun initView() {
+    override fun initView() {
         findViewById<TextView>(R.id.setting_tv_modify_password).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_feedback).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_about).setOnClickListener(this)
         findViewById<ImageView>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting)
     }
+    override fun initData() {}
 
     override fun onClick(v: View?) {
         when (v?.id) {
