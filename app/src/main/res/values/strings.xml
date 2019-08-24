@@ -11,7 +11,10 @@
     <!-- 分割线 -->
     <color name="dividing_line_color">#26ffffff</color>
 
-
+    <string name="not_install">Sorry, you have not yet installed the program!</string>
+    <string name="no_suitable_player">No suitable video player !</string>
+    <string name="more">MORE</string>
+    <string name="share_to">Share to</string>
     <!--  -->
 
     <!-- 异常提示 -->

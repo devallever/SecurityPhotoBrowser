@@ -17,14 +17,12 @@ import com.allever.security.photo.browser.function.endecode.PrivateHelper
 import com.allever.security.photo.browser.function.endecode.UnLockAndRestoreListener
 import com.allever.security.photo.browser.ui.mvp.presenter.PreviewPresenter
 import com.allever.security.photo.browser.ui.mvp.view.PreviewView
-import com.allever.security.photo.browser.util.DialogHelper
-import com.allever.security.photo.browser.util.FileUtil
-import com.allever.security.photo.browser.util.MD5
-import com.allever.security.photo.browser.util.SharePreferenceUtil
+import com.allever.security.photo.browser.util.*
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.ToastUtils
 import org.greenrobot.eventbus.EventBus
 import java.io.File
+import java.lang.Exception
 
 class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener,
     View.OnClickListener {
@@ -54,6 +52,7 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
         findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
         findViewById<View>(R.id.preview_iv_delete).setOnClickListener(this)
+        findViewById<View>(R.id.preview_iv_share).setOnClickListener(this)
         mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)
         mDeleteDialog = DialogHelper.createMessageDialog(this, getString(R.string.tips_dialog_delete_resource),
             DialogInterface.OnClickListener { dialog, which ->
@@ -93,6 +92,9 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
             R.id.preview_iv_delete -> {
                 showDeleteDialog()
             }
+            R.id.preview_iv_share -> {
+                share()
+            }
         }
 
     }
@@ -120,6 +122,33 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
             ToastUtils.show(ResourcesUtils.getString(R.string.preview_boundary_error_tips))
         }
         return result
+    }
+
+    private fun share(){
+        val thumbnailBean = mThumbnailBeanList[mPosition]
+        val shareFilePath = if (thumbnailBean.sourceType == ThumbnailBean.SYSTEM){
+            thumbnailBean.path
+        }else{
+            thumbnailBean.tempPath
+        }
+        if (MediaTypeUtil.isImage(thumbnailBean.type)){
+            ShareHelper.shareTo(this, shareFilePath, ShareHelper.TYPE_IMAGE)
+        }else if (MediaTypeUtil.isVideo(thumbnailBean.type)){
+            try {
+                run {
+                    val fileName = "${FileUtil.getFileName(shareFilePath)}.mp4"
+                    val videoCacheFilePath = "${PrivateHelper.PATH_DECODE_TEMP}${File.separator}$fileName"
+                    val targetFile = File(videoCacheFilePath)
+                    if (!targetFile.exists()){
+                        targetFile.createNewFile()
+                        FileUtil.copyFile(File(shareFilePath), targetFile)
+                    }
+                    ShareHelper.shareTo(this, videoCacheFilePath, ShareHelper.TYPE_VIDEO)
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
     }
 
 
