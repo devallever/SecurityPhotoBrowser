@@ -7,6 +7,8 @@ import com.allever.lib.common.mvp.BaseMvpActivity
 import com.allever.lib.common.mvp.BasePresenter
 import com.allever.security.photo.browser.function.password.PrivateViewManager
 import com.allever.security.photo.browser.function.password.PrivateViewProxy
+import java.lang.Exception
+import java.lang.RuntimeException
 
 abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
@@ -14,7 +16,18 @@ abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getContentView())
+        when(val contentView = getContentView()) {
+            is Int -> {
+                setContentView(contentView)
+            }
+            is View -> {
+                setContentView(contentView)
+            }
+            else -> {
+                throw RuntimeException("Please check contentView type")
+            }
+        }
+
         initView()
         initData()
         mPrivateViewProxy = PrivateViewManager.getProxy(this)
@@ -42,5 +55,5 @@ abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     abstract fun initView()
     abstract fun initData()
-    abstract fun getContentView(): Int
+    abstract fun getContentView(): Any
 }
