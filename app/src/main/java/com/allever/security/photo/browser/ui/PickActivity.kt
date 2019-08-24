@@ -5,19 +5,16 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-
-import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.DLog
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
@@ -38,7 +35,6 @@ import com.allever.security.photo.browser.ui.widget.tab.TabLayout
 import com.allever.security.photo.browser.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
-import com.android.absbase.utils.ToastUtils
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
@@ -84,6 +80,8 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
 
     private var mAlbumName: String? = null
 
+    private lateinit var mImportLoadingDialog: AlertDialog
+
     override fun getContentView(): Int = R.layout.activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
@@ -96,6 +94,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         mBtnImport.setOnClickListener(this)
         mTvTitle = findViewById(R.id.tv_title)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        mImportLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.import_resource), false)
     }
 
     override fun initData() {
@@ -334,9 +333,11 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
                 override fun onStart() {
                     mBtnImport.isClickable = false
                     DLog.d("onStart encode")
+                    showImportLoading()
                 }
 
                 override fun onSuccess(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
+                    hideImportLoading()
                     DLog.d("onSuccess encode")
                     mBtnImport.isClickable = true
 
@@ -364,6 +365,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
                 }
 
                 override fun onFailed(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
+                    hideImportLoading()
                     DLog.d("onFailed encode")
                     mBtnImport.isClickable = true
                 }
@@ -543,8 +545,16 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         val data = mFragmentDataMap[TabModel.selectedTab]
         val index = data?.indexOf(thumbnailBean) ?: 0
         if (data != null) {
-            PreviewActivity.start(this, ArrayList(data), index)
+            PreviewActivity.start(this, ArrayList(data), index, PreviewActivity.TYPE_SYSTEM)
         }
+    }
+
+    override fun showImportLoading() {
+        mImportLoadingDialog.show()
+    }
+
+    override fun hideImportLoading() {
+        mImportLoadingDialog.dismiss()
     }
 
     companion object {

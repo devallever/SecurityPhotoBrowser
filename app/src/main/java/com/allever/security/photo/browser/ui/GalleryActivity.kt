@@ -3,6 +3,7 @@ package com.allever.security.photo.browser.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -27,6 +28,7 @@ import com.allever.security.photo.browser.function.endecode.UnLockListListener
 import com.allever.security.photo.browser.ui.adapter.GalleryAdapter
 import com.allever.security.photo.browser.ui.mvp.presenter.GalleryPresenter
 import com.allever.security.photo.browser.ui.mvp.view.GalleryView
+import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
 import org.greenrobot.eventbus.EventBus
@@ -51,6 +53,8 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
 
     private var mPrivateThumbMap = HashMap<PrivateBean, ThumbnailBean>()
 
+    private lateinit var mLoadingDialog: AlertDialog
+
     private var mSelectMode = false
 
     override fun getContentView(): Int = R.layout.activity_gallery
@@ -64,6 +68,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = mAlbumName
         findViewById<View>(R.id.gallery_btn_pick).setOnClickListener(this)
+        mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)
         mBtnExport = findViewById(R.id.iv_right)
         mBtnExport.setOnClickListener(this)
         mBtnExport.setImageResource(R.drawable.nav_button_export)
@@ -119,7 +124,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
                     selectItem(position, holder)
                 } else {
                     val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
-                    PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition)
+                    PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition, PreviewActivity.TYPE_ENCODE)
                 }
             }
 
@@ -210,6 +215,14 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         }
     }
 
+    override fun showLoading() {
+        mLoadingDialog.show()
+    }
+
+    override fun hideLoading() {
+        mLoadingDialog.dismiss()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
         if (!decodeEvent.needRefresh) {
@@ -273,9 +286,12 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         }
 
         PrivateHelper.unLockList(privateBeanList, object : UnLockListListener{
-            override fun onStart() {}
+            override fun onStart() {
+                showLoading()
+            }
 
             override fun onSuccess(successList: List<PrivateBean>) {
+                hideLoading()
                 val exportIndexList = mutableListOf<Int>()
                 successList.map {
                     val thumbnailBean = mPrivateThumbMap[it]
@@ -305,6 +321,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
             }
 
             override fun onFailed(errors: List<PrivateBean>) {
+                hideLoading()
                 errors.map {
                     val thumbnailBean = mPrivateThumbMap[it]
                     if (thumbnailBean != null) {

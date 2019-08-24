@@ -1,5 +1,6 @@
 package com.allever.security.photo.browser.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.support.v7.app.AlertDialog
@@ -14,6 +15,16 @@ import com.android.absbase.ui.widget.RippleButton
 import java.lang.Exception
 
 object DialogHelper {
+
+    @SuppressLint("InflateParams")
+    fun createLoadingDialog(activity: Activity, msg: String, cancelAble: Boolean = true): AlertDialog {
+        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_load_progress, null)
+        view.findViewById<TextView>(R.id.dialog_progress_tv_message).text = msg
+        return AlertDialog.Builder(activity)
+            .setView(view)
+            .setCancelable(cancelAble)
+            .create()
+    }
 
     fun createEditTextDialog(
         activity: Activity,
