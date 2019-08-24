@@ -23,7 +23,7 @@
         android:layout_marginStart="@dimen/item_select_album_title_margin_start"
         android:layout_marginTop="@dimen/item_select_album_margin_top"
         android:textSize="@dimen/item_select_album_title_text_size"
-        android:textColor="@color/white"
+        android:textColor="@color/default_tv_color"
         android:layout_marginLeft="@dimen/item_select_album_title_margin_start"
         android:layout_toEndOf="@id/iv_image"
         android:text="Download"
@@ -42,7 +42,8 @@
         <ImageView
             android:id="@+id/iv_video"
             style="@style/item_select_album_iv_count_style"
-            android:src="@drawable/ic_album_video_flag"/>
+            android:src="@drawable/ic_album_video_flag"
+            />
 
         <TextView
             android:id="@+id/tv_video_count"

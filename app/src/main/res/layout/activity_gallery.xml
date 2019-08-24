@@ -22,7 +22,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:src="@drawable/icon_add"
-        android:tint="@color/white"
+        android:tint="@color/default_icon_color_filter"
         android:scaleType="centerInside"
         android:background="@drawable/circle"/>
 
