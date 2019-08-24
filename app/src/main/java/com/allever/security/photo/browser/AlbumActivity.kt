@@ -18,15 +18,21 @@ import com.allever.security.photo.browser.ui.dialog.AlbumDialog
 import com.allever.security.photo.browser.ui.mvp.presenter.AlbumPresenter
 import com.allever.security.photo.browser.ui.mvp.view.AlbumView
 
-import com.android.absbase.ui.widget.RippleImageView
 import kotlin.collections.ArrayList
 
-class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, View.OnClickListener {
+class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, View.OnClickListener, AlbumDialog.Callback {
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, AlbumActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
+
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
-    private lateinit var mIvSetting: RippleImageView
-    private lateinit var mBtnAddAlbum: View
     private var mImageFolderList = mutableListOf<ImageFolder>()
+    private var mAlbumBottomDialog: AlbumDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +61,10 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mRecyclerView = findViewById(R.id.album_recycler_view)
         mRecyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        mIvSetting = findViewById(R.id.album_iv_setting)
-        mIvSetting.setOnClickListener(this)
-        mBtnAddAlbum = findViewById(R.id.album_btn_add_album)
-        mBtnAddAlbum.setOnClickListener(this)
+        findViewById<View>(R.id.album_iv_setting).setOnClickListener(this)
+        findViewById<View>(R.id.album_btn_add_album).setOnClickListener(this)
 
-        mAlbumBottomDialog = AlbumDialog(mAlbumBottomDialogCallback)
+        mAlbumBottomDialog = AlbumDialog(this)
     }
 
     private fun initData() {
@@ -85,33 +89,27 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         }
     }
 
-    /***
-     * 底部弹窗
-     */
-    private var mAlbumBottomDialog: AlbumDialog? = null
-    private val mAlbumBottomDialogCallback = object : AlbumDialog.Callback {
-        override fun onDeleteClick(dialog: AppCompatDialogFragment) {
-            dialog.dismissAllowingStateLoss()
-            mPresenter.deleteAlbum(this@AlbumActivity)
-        }
-
-        override fun onRenameClick(dialog: AppCompatDialogFragment) {
-            dialog.dismissAllowingStateLoss()
-            mPresenter.renameAlbum(this@AlbumActivity)
-        }
-    }
-
     override fun onClick(v: View?) {
-        when (v) {
-            mIvSetting -> {
+        when (v?.id) {
+            R.id.album_iv_setting -> {
                 SettingActivity.start(this)
             }
-            mBtnAddAlbum -> {
+            R.id.album_btn_add_album -> {
                 mPresenter.requestPermission(this, Runnable {
                     mPresenter.handleAddAlbum(this)
                 })
             }
         }
+    }
+
+    override fun onDeleteClick(dialog: AppCompatDialogFragment) {
+        dialog.dismissAllowingStateLoss()
+        mPresenter.deleteAlbum(this@AlbumActivity)
+    }
+
+    override fun onRenameClick(dialog: AppCompatDialogFragment) {
+        dialog.dismissAllowingStateLoss()
+        mPresenter.renameAlbum(this@AlbumActivity)
     }
 
     override fun updateAlbumList(data: MutableList<ImageFolder>) {
@@ -150,12 +148,5 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         mPresenter.onActivityResult(this, requestCode, resultCode, data)
-    }
-
-    companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, AlbumActivity::class.java)
-            context.startActivity(intent)
-        }
     }
 }
