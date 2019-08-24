@@ -21,6 +21,7 @@ object GlobalData {
             cloneImageFolder.isChecked = false
             cloneImageFolder.isNeedRefresh = imageFolder.isNeedRefresh
             cloneImageFolder.videoCount = imageFolder.videoCount
+            cloneImageFolder.photoCount = imageFolder.photoCount
 
             //all data
             val thumbnailList = ArrayList<ThumbnailBean>()
