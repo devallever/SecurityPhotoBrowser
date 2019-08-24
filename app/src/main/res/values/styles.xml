@@ -32,7 +32,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">@dimen/item_select_album_tv_count_text_size</item>
         <item name="android:text">0</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/default_tv_color</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginStart">@dimen/item_select_album_tv_count_text_margin_start</item>
         <item name="android:layout_centerVertical">true</item>
@@ -44,6 +44,7 @@
         <item name="android:scaleType">centerInside</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="android:tint">@color/default_icon_color_filter</item>
     </style>
 
     <style name="keyboard_line_style">
@@ -65,7 +66,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/keyboard_text_color</item>
+        <item name="android:textColor">@color/default_tv_color</item>
         <item name="android:textSize">@dimen/keyboard_text_size</item>
     </style>
 
@@ -81,7 +82,7 @@
     <style name="setting_item">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">68dp</item>
-        <item name="android:textColor">#ddffffff</item>
+        <item name="android:textColor">@color/default_tv_color</item>
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center_vertical</item>
     </style>

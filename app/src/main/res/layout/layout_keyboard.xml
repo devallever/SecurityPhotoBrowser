@@ -1,90 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.allever.security.photo.browser.function.password.KeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                                                   android:layout_width="match_parent"
-                                                                   android:layout_height="wrap_content"
-                                                                   android:orientation="vertical"
-                                                                   android:background="@color/password_view_key_board_bg">
+<com.allever.security.photo.browser.function.password.KeyboardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:background="@color/password_view_key_board_bg">
 
+	<LinearLayout
+		style="@style/keyboard_line_style">
 
-    <LinearLayout
-        style="@style/keyboard_line_style">
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_1"
+			android:text="1"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_1"
-            android:text="1"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_2"
+			android:text="2"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_2"
-            android:text="2"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_3"
+			android:text="3"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_3"
-            android:text="3"
-            style="@style/keyboard_grid_style"/>
+	</LinearLayout>
 
-    </LinearLayout>
+	<LinearLayout
+		style="@style/keyboard_line_style">
 
-    <LinearLayout
-        style="@style/keyboard_line_style">
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_4"
+			android:text="4"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_4"
-            android:text="4"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_5"
+			android:text="5"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_5"
-            android:text="5"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_6"
+			android:text="6"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_6"
-            android:text="6"
-            style="@style/keyboard_grid_style"/>
+	</LinearLayout>
 
-    </LinearLayout>
+	<LinearLayout
+		style="@style/keyboard_line_style">
 
-    <LinearLayout
-        style="@style/keyboard_line_style">
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_7"
+			android:text="7"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_7"
-            android:text="7"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_8"
+			android:text="8"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_8"
-            android:text="8"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_9"
+			android:text="9"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_9"
-            android:text="9"
-            style="@style/keyboard_grid_style"/>
+	</LinearLayout>
 
-    </LinearLayout>
+	<LinearLayout
+		style="@style/keyboard_line_style">
 
-    <LinearLayout
-        style="@style/keyboard_line_style">
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_space"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_space"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleTextView
+			android:id="@+id/keyboard_key_0"
+			android:text="0"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleTextView
-            android:id="@+id/keyboard_key_0"
-            android:text="0"
-            style="@style/keyboard_grid_style"/>
+		<com.android.absbase.ui.widget.RippleImageView
+			android:id="@+id/keyboard_key_del"
+			android:scaleType="centerInside"
+			android:src="@drawable/icon_del"
+			android:tint="@color/default_icon_color_filter"
+			style="@style/keyboard_grid_style"/>
 
-        <com.android.absbase.ui.widget.RippleImageView
-            android:id="@+id/keyboard_key_del"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_del"
-            android:tint="@color/white"
-            style="@style/keyboard_grid_style"/>
-
-    </LinearLayout>
+	</LinearLayout>
 
 </com.allever.security.photo.browser.function.password.KeyboardView>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
 import com.allever.security.photo.browser.R
@@ -22,6 +23,7 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
     private fun initView() {
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
     }
 
     override fun onClick(v: View?) {
