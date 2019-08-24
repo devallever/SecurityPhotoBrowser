@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -14,15 +15,22 @@ import com.allever.lib.common.util.ToastUtils
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.DecodeEvent
+import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
+import com.allever.security.photo.browser.function.password.PasswordConfig
 import com.allever.security.photo.browser.ui.mvp.view.AlbumView
 import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.FileUtil
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 
 class AlbumPresenter : BasePresenter<AlbumView>() {
@@ -30,6 +38,12 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
     private val mAlbumImageFolderMap = LinkedHashMap<String, ImageFolder>()
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private lateinit var mAlbumDataTask: PrivateAlbumDataTask
+    private var mClickAlbumPosition = 0
+    private var mClickMorePosition = 0
+
+    init {
+        EventBus.getDefault().register(this)
+    }
 
     fun requestPermission(activity: Activity, task: Runnable? = null) {
         PermissionManager.request(object : PermissionListener {
@@ -56,7 +70,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         mAlbumDataTask.execute()
     }
 
-    fun cancelTask() {
+    private fun cancelTask() {
         mAlbumDataTask.cancel(true)
     }
 
@@ -77,7 +91,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
 
         val albumPath = PrivateHelper.PATH_ALBUM + File.separator + albumName
         mAlbumImageFolderMap[albumPath] = imageFolder
-
+        mImageFolderList.add(imageFolder)
         mViewRef.get()?.updateAddAlbum(imageFolder)
     }
 
@@ -103,7 +117,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         addAlbumDialog.show()
     }
 
-    fun deleteAlbum(activity: Activity, position:Int) {
+    fun deleteAlbum(activity: Activity) {
         //删除提示弹窗
         val builder = AlertDialog.Builder(activity)
             .setMessage(R.string.tips_dialog_delete_resource)
@@ -112,10 +126,10 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
             }
             .setPositiveButton(R.string.delete, DialogInterface.OnClickListener { dialog, which ->
                 //启动一个Task删除， 遍历删除
-                if (position < 0 || position >= mImageFolderList.size) {
+                if (mClickMorePosition < 0 || mClickMorePosition >= mImageFolderList.size) {
                     return@OnClickListener
                 }
-                val imageFolder = mImageFolderList[position]
+                val imageFolder = mImageFolderList[mClickMorePosition]
                 getDeleteAlbumTask().execute(imageFolder)
                 dialog.dismiss()
             })
@@ -214,7 +228,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
      * 删除相册异步任务
      * @return
      */
-    fun getDeleteAlbumTask(): AsyncTask<ImageFolder, Void, Boolean> {
+    private fun getDeleteAlbumTask(): AsyncTask<ImageFolder, Void, Boolean> {
         return object : AsyncTask<ImageFolder, Void, Boolean>() {
             override fun doInBackground(vararg imageFolders: ImageFolder): Boolean? {
                 if (imageFolders.isEmpty()) {
@@ -246,7 +260,8 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                 if (isSuccess!!) {
                     //已删除，刷新数据
                     ToastUtils.show(App.context.getString(R.string.delete_finish))
-                   mViewRef.get()?.updateDeleteAlbum()
+                    mImageFolderList.removeAt(mClickMorePosition)
+                    mViewRef.get()?.updateDeleteAlbum(mClickMorePosition)
                 } else {
                     //失败，不做处理
                 }
@@ -256,8 +271,8 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         }
     }
 
-    fun renameAlbum(activity: Activity, position: Int) {
-        val imageFolder = mImageFolderList[position]
+    fun renameAlbum(activity: Activity) {
+        val imageFolder = mImageFolderList[mClickMorePosition]
 
         val albumName = imageFolder.name
 
@@ -288,11 +303,11 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                         return
                     }
 
-                    if (position >= mImageFolderList.size) {
+                    if (mClickMorePosition >= mImageFolderList.size) {
                         return
                     }
 
-                    val imageFolder = mImageFolderList[position]
+                    val imageFolder = mImageFolderList[mClickMorePosition]
 
                     val albumDir = imageFolder.dir
                     val albumDirFile = File(albumDir)
@@ -305,7 +320,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                     }
 
                     if (!renameOk) {
-                        com.android.absbase.utils.ToastUtils.show(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
+                        ToastUtils.show(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
                         dialog.dismiss()
                         return
                     }
@@ -316,7 +331,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                     imageFolder.dir = (albumPath)
                     imageFolder.name = (albumDesDirFile.name)
                     mAlbumImageFolderMap[albumPath] = imageFolder
-                    mViewRef.get()?.updateRenameAlbum(imageFolder.name!!, imageFolder.dir!!)
+                    mViewRef.get()?.updateRenameAlbum(mClickMorePosition, imageFolder.name!!, imageFolder.dir!!)
 
                 }
 
@@ -325,5 +340,85 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                 }
             })
         mRenameAlbumDialog.show()
+    }
+
+    fun clearPasswordStatus() {
+        PasswordConfig.secretCheckPass = false
+    }
+
+    fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                0 -> {
+                    ToastUtils.show("获取加密相册内容")
+                    //获取加密相册内容
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        getPrivateAlbumData()
+                    }
+                }
+                1 -> {
+                    //创建相册
+                    ToastUtils.show("创建相册")
+                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        handleAddAlbum(activity)
+                    }
+                }
+            }
+        }
+    }
+
+    fun setAlbumClickPosition(position: Int) {
+        mClickAlbumPosition = position
+    }
+
+    fun setMorePosition(position: Int) {
+        mClickMorePosition = position
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveDecodeEvent(decodeEvent: DecodeEvent) {
+        val imageFolder = mImageFolderList[mClickAlbumPosition]
+        decodeEvent.indexList.map {
+            val thumbnailBean = imageFolder.data?.get(it)
+            val nameMd5 = MD5.getMD5Str(thumbnailBean?.path!!)
+            val linkFile = File(imageFolder.dir, nameMd5)
+            if (linkFile.exists()) {
+                linkFile.delete()
+            }
+            imageFolder.data?.removeAt(it)
+            imageFolder.count = imageFolder.data?.size?:0
+        }
+        //刷新界面
+        mViewRef.get()?.updateAlbumList(mImageFolderList)
+        GlobalData.albumData.clear()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveEncodeEvent(encodeEvent: EncodeEvent) {
+        val imageFolder = mImageFolderList[mClickAlbumPosition]
+        encodeEvent.thumbnailBeanList.map {
+            imageFolder.data?.add(it)
+        }
+
+        imageFolder.count = imageFolder.data?.size?:0
+        //排序
+        val sortThumbnailBeans = ArrayList<ThumbnailBean>()
+        sortThumbnailBeans.addAll(imageFolder.data!!)
+        sortThumbnailBeans.sortWith(Comparator { arg0, arg1 ->
+            java.lang.Long.compare(arg1.date, arg0.date)
+        })
+
+        imageFolder.data = sortThumbnailBeans
+
+        //刷新界面
+        mViewRef.get()?.updateAlbumList(mImageFolderList)
+
+        GlobalData.albumData.clear()
+    }
+
+    fun destroy() {
+        cancelTask()
+        EventBus.getDefault().unregister(this)
+        GlobalData.albumData.clear()
     }
 }
