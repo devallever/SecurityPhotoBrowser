@@ -7,7 +7,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build
+import android.support.v4.content.FileProvider
 import android.text.TextUtils
+import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ShareData
 import com.android.absbase.utils.ToastUtils
@@ -41,17 +44,29 @@ object ShareHelper {
     const val TYPE_IMAGE = 0
     const val TYPE_VIDEO = 1
 
-    fun shareTo(context: Context?, path: String?, type: Int){
-        val uri = Uri.fromFile(File(path))
+    fun shareTo(context: Context, path: String?, type: Int){
         val intent = Intent()
+        val file = File(path)
+        val fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //解决调用相册不显示图片的问题
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            FileProvider.getUriForFile(
+                context,
+                BuildConfig.APPLICATION_ID + ".fileprovider",
+                file
+            )
+        } else {
+            Uri.fromFile(file)
+        }
+
         intent.action = Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri)
         if (type == TYPE_IMAGE){
             intent.type = "image/*"
         }else if (type == TYPE_VIDEO){
             intent.type = "video/*"
         }
-        context?.startActivity(Intent.createChooser(intent, context?.getString(R.string.share_to)))
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_to)))
     }
 
     private fun shareTextTo(context: Context, pkg: String, activityName: String, content: String): Boolean {
