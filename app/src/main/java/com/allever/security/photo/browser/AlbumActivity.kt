@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Toast
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
+import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.ui.GalleryActivity
@@ -90,6 +92,14 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
                 })
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (isPasswordViewShowing()) {
+            super.onBackPressed()
+            return
+        }
+        checkExit()
     }
 
     override fun onDeleteClick(dialog: AppCompatDialogFragment) {

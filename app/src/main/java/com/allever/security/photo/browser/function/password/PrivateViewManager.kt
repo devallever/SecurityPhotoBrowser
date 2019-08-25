@@ -50,6 +50,8 @@ class PrivateViewProxy(val activity: Activity) {
                     followupRunnable?.run()
                     showPasswordView(false)
                     PasswordConfig.secretCheckPass = true
+                    //移除所有passView
+                    removeAllPasswordView()
                 }
             })
     }
@@ -62,6 +64,23 @@ class PrivateViewProxy(val activity: Activity) {
     fun release() {
         unregisterReceiver(activity)
         passwordHelper.release()
+    }
+
+    private fun removeAllPasswordView() {
+        var content = activity.findViewById(android.R.id.content) as? ViewGroup
+        if (content == null) {
+            val window = activity.window
+            content = window?.decorView as? FrameLayout
+        }
+
+        if (content != null) {
+            for (i in 0 until content.childCount) {
+                val view = content.getChildAt(i)
+                if (view?.tag == WINDOW_PASSWORD_VIEW) {
+                    content.removeView(view)
+                }
+            }
+        }
     }
 
     private fun registerBroadcast(activity: Activity) {
