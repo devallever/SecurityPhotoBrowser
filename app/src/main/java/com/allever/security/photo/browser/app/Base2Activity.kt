@@ -7,6 +7,7 @@ import com.allever.lib.common.mvp.BaseMvpActivity
 import com.allever.lib.common.mvp.BasePresenter
 import com.allever.security.photo.browser.function.password.PrivateViewManager
 import com.allever.security.photo.browser.function.password.PrivateViewProxy
+import com.quxianggif.util.ActivityCollector
 import java.lang.Exception
 import java.lang.RuntimeException
 
@@ -47,6 +48,14 @@ abstract class Base2Activity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
     override fun onDestroy() {
         super.onDestroy()
         mPrivateViewProxy.release()
+    }
+
+    override fun onBackPressed() {
+        if (isPasswordViewShowing()) {
+            ActivityCollector.finishAll()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     protected fun isPasswordViewShowing(): Boolean {
