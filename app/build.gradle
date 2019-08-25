@@ -38,6 +38,7 @@ dependencies {
     //local
     implementation project(':permission')
     implementation project(':common')
+    implementation project(':umeng')
     implementation(name: "Toolkit-1.1", ext: 'aar')
 
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
