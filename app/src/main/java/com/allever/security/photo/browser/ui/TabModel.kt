@@ -52,19 +52,19 @@ object TabModel {
          */
         ALL(
             PickFragment::class.java,
-            R.mipmap.ic_launcher,
+            R.drawable.ic_launcher,
             R.string.tab_all_album,
             emptyIconResId = R.drawable.icon_album_empty_all
         ),
         VIDEO(
             PickFragment::class.java,
-            R.mipmap.ic_launcher,
+            R.drawable.ic_launcher,
             R.string.tab_video,
             emptyIconResId = R.drawable.icon_album_empty_video
         ),
         PICTURE(
             PickFragment::class.java,
-            R.mipmap.ic_launcher,
+            R.drawable.ic_launcher,
             R.string.tab_photo,
             emptyIconResId = R.drawable.icon_album_empty_photo
         );
