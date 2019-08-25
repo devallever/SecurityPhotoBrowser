@@ -4,3 +4,5 @@ include ':permission'
 project(':permission').projectDir = new File(settingsDir, '../AndroidDependencyLib/permission')
 include ':common'
 project(':common').projectDir = new File(settingsDir, '../AndroidDependencyLib/common')
+include ':umeng'
+project(':umeng').projectDir = new File(settingsDir, '../AndroidDependencyLib/umeng')
