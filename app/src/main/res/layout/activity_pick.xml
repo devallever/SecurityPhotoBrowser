@@ -33,7 +33,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Album"
+                android:text="@string/tab_all_album"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
