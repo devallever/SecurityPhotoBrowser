@@ -277,7 +277,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         val albumName = imageFolder.name
 
         val builder = DialogHelper.Builder()
-            .setTitleContent(App.context.getString(R.string.rename_album))
+            .setTitleContent(App.context.getString(R.string.rename))
             .isShowMessage(false)
             .isShowEditText(true)
             .setOkContent(App.context.getString(R.string.save))

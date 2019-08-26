@@ -47,7 +47,7 @@
     <string name="delete">Delete</string>
     <string name="delete_finish">Delete Finish</string>
     <string name="set_album_cover">Set Album cover</string>
-    <string name="rename_album">Rename</string>
+    <string name="rename">Rename</string>
     <string name="already_exist_album">Already exist album</string>
     <string name="album_rename_failed">Album rename failed</string>
 
@@ -68,13 +68,13 @@
 
     <string name="about">About</string>
     <string name="feedback">Feedback</string>
-    <string name="privacy">隐私政策</string>
-    <string name="about_right">版权所有@2018-2019 私密相册浏览器保留所有权利</string>
-    <string name="feed_back_subject">您的建议</string>
-    <string name="feed_back_content">我们很希望能得到您的建议：</string>
-    <string name="select_mail_app">请选择邮件类应用</string>
-    <string name="has_not_google_service">没安装谷歌服务</string>
-	<string name="export_resource">正在为您导出资源...</string>
-    <string name="import_resource">正在为您导入资源...</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="about_right">Copyright @2018–2019 Private Album Browser All Rights Reserved</string>
+    <string name="feed_back_subject">Your suggestion</string>
+    <string name="feed_back_content">We hope to get your advice:</string>
+    <string name="select_mail_app">Please select the mail application</string>
+    <string name="has_not_google_service">Did not install Google services</string>
+	<string name="export_resource">Exporting resources for you…</string>
+    <string name="import_resource">Importing resources for you…</string>
 
 </resources>
