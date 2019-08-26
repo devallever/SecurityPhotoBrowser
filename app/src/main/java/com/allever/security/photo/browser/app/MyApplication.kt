@@ -7,6 +7,6 @@ class MyApplication : App() {
     override fun onCreate() {
         super.onCreate()
         com.android.absbase.App.setContext(this)
-        UMeng.init(this, "5d61ebd3570df3add50003a6", "google")
+        UMeng.init(this)
     }
 }
