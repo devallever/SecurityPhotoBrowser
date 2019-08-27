@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 import com.allever.lib.common.app.App
 import android.view.LayoutInflater
 import android.view.View

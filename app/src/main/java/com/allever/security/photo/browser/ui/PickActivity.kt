@@ -5,11 +5,11 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,12 +47,12 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     SelectAlbumAdapter.OnItemClickListener{
 
     private lateinit var mTabs: TabLayout
-    private lateinit var mViewPager: ViewPager
+    private lateinit var mViewPager: androidx.viewpager.widget.ViewPager
     private lateinit var mFragmentPageAdapter: FragmentPageAdapter
     private lateinit var mLlAlbumTitleContainer: ViewGroup
     private lateinit var mFlSelectAlbumContainer: ViewGroup
     private lateinit var mIvSelectAlbum: ImageView
-    private lateinit var mAlbumRecyclerView: RecyclerView
+    private lateinit var mAlbumRecyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var mBtnImport: RippleTextView
     private lateinit var mTvTitle: TextView
 
@@ -71,7 +71,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     //相册列表数据
     private var mAlbumData = mutableListOf<ImageFolder>()
 
-    private var mFragments = mutableListOf<Fragment>()
+    private var mFragments = mutableListOf<androidx.fragment.app.Fragment>()
 
     private var mSelectAlbumContainerAnimShow: Animator? = null
     private var mSelectAlbumContainerAnimHide: Animator? = null
@@ -226,7 +226,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
 
     private fun initAlbumRecyclerView() {
         mAlbumRecyclerView = findViewById(R.id.select_album_recycler_view)
-        mAlbumRecyclerView.layoutManager = LinearLayoutManager(this)
+        mAlbumRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         mAlbumAdapter = SelectAlbumAdapter(this, R.layout.item_slect_album, mAlbumData)
         mAlbumAdapter?.setOnItemClickListener(this)
         mAlbumRecyclerView.adapter = mAlbumAdapter

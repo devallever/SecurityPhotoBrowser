@@ -3,9 +3,9 @@ package com.allever.security.photo.browser.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -72,10 +72,10 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         mBtnExport = findViewById(R.id.iv_right)
         mBtnExport.setOnClickListener(this)
         mBtnExport.setImageResource(R.drawable.nav_button_export)
-        val recyclerView = findViewById<RecyclerView>(R.id.gallery_recycler_view)
-        val gridLayoutManager = GridLayoutManager(this, 3)
+        val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.gallery_recycler_view)
+        val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 3)
         //解决最后单个跨列问题
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+        gridLayoutManager.spanSizeLookup = object : androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val itemType = mGalleryAdapter.getItemViewType(position)
                 return if (itemType == GALLERY_ITEM_TYPE_SEPARATOR) {

@@ -62,7 +62,7 @@
         android:background="@color/default_top_bar_background_color"/>
 
     <!-- main -->
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,7 +99,7 @@
             android:layout_height="1dp"
             android:background="@color/dividing_line_color"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/select_album_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
