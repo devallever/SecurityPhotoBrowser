@@ -1,7 +1,7 @@
 package com.allever.security.photo.browser.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.ImageView
 import android.widget.VideoView
@@ -12,7 +12,7 @@ import com.allever.security.photo.browser.util.MediaTypeUtil
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.chrisbanes.photoview.PhotoView
 
-class PreviewFragment : Fragment() {
+class PreviewFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         private val TAG = PreviewFragment::class.java.simpleName

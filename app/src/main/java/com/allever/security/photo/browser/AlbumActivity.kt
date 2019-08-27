@@ -3,9 +3,9 @@ package com.allever.security.photo.browser
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatDialogFragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
@@ -30,7 +30,7 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         }
     }
 
-    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAlbumBottomDialog: AlbumDialog? = null
@@ -39,7 +39,7 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
     override fun initView() {
         mRecyclerView = findViewById(R.id.album_recycler_view)
-        mRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
 
         findViewById<View>(R.id.album_iv_setting).setOnClickListener(this)
         findViewById<View>(R.id.album_btn_add_album).setOnClickListener(this)

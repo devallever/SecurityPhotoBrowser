@@ -1,19 +1,19 @@
 package com.allever.security.photo.browser.ui
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import android.view.ViewGroup
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.bean.ThumbnailBean
 
-class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: MutableList<ThumbnailBean>) :
-    FragmentStatePagerAdapter(fragmentManager) {
+class PreviewFragmentPagerAdapter(fragmentManager: androidx.fragment.app.FragmentManager, data: MutableList<ThumbnailBean>) :
+    androidx.fragment.app.FragmentStatePagerAdapter(fragmentManager) {
 
     private var mData: MutableList<ThumbnailBean>? = data
     private var mContainer: ViewGroup? = null
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment? {
         return PreviewFragment()
     }
 

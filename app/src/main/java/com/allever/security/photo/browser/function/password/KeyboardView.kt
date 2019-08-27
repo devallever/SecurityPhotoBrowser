@@ -3,7 +3,7 @@ package com.allever.security.photo.browser.function.password
 import android.content.Context
 import android.os.Build
 import android.os.Vibrator
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView

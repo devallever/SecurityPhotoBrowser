@@ -3,8 +3,8 @@ package com.allever.security.photo.browser.ui
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import com.allever.lib.common.app.App
 import com.allever.lib.common.util.DLog
@@ -24,9 +24,9 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.lang.Exception
 
-class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, ViewPager.OnPageChangeListener,
+class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, androidx.viewpager.widget.ViewPager.OnPageChangeListener,
     View.OnClickListener {
-    private var mViewPager: ViewPager? = null
+    private var mViewPager: androidx.viewpager.widget.ViewPager? = null
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null
     private var mThumbnailBeanList: MutableList<ThumbnailBean> = mutableListOf()
     private var mPosition = 0

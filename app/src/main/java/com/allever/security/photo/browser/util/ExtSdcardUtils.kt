@@ -8,8 +8,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.support.v4.provider.DocumentFile
-import android.support.v7.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
+import androidx.appcompat.app.AlertDialog
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -124,7 +124,7 @@ object ExtSdcardUtils {
         try {
             val u = data.data
 
-            val documentFile = DocumentFile.fromTreeUri(activity, u!!)//根目录文件的
+            val documentFile = androidx.documentfile.provider.DocumentFile.fromTreeUri(activity, u!!)//根目录文件的
             if (isExtSdcardRootUri(documentFile!!)) {
                 saveExtSdcardUri(u)
                 val takeFlags =
@@ -148,7 +148,7 @@ object ExtSdcardUtils {
      * @param documentFile
      * @return
      */
-    fun isExtSdcardRootUri(documentFile: DocumentFile): Boolean {
+    fun isExtSdcardRootUri(documentFile: androidx.documentfile.provider.DocumentFile): Boolean {
         val documentId = DocumentsContract.getDocumentId(documentFile.uri)
         if (!TextUtils.isEmpty(documentId)) {
             val part = documentId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -168,7 +168,7 @@ object ExtSdcardUtils {
      */
     fun getRootDocumentId(context: Context, treeUri: Uri?): String? {
         if (treeUri != null) {
-            val documentFile = DocumentFile.fromTreeUri(context, treeUri)
+            val documentFile = androidx.documentfile.provider.DocumentFile.fromTreeUri(context, treeUri)
             return DocumentsContract.getDocumentId(documentFile!!.uri)
         }
         return null
@@ -183,7 +183,7 @@ object ExtSdcardUtils {
      * @param mimeType
      * @return 返回的都是SingleDocumentFile不能进行文件创建
      */
-    fun getDocumentFile(context: Context, pathName: String, treeUri: Uri?, mimeType: String): DocumentFile? {
+    fun getDocumentFile(context: Context, pathName: String, treeUri: Uri?, mimeType: String): androidx.documentfile.provider.DocumentFile? {
         val documentFile = getDocumentFile(context, pathName, treeUri)
         if (documentFile == null) {
             return null
@@ -201,7 +201,7 @@ object ExtSdcardUtils {
      * @param documentFile
      * @return SingleDocumentFile
      */
-    private fun getParentDocument(context: Context, documentFile: DocumentFile?, treeUri: Uri?): DocumentFile? {
+    private fun getParentDocument(context: Context, documentFile: androidx.documentfile.provider.DocumentFile?, treeUri: Uri?): androidx.documentfile.provider.DocumentFile? {
         if (documentFile == null) {
             return null
         }
@@ -212,11 +212,11 @@ object ExtSdcardUtils {
             val index = documentId.lastIndexOf(File.separator)
             if (index == -1) {//没有/则代表是root目录了
                 if (treeUri != null) {
-                    parentDocumentFile = DocumentFile.fromTreeUri(context, treeUri)
+                    parentDocumentFile = androidx.documentfile.provider.DocumentFile.fromTreeUri(context, treeUri)
                 }
             } else {
                 parentDocumentId = documentId.substring(0, index)
-                parentDocumentFile = DocumentFile.fromSingleUri(
+                parentDocumentFile = androidx.documentfile.provider.DocumentFile.fromSingleUri(
                     context,
                     DocumentsContract.buildDocumentUriUsingTree(treeUri, parentDocumentId)
                 )
@@ -238,7 +238,7 @@ object ExtSdcardUtils {
      */
     private fun createDocumentFile(
         context: Context,
-        documentFile: DocumentFile,
+        documentFile: androidx.documentfile.provider.DocumentFile,
         treeUri: Uri?,
         pathName: String,
         mimeType: String
@@ -284,7 +284,7 @@ object ExtSdcardUtils {
      * @param treeUri
      * @Return SingleDocumentFile
      */
-    fun getDocumentFile(context: Context, pathName: String?, treeUri: Uri?): DocumentFile? {
+    fun getDocumentFile(context: Context, pathName: String?, treeUri: Uri?): androidx.documentfile.provider.DocumentFile? {
         if (treeUri != null) {
             val sdcardPath = FolderUtil.getAllSDPath(context)
             if (sdcardPath != null && sdcardPath.size >= 2) {
@@ -294,7 +294,7 @@ object ExtSdcardUtils {
                 val documentId = rootDocumentId!! + truePath
                 //这里存在两种方式 一种会生成singleDocumentFile 另一种生成TreeDocumentFile
                 //            DocumentFile documentFile = DocumentFile.fromTreeUri(context, DocumentsContract.buildTreeDocumentUri(treeUri.getAuthority(), documentId));
-                val documentFile = DocumentFile.fromSingleUri(
+                val documentFile = androidx.documentfile.provider.DocumentFile.fromSingleUri(
                     context,
                     DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
                 )
@@ -312,7 +312,7 @@ object ExtSdcardUtils {
      * @param path    必须是一个目录  不能是文件
      * @param treeUri
      */
-    fun getDocumentDirectoryFile(context: Context, path: String, treeUri: Uri): DocumentFile? {
+    fun getDocumentDirectoryFile(context: Context, path: String, treeUri: Uri): androidx.documentfile.provider.DocumentFile? {
         val documentFile = getDocumentFile(context, path, treeUri)
         if (documentFile == null) {
             return null

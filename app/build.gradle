@@ -12,7 +12,10 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //默认渠道为官网
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "offical"]
     }
 
     //友盟多渠道
@@ -21,7 +24,6 @@ android {
         google {}
         xiaomi {}
         baidu {}
-        uc {}
     }
 
     productFlavors.all {
@@ -79,7 +81,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //android
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     //local
     implementation project(':permission')

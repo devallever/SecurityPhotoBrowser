@@ -1,8 +1,8 @@
 package com.allever.security.photo.browser.ui
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ class PickFragment : BaseFragment() {
     var callback: PickCallback? = null
     var type: TabModel.Tab? = null
 
-    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
     private var mPickImageAdapter: PickImageAdapter? = null
     private val mData = mutableListOf<ThumbnailBean>()
 
@@ -41,7 +41,7 @@ class PickFragment : BaseFragment() {
     private fun initView() {
         DLog.d("initView")
         mRecyclerView = mView.findViewById(R.id.pick_recycler_view)
-        mRecyclerView.layoutManager = GridLayoutManager(activity, 4)
+        mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 4)
 
         mPickImageAdapter = PickImageAdapter(App.context, R.layout.item_pick, mData)
         mRecyclerView.adapter = mPickImageAdapter
