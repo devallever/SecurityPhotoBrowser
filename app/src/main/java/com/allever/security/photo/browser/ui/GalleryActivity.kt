@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -102,8 +100,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
             }
 
             override fun getItemViewType(position: Int, t: Any): Int {
-                val obj = mGalleryData[position]
-                return when (obj) {
+                return when (mGalleryData[position]) {
                     is ThumbnailBean -> {
                         GALLERY_ITEM_TYPE_IMAGE
                     }

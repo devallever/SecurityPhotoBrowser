@@ -1,35 +1,30 @@
 package com.allever.security.photo.browser.ui
 
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.allever.lib.common.app.BaseFragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.allever.lib.common.app.App
+import com.allever.lib.common.app.BaseFragment
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.util.DLog
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.ui.adapter.PickImageAdapter
-import com.android.absbase.utils.ToastUtils
 
 class PickFragment : BaseFragment() {
 
     var callback: PickCallback? = null
     var type: TabModel.Tab? = null
 
-    private lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
     private var mPickImageAdapter: PickImageAdapter? = null
     private val mData = mutableListOf<ThumbnailBean>()
 
     lateinit var mView: View
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = LayoutInflater.from(context).inflate(R.layout.fragment, container, false)
@@ -41,7 +36,7 @@ class PickFragment : BaseFragment() {
     private fun initView() {
         DLog.d("initView")
         mRecyclerView = mView.findViewById(R.id.pick_recycler_view)
-        mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 4)
+        mRecyclerView.layoutManager = GridLayoutManager(activity, 4)
 
         mPickImageAdapter = PickImageAdapter(App.context, R.layout.item_pick, mData)
         mRecyclerView.adapter = mPickImageAdapter
