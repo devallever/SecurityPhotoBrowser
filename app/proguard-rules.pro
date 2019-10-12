@@ -50,3 +50,11 @@
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 
+# 奇葩问题
+# Process: com.allever.app.virtual.call, PID: 28185
+#    java.lang.NoSuchMethodError: No static method asAttributeSet(Lg/a/a/a;)Landroid/util/AttributeSet; in class Landroid/util/Xml; or its super classes (declaration of 'android.util.Xml' appears in /system/framework/framework.jar)
+# https://www.jianshu.com/p/48c56e9048e7
+-dontwarn org.xmlpull.v1.XmlPullParser
+-dontwarn org.xmlpull.v1.XmlSerializer
+-keep class org.xmlpull.v1.* {*;}
+
