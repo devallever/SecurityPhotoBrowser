@@ -2,15 +2,11 @@ package com.allever.security.photo.browser
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
-import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
-import com.allever.lib.common.util.ToastUtils
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.ui.GalleryActivity
@@ -30,7 +26,7 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
         }
     }
 
-    private lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mPrivateAlbumAdapter: PrivateAlbumAdapter
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAlbumBottomDialog: AlbumDialog? = null
