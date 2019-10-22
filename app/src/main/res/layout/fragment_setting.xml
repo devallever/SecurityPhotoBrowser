@@ -19,6 +19,14 @@
         <include layout="@layout/include_divider_line"/>
 
         <TextView
+            android:id="@+id/setting_tv_share"
+            style="@style/setting_item"
+            android:drawableEnd="@drawable/ic_share"
+            android:text="@string/share" />
+
+        <include layout="@layout/include_divider_line" />
+
+        <TextView
             style="@style/setting_item"
             android:id="@+id/setting_tv_feedback"
             android:text="@string/feedback"

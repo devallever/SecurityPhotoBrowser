@@ -13,6 +13,7 @@ import android.os.StrictMode
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import com.allever.security.photo.browser.R
 
 object SystemUtils {
     private val isDebug = true
@@ -268,6 +269,17 @@ object SystemUtils {
         }
 
         return infos != null && infos.size > 0
+    }
+
+    fun getShareIntent(context: Context, msg: String): Intent? {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_TEXT, msg)
+        shareIntent.type = "text/plain"
+        return Intent.createChooser(
+            shareIntent,
+            context.resources.getString(R.string.common_share_to)
+        )
     }
 
 }

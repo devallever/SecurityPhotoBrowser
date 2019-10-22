@@ -38,7 +38,8 @@
         android:singleLine="true"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:theme="@style/MyEditText"/>
 
     <View
         android:id="@+id/separate"

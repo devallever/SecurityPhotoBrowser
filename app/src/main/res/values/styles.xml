@@ -88,4 +88,9 @@
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
     </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <!--        <item name="colorControlNormal">@color/indigo</item>-->
+        <item name="colorControlActivated">@color/default_theme_color</item>
+    </style>
 </resources>
