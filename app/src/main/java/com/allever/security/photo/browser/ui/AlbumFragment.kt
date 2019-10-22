@@ -1,8 +1,11 @@
 package com.allever.security.photo.browser.ui
 
+import android.Manifest
 import android.content.Intent
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
@@ -63,9 +66,19 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
             }
         }
 
-        mPresenter.requestPermission(activity, Runnable {
-            mPresenter.getPrivateAlbumData()
-        })
+        AlertDialog.Builder(activity!!)
+            .setMessage(R.string.permission_tips)
+            .setPositiveButton(R.string.permission_accept) { dialog, which ->
+                dialog.dismiss()
+                mPresenter.requestPermission(activity, Runnable {
+                    mPresenter.getPrivateAlbumData()
+                })
+            }
+            .setNegativeButton(R.string.permission_reject) { dialog, which ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     override fun onDestroy() {
@@ -76,9 +89,19 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.album_btn_add_album -> {
-                mPresenter.requestPermission(activity, Runnable {
-                    mPresenter.handleAddAlbum(activity!!)
-                })
+                AlertDialog.Builder(activity!!)
+                    .setMessage(R.string.permission_tips)
+                    .setPositiveButton(R.string.permission_accept) { dialog, which ->
+                        dialog.dismiss()
+                        mPresenter.requestPermission(activity, Runnable {
+                            mPresenter.handleAddAlbum(activity!!)
+                        })
+                    }
+                    .setNegativeButton(R.string.permission_reject) { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
             }
         }
     }

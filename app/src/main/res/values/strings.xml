@@ -91,4 +91,11 @@
         \n\n【注意】：删除本应用时，我们会删除您导入的图片或视频，请及时还原。为了尊重用户隐私，暂时不提供网络备份功能。
     </string>
 
+    <string name="permission_tips">我们需要
+        \n【存储权限】获取您设备的图片和视频
+        \n【手机信息】以便统计设备信息，做出更好的用户体验
+        \n 拒绝相应的权限将无法使用部分功能</string>
+    <string name="permission_accept">同意</string>
+    <string name="permission_reject">拒绝</string>
+
 </resources>
