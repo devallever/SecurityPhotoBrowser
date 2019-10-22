@@ -16,6 +16,7 @@
     <color name="default_btn_color_filter">#ff000000</color>
     <color name="default_btn_background">@color/default_theme_color</color>
     <color name="default_tv_color">@color/black</color>
+    <color name="fab_btn_background">#992196f3</color>
     
     <!--  top_bar -->
     <color name="top_bar_tv_title_color">@color/white</color>

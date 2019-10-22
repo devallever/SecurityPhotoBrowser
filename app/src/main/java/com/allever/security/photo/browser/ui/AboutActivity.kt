@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
+import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.util.SystemUtils
 
@@ -24,6 +25,7 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
+        findViewById<TextView>(R.id.about_app_version).text = "V ${BuildConfig.VERSION_NAME}"
     }
 
     override fun onClick(v: View?) {

@@ -63,7 +63,8 @@
 		android:padding="5dp"
 		android:textSize="12sp"
 		android:gravity="center"
-		android:textColor="@color/default_tv_color"/>
+		android:textColor="@color/default_tv_color"
+		android:visibility="gone"/>
 
 
 </RelativeLayout>
