@@ -3,6 +3,7 @@ package com.allever.security.photo.browser.ui
 import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.App
+import com.allever.lib.permission.PermissionUtil
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Fragment
 import com.allever.security.photo.browser.ui.mvp.presenter.SettingPresenter
@@ -15,6 +16,7 @@ class SettingFragment: Base2Fragment<SettingView, SettingPresenter>(), SettingVi
 
     override fun initView(root: View) {
         root.findViewById<View>(R.id.setting_tv_share).setOnClickListener(this)
+        root.findViewById<TextView>(R.id.setting_tv_permission).setOnClickListener(this)
         root.findViewById<TextView>(R.id.setting_tv_modify_password).setOnClickListener(this)
         root.findViewById<TextView>(R.id.setting_tv_feedback).setOnClickListener(this)
         root.findViewById<TextView>(R.id.setting_tv_about).setOnClickListener(this)
@@ -26,6 +28,9 @@ class SettingFragment: Base2Fragment<SettingView, SettingPresenter>(), SettingVi
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.setting_tv_permission -> {
+                PermissionUtil.GoToSetting(activity)
+            }
             R.id.setting_tv_modify_password -> {
                 ChangePasswordActivity.start(activity!!, true)
             }

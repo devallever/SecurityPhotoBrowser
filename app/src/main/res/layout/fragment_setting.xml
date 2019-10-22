@@ -11,6 +11,14 @@
         tools:ignore="RtlSymmetry">
 
         <TextView
+            android:id="@+id/setting_tv_permission"
+            style="@style/setting_item"
+            android:drawableEnd="@drawable/ic_arrow"
+            android:text="@string/permission_setting" />
+
+        <include layout="@layout/include_divider_line" />
+
+        <TextView
             style="@style/setting_item"
             android:id="@+id/setting_tv_modify_password"
             android:text="@string/setting_modify_password"

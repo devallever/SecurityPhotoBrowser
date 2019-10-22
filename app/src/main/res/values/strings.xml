@@ -80,6 +80,7 @@
 
     <string name="tab_guide">使用说明</string>
     <string name="tab_main">隐私相册</string>
+    <string name="permission_setting">设置权限</string>
 
     <string name="guide">
         这是一款私密相册浏览器，您可以将一些重要的私密的照片或视频导入到该应用中，并为您的应用设置密码。主要内容功能包括：
