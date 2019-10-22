@@ -37,7 +37,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
 
     private val mAlbumImageFolderMap = LinkedHashMap<String, ImageFolder>()
     private var mImageFolderList = mutableListOf<ImageFolder>()
-    private lateinit var mAlbumDataTask: PrivateAlbumDataTask
+    private val mAlbumDataTask = PrivateAlbumDataTask()
     private var mClickAlbumPosition = 0
     private var mClickMorePosition = 0
 
@@ -68,7 +68,6 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
     }
 
     fun getPrivateAlbumData() {
-        mAlbumDataTask = PrivateAlbumDataTask()
         mAlbumDataTask.execute()
     }
 

@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
+import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.AlbumActivity
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.app.Base2Fragment
@@ -66,19 +67,28 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
             }
         }
 
-        AlertDialog.Builder(activity!!)
-            .setMessage(R.string.permission_tips)
-            .setPositiveButton(R.string.permission_accept) { dialog, which ->
-                dialog.dismiss()
-                mPresenter.requestPermission(activity, Runnable {
-                    mPresenter.getPrivateAlbumData()
-                })
-            }
-            .setNegativeButton(R.string.permission_reject) { dialog, which ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+        if (PermissionManager.hasPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE)) {
+            mPresenter.requestPermission(activity, Runnable {
+                mPresenter.getPrivateAlbumData()
+            })
+        } else {
+            AlertDialog.Builder(activity!!)
+                .setMessage(R.string.permission_tips)
+                .setPositiveButton(R.string.permission_accept) { dialog, which ->
+                    dialog.dismiss()
+                    mPresenter.requestPermission(activity, Runnable {
+                        mPresenter.getPrivateAlbumData()
+                    })
+                }
+                .setNegativeButton(R.string.permission_reject) { dialog, which ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
     }
 
     override fun onDestroy() {
@@ -89,19 +99,28 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.album_btn_add_album -> {
-                AlertDialog.Builder(activity!!)
-                    .setMessage(R.string.permission_tips)
-                    .setPositiveButton(R.string.permission_accept) { dialog, which ->
-                        dialog.dismiss()
-                        mPresenter.requestPermission(activity, Runnable {
-                            mPresenter.handleAddAlbum(activity!!)
-                        })
-                    }
-                    .setNegativeButton(R.string.permission_reject) { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .create()
-                    .show()
+                if (PermissionManager.hasPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)) {
+                    mPresenter.requestPermission(activity, Runnable {
+                        mPresenter.handleAddAlbum(activity!!)
+                    })
+                } else {
+                    AlertDialog.Builder(activity!!)
+                        .setMessage(R.string.permission_tips)
+                        .setPositiveButton(R.string.permission_accept) { dialog, which ->
+                            dialog.dismiss()
+                            mPresenter.requestPermission(activity, Runnable {
+                                mPresenter.handleAddAlbum(activity!!)
+                            })
+                        }
+                        .setNegativeButton(R.string.permission_reject) { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
             }
         }
     }
