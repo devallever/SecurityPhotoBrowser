@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ff240b</color>
-    <color name="colorPrimaryDark">#ff240b</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#2196f3</color>
+    <color name="colorPrimaryDark">#2196f3</color>
+    <color name="colorAccent">#2196f3</color>
     <color name="default_gray">#eeeeee</color>
     <color name="default_gray_alpha">#aaeeeeee</color>
 
+    <color name="colorDefault">#2196f3</color>
     <!-- default -->
 
     <color name="default_theme_color">@color/colorPrimary</color>
     <color name="default_background">@color/white</color>
-    <color name="default_top_bar_background_color">@color/default_gray</color>
-    <color name="default_icon_color_filter">@color/black</color>
+    <color name="default_top_bar_background_color">@color/default_theme_color</color>
+    <color name="default_icon_color_filter">@color/white</color>
     <color name="default_btn_color_filter">#ff000000</color>
-    <color name="default_btn_background">@color/default_gray_alpha</color>
+    <color name="default_btn_background">@color/default_theme_color</color>
     <color name="default_tv_color">@color/black</color>
     
     <!--  top_bar -->
-    <color name="top_bar_tv_title_color">@color/black</color>
+    <color name="top_bar_tv_title_color">@color/white</color>
 
     <!-- common -->
     <color name="white">#ffffff</color>
@@ -25,12 +26,12 @@
 
     <!--  tab -->
     <color name="tab_bar_color">@color/black</color>
-    <color name="album_tab_selected_color">@color/black</color>
-    <color name="album_tab_un_selected_color">#999999</color>
-    <color name="album_tab_indicator_color">@color/black</color>
+    <color name="album_tab_selected_color">@color/white</color>
+    <color name="album_tab_un_selected_color">#aaffffff</color>
+    <color name="album_tab_indicator_color">@color/white</color>
 
     <color name="keyboard_text_color">@color/white</color>
-    <color name="password_view_key_board_bg">@color/default_gray_alpha</color>
+    <color name="password_view_key_board_bg">#33000000</color>
 
     <color name="divider_color">#19474747</color>
     <color name="private_album_item_bg">#66000000</color>

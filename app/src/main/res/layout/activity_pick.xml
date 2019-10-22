@@ -37,7 +37,7 @@
                 android:text="@string/tab_all_album"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/default_tv_color"/>
+                android:textColor="@color/white"/>
 
             <ImageView
                 android:id="@+id/iv_select_album"
@@ -80,7 +80,7 @@
         android:text="@string/pick_import"
         android:gravity="center"
         android:textSize="18sp"
-        android:textColor="@color/default_tv_color"
+        android:textColor="@color/white"
         android:textStyle="bold"/>
 
     <!-- select album -->

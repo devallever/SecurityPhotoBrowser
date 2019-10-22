@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/default_background">
+    android:background="@color/black">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/preview_view_pager"
@@ -15,7 +15,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_top_bar_height"
-        android:background="#33000000">
+        android:background="#33ffffff">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -43,7 +43,7 @@
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="#33000000">
+        android:background="#33ffffff">
 
         <ImageView
             android:id="@+id/preview_iv_share"

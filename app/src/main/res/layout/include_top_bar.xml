@@ -32,7 +32,7 @@
 				android:text=""
 				android:textSize="18sp"
 				android:textStyle="bold"
-				android:textColor="@color/default_tv_color"/>
+				android:textColor="@color/top_bar_tv_title_color"/>
 		</LinearLayout>
 
 		<ImageView
