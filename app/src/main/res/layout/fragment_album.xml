@@ -2,6 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/default_background">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/album_recycler_view"
+        android:layout_below="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/album_btn_add_album"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/icon_add"
+        android:tint="@color/default_icon_color_filter"
+        android:scaleType="centerInside"
+        android:background="@drawable/circle"/>
 
 </RelativeLayout>

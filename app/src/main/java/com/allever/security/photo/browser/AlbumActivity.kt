@@ -73,8 +73,8 @@ class AlbumActivity : Base2Activity<AlbumView, AlbumPresenter>(), AlbumView, Vie
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         mPresenter.destroy()
+        super.onDestroy()
     }
 
     override fun onClick(v: View?) {

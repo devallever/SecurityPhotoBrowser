@@ -18,8 +18,8 @@ import com.allever.security.photo.browser.ui.adapter.ViewPagerAdapter
 import com.allever.security.photo.browser.ui.mvp.presenter.MainPresenter
 import com.allever.security.photo.browser.ui.mvp.view.MainView
 
-class MainActivity: Base2Activity<MainView, MainPresenter>(), MainView,
-    TabLayout.OnTabSelectedListener{
+class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
+    TabLayout.OnTabSelectedListener {
 
     private lateinit var mVp: ViewPager
     private lateinit var mViewPagerAdapter: ViewPagerAdapter
@@ -47,9 +47,7 @@ class MainActivity: Base2Activity<MainView, MainPresenter>(), MainView,
 
     }
 
-    override fun initData() {
-    }
-
+    override fun initData() {}
 
     override fun createPresenter(): MainPresenter = MainPresenter()
 
@@ -146,5 +144,13 @@ class MainActivity: Base2Activity<MainView, MainPresenter>(), MainView,
         textView.setText(tab.labelResId)
         imageView.setImageResource(tab.iconResId)
         return view
+    }
+
+    override fun onBackPressed() {
+        if (isPasswordViewShowing()) {
+            super.onBackPressed()
+            return
+        }
+        checkExit()
     }
 }

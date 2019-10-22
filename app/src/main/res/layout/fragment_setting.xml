@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            style="@style/setting_item"
+            android:id="@+id/setting_tv_modify_password"
+            android:text="@string/setting_modify_password"
+            android:drawableEnd="@drawable/setting_icon_password"/>
+
+        <include layout="@layout/include_divider_line"/>
+
+        <TextView
+            style="@style/setting_item"
+            android:id="@+id/setting_tv_feedback"
+            android:text="@string/feedback"
+            android:drawableEnd="@drawable/setting_icon_feedback"/>
+
+        <include layout="@layout/include_divider_line"/>
+
+        <TextView
+            style="@style/setting_item"
+            android:id="@+id/setting_tv_about"
+            android:text="@string/about"
+            android:drawableEnd="@drawable/icon_setting_about"/>
+
+        <include layout="@layout/include_divider_line"/>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

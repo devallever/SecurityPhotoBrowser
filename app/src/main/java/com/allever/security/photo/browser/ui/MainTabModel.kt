@@ -48,7 +48,7 @@ internal object MainTabModel {
         /**
          *
          */
-        MAIN(AlbumFragment::class.java, R.drawable.ic_tab_call, R.string.tab_main),
+        MAIN(AlbumFragment::class.java, R.drawable.ic_tag_album, R.string.tab_main),
         GUIDE(GuideFragment::class.java, R.drawable.ic_tab_guide, R.string.tab_guide),
         SETTING(SettingFragment::class.java, R.drawable.ic_tab_setting, R.string.setting);
 

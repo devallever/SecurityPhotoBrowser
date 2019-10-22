@@ -14,7 +14,8 @@ abstract class Base2Fragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = LayoutInflater.from(context).inflate(getContentView(), container, false);
+        super.onCreateView(inflater, container, savedInstanceState)
+        val view = LayoutInflater.from(context).inflate(getContentView(), container, false)
         initView(view)
         initData()
         return view

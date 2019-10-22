@@ -45,7 +45,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
         EventBus.getDefault().register(this)
     }
 
-    fun requestPermission(activity: Activity, task: Runnable? = null) {
+    fun requestPermission(activity: Activity?, task: Runnable? = null) {
         PermissionManager.request(object : PermissionListener {
             override fun onGranted(grantedList: MutableList<String>) {
                 task?.run()
