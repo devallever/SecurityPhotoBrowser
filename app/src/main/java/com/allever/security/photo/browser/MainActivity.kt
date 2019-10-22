@@ -73,17 +73,7 @@ class MainActivity: Base2Activity<MainView, MainPresenter>(), MainView,
             }
 
             override fun onPageSelected(position: Int) {
-                when (position) {
-                    0 -> {
-                        mTvTitle.text = getString(R.string.app_name)
-                    }
-                    1 -> {
-                        mTvTitle.text = getString(R.string.tab_guide)
-                    }
-                    2 -> {
-                        mTvTitle.text = getString(R.string.setting)
-                    }
-                }
+                mTvTitle.text = getString(MainTabModel.getTabAt(position).labelResId)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
