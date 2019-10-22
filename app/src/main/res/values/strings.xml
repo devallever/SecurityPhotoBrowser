@@ -2,34 +2,34 @@
     <string name="app_name">隐私相册浏览器</string>
 
     <!-- Pick -->
-    <string name="pick_import">Import</string>
+    <string name="pick_import">导入</string>
     <!-- Tabs -->
-    <string name="tab_all_album">All</string>
-    <string name="tab_video">Video</string>
-    <string name="tab_photo">Photo</string>
+    <string name="tab_all_album">全部</string>
+    <string name="tab_video">视频</string>
+    <string name="tab_photo">照片</string>
 
     <!-- 分割线 -->
     <color name="dividing_line_color">#26ffffff</color>
 
-    <string name="not_install">Sorry, you have not yet installed the program!</string>
-    <string name="no_suitable_player">No suitable video player !</string>
-    <string name="more">MORE</string>
-    <string name="share_to">Share to</string>
+    <string name="not_install">对不起，您还没有安装该应用！</string>
+    <string name="no_suitable_player">没有合适的视频播放器！</string>
+    <string name="more">更多</string>
+    <string name="share_to">分享到</string>
     <!--  -->
 
     <!-- 异常提示 -->
-    <string name="storage_not_ready">Cannot take photo. Please insert a storage card or change the storage path of photos.</string>
-    <string name="little_sdcard_tips">Not Enough Storage. Photo/video may not be saved.</string>
-    <string name="request_ext_sdcard_permission_tip">SD Write Permission</string>
-    <string name="request_ext_sdcard_permission_msg1">In order to write to the SD card, App needs you to explicitly grant permission through Android. After you press CONFIRM, the Android document selection dialog will be displayed.</string>
-    <string name="request_ext_sdcard_permission_msg2">Please navigate to your external SD card and select the top level folder.</string>
-    <string name="request_ext_sdcard_permission_msg3">You may need to use a menu option to show the SD card.</string>
+    <string name="storage_not_ready">不能拍照。请插入存储卡或更改照片的存储路径。</string>
+    <string name="little_sdcard_tips">存储空间不足。照片/录像可能无法保存。</string>
+    <string name="request_ext_sdcard_permission_tip">SD写入权限</string>
+    <string name="request_ext_sdcard_permission_msg1">为了写入SD卡，App需要您通过Android明确授予权限。按CONFIRM后，将显示Android文档选择对话框。</string>
+    <string name="request_ext_sdcard_permission_msg2">请导外部SD卡并选择顶级文件夹。</string>
+    <string name="request_ext_sdcard_permission_msg3">您可能需要使用菜单选项来显示SD卡。</string>
     <!-- 文件夹选择界面 -->
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
-    <string name="done">Done</string>
-    <string name="ok">Ok</string>
-    <string name="save">Save</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="done">完成</string>
+    <string name="ok">确定</string>
+    <string name="save">保存</string>
 
     <string name="media_save_file_name_prefix">KeepSecurity</string>
 
@@ -39,42 +39,45 @@
     <string name="dialog_default_positive_text">@string/ok</string>
     <string name="dialog_default_negative_text">@string/cancel</string>
 
-    <string name="add_album">Add Album</string>
-    <string name="input_album_name">Input album name</string>
-    <string name="tips_please_input_album_name">Please input album name.</string>
-    <string name="tips_dialog_delete_album_resource">This album will be deleted.  This action cannot be undone.</string>
-    <string name="tips_dialog_delete_resource">This resource will be deleted.  This action cannot be undone.</string>
-    <string name="delete">Delete</string>
-    <string name="delete_finish">Delete Finish</string>
-    <string name="set_album_cover">Set Album cover</string>
-    <string name="rename">Rename</string>
-    <string name="already_exist_album">Already exist album</string>
-    <string name="album_rename_failed">Album rename failed</string>
+    <string name="add_album">创建相册</string>
+    <string name="input_album_name">输入相册名称</string>
+    <string name="tips_please_input_album_name">请输入相册名称。</string>
+    <string name="tips_dialog_delete_album_resource">此相册将被删除。此操作无法撤消。</string>
+    <string name="tips_dialog_delete_resource">该资源将被删除。此操作无法撤消。</string>
+    <string name="delete">删除</string>
+    <string name="delete_finish">删除完成</string>
+    <string name="set_album_cover">设置专辑封面</string>
+    <string name="rename">重命名</string>
+    <string name="already_exist_album">已经存在该相册</string>
+    <string name="album_rename_failed">相册重命名失败</string>
 
-    <string name="album_select_secret_vault_new_password_tip">Enter your new passcode</string>
-    <string name="album_select_secret_vault_comfirm_password_tip">Comfirm your new passcode</string>
-    <string name="album_select_secret_vault_password_tip">Enter your passcode</string>
-    <string name="enter_old_pwd">Enter your old passcode</string>
+    <string name="album_select_secret_vault_new_password_tip">输入新的密码</string>
+    <string name="album_select_secret_vault_comfirm_password_tip">确认您的新密码</string>
+    <string name="album_select_secret_vault_password_tip">输入您的密码</string>
+    <string name="enter_old_pwd">输入您的旧密码</string>
     <string name="enter_new_pwd">@string/album_select_secret_vault_new_password_tip</string>
     <string name="enter_comfirm_pwd">@string/album_select_secret_vault_comfirm_password_tip</string>
 
     <!-- 预览界面 -->
-    <string name="preview_video_unavailable_tips">Can not play this video.</string>
-    <string name="preview_boundary_error_tips">Can not display this photo or video.</string>
+    <string name="preview_video_unavailable_tips">无法播放此视频。</string>
+    <string name="preview_boundary_error_tips">无法显示此照片或视频。</string>
 
     <!-- 设置 -->
-    <string name="setting">Setting</string>
-	<string name="setting_modify_password">Change Password</string>
+    <string name="setting">设置</string>
+	<string name="setting_modify_password">更改密码</string>
 
-    <string name="about">About</string>
-    <string name="feedback">Feedback</string>
-    <string name="privacy">Privacy Policy</string>
-    <string name="about_right">Copyright @2018–2019 Private Album Browser All Rights Reserved</string>
-    <string name="feed_back_subject">Your suggestion</string>
-    <string name="feed_back_content">We hope to get your advice:</string>
-    <string name="select_mail_app">Please select the mail application</string>
-    <string name="has_not_google_service">Did not install Google services</string>
-	<string name="export_resource">Exporting resources for you…</string>
-    <string name="import_resource">Importing resources for you…</string>
+    <string name="about">关于</string>
+    <string name="feedback">反馈</string>
+    <string name="privacy">隐私政策</string>
+    <string name="about_right">版权所有@2018-2019 私密相册浏览器保留所有权利</string>
+    <string name="feed_back_subject">您的建议</string>
+    <string name="feed_back_content">我们很希望能得到您的建议：</string>
+    <string name="select_mail_app">请选择邮件类应用</string>
+    <string name="has_not_google_service">没安装谷歌服务</string>
+	<string name="export_resource">正在为您导出资源...</string>
+    <string name="import_resource">正在为您导入资源...</string>
+
+    <string name="tab_guide">使用说明</string>
+    <string name="tab_main">隐私相册</string>
 
 </resources>

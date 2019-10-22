@@ -23,7 +23,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import android.text.TextUtils
 
-
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.Locale
@@ -34,7 +33,7 @@ import com.allever.security.photo.browser.R
 /**
  * All tab data is accessed via this model.
  */
-object TabModel {
+internal object MainTabModel {
 
     /**
      * Identifies each of the primary tabs within the application.
@@ -44,36 +43,25 @@ object TabModel {
         @param:DrawableRes @field:DrawableRes @get:DrawableRes val iconResId: Int,
         @param:StringRes @field:StringRes @get:StringRes
         val labelResId: Int,
-        val emptyIconResId: Int,
         val bundle: Bundle? = null
     ) {
         /**
          *
          */
-        ALL(
-            PickFragment::class.java,
-            R.drawable.ic_launcher,
-            R.string.tab_all_album,
-            emptyIconResId = R.drawable.icon_album_empty_all
-        ),
-        VIDEO(
-            PickFragment::class.java,
-            R.drawable.ic_launcher,
-            R.string.tab_video,
-            emptyIconResId = R.drawable.icon_album_empty_video
-        ),
-        PICTURE(
-            PickFragment::class.java,
-            R.drawable.ic_launcher,
-            R.string.tab_photo,
-            emptyIconResId = R.drawable.icon_album_empty_photo
-        );
+        MAIN(AlbumFragment::class.java, R.drawable.ic_tab_call, R.string.tab_main),
+        GUIDE(GuideFragment::class.java, R.drawable.ic_tab_guide, R.string.tab_guide),
+        SETTING(SettingFragment::class.java, R.drawable.ic_tab_setting, R.string.setting);
 
         val fragmentClassName: String
         var drawable: Drawable? = null
 
         init {
             fragmentClassName = fragmentClass.name
+
+//            if (labelResId == R.string.tab_name_history) {
+//                bundle?.putIntegerArrayList(HistoryFragment.EXTRA_HISTORY_ITEM_TYPE, arrayListOf(HistoryFragment.HISTORY_TYPE_SCAN, HistoryFragment.HISTORY_TYPE_GENERATE))
+//                bundle?.putBoolean(HistoryFragment.EXTRA_HISTORY_SHOW_TAGS, true)
+//            }
         }
     }
 
@@ -95,7 +83,7 @@ object TabModel {
     /**
      * An enumerated value indicating the currently selected tab.
      */
-    private var mSelectedTab: Tab = Tab.ALL
+    private var mSelectedTab: Tab = Tab.MAIN
 
     /**
      * @return the number of tabs
@@ -168,7 +156,10 @@ object TabModel {
      */
     fun getTabAt(position: Int): Tab {
         val ordinal: Int
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && TextUtils.getLayoutDirectionFromLocale(
+                Locale.getDefault()
+            ) == LAYOUT_DIRECTION_RTL
+        ) {
             ordinal = tabCount - position - 1
         } else {
             ordinal = position

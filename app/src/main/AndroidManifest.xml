@@ -26,6 +26,10 @@
 			</intent-filter>
 		</activity>
 		<activity
+			android:name=".MainActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTask"/>
+		<activity
 			android:name=".AlbumActivity"
 			android:screenOrientation="portrait"/>
 		<activity

@@ -36,5 +36,8 @@
     <color name="divider_color">#19474747</color>
     <color name="private_album_item_bg">#66000000</color>
 
+    <color name="main_tab_highlight">@color/colorAccent</color>
+    <color name="main_tab_unselect_color">#8a8a8a</color>
+
 
 </resources>

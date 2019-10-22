@@ -18,7 +18,7 @@ import com.allever.security.photo.browser.ui.adapter.PickImageAdapter
 class PickFragment : BaseFragment() {
 
     var callback: PickCallback? = null
-    var type: TabModel.Tab? = null
+    var type: AlbumTabModel.Tab? = null
 
     private lateinit var mRecyclerView: RecyclerView
     private var mPickImageAdapter: PickImageAdapter? = null

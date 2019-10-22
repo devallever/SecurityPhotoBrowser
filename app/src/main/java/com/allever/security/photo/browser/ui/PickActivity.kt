@@ -5,11 +5,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +55,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     private lateinit var mAlbumAdapter: SelectAlbumAdapter
 
     //fragment数据的数据集
-    private var mFragmentDataMap = mutableMapOf<TabModel.Tab, MutableList<ThumbnailBean>>()
+    private var mFragmentDataMap = mutableMapOf<AlbumTabModel.Tab, MutableList<ThumbnailBean>>()
     //底部选中的数据
     private var mSelectedData = mutableListOf<ThumbnailBean>()
     //All数据
@@ -138,10 +134,10 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
 
     private fun initTabs() {
         //Tab
-        val tabCount = TabModel.tabCount
+        val tabCount = AlbumTabModel.tabCount
         mTabs = findViewById(R.id.tab_bar)
         for (i in 0 until tabCount) {
-            val tabModel = TabModel.getTab(i)
+            val tabModel = AlbumTabModel.getTab(i)
             val tabView = getTabView(tabModel, i)
             val tab = mTabs.newTab()
                 .setCustomView(tabView)
@@ -170,16 +166,16 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
             beginTransaction.commitAllowingStateLoss()
         }
 
-        val tabCount = TabModel.tabCount
+        val tabCount = AlbumTabModel.tabCount
         for (i in 0 until tabCount) {
             val fragment = PickFragment()
             fragment.callback = this
-            fragment.type = TabModel.getTab(i)
+            fragment.type = AlbumTabModel.getTab(i)
             mFragments.add(fragment)
         }
-        mFragmentDataMap[TabModel.Tab.ALL] = mAllData
-        mFragmentDataMap[TabModel.Tab.VIDEO] = mVideoData
-        mFragmentDataMap[TabModel.Tab.PICTURE] = mPhotoData
+        mFragmentDataMap[AlbumTabModel.Tab.ALL] = mAllData
+        mFragmentDataMap[AlbumTabModel.Tab.VIDEO] = mVideoData
+        mFragmentDataMap[AlbumTabModel.Tab.PICTURE] = mPhotoData
 
         mFragmentPageAdapter = FragmentPageAdapter(supportFragmentManager, mFragments)
         mViewPager.adapter = mFragmentPageAdapter
@@ -246,7 +242,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     override fun onTabSelected(tab: TabLayout.Tab?) {
         tab ?: return
         mViewPager.currentItem = tab.position
-        TabModel.selectedTab = tab.tag as TabModel.Tab
+        AlbumTabModel.selectedTab = tab.tag as AlbumTabModel.Tab
 
         for (i in 0 until mTabs.tabCount) {
             val tabAt = mTabs.getTabAt(i)
@@ -383,7 +379,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         }
     }
 
-    private fun getTabView(tab: TabModel.Tab, position: Int): View {
+    private fun getTabView(tab: AlbumTabModel.Tab, position: Int): View {
         val view = LayoutInflater.from(this).inflate(R.layout.item_tab, null)
         val tvLabel = view.findViewById<TextView>(R.id.tv_tab)
         tvLabel?.text = resources.getString(tab.labelResId)
@@ -518,7 +514,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         for (i in 0 until fragmentCount) {
             val fragment = mFragments[i] as? PickFragment
             if (thumbnailBean == null) {
-                val tab = TabModel.getTab(i)
+                val tab = AlbumTabModel.getTab(i)
                 fragment?.updateData(mFragmentDataMap[tab])
             } else {
                 fragment?.updateData(thumbnailBean)
@@ -542,7 +538,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     }
 
     override fun onPickItemLongClick(position: Int, thumbnailBean: ThumbnailBean) {
-        val data = mFragmentDataMap[TabModel.selectedTab]
+        val data = mFragmentDataMap[AlbumTabModel.selectedTab]
         val index = data?.indexOf(thumbnailBean) ?: 0
         if (data != null) {
             PreviewActivity.start(this, ArrayList(data), index, PreviewActivity.TYPE_SYSTEM)
