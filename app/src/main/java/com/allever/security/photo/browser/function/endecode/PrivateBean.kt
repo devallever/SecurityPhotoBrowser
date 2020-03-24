@@ -54,10 +54,10 @@ class PrivateBean {
      * 文件原始数据偏移量（4个字节）
      * 文件原始数据长度（8个字节）
      * 加密时间戳（8个字节）
-     * 4个字节存储长度、文件原始路径
-     * 4个字节存储长度、相册目录
-     * 4个字节存储长度、加密后路径
-     * 4个字节存储长度、解码后临时缓存文件路径
+     * 4个字节存储长度、n字节文件原始路径
+     * 4个字节存储长度、n字节相册目录
+     * 4个字节存储长度、n字节加密后路径
+     * 4个字节存储长度、n字节解码后临时缓存文件路径
      * 1个字节秘钥
      */
     fun buildHead(): ByteArray {
@@ -67,7 +67,7 @@ class PrivateBean {
         //相册目录
         // 暂时去除目录名字
 //        val albumPathBytes = PrivateHelper.deBytes(albumPath.toByteArray(), VALUE_KEY)
-        val albumPathBytes = ByteArray(0)
+        val albumPathBytes = PrivateHelper.deBytes(ByteArray(0), VALUE_KEY)
         //加密路径长度
         val encodePathBytes = PrivateHelper.deBytes(encodePath.toByteArray(), VALUE_KEY)
         //缓存文件路径长度
