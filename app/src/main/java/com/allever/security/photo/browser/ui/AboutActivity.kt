@@ -7,9 +7,12 @@ import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
+import com.allever.lib.umeng.UMeng
 import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.util.SystemUtils
+import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.include_top_bar.*
 
 class AboutActivity: BaseActivity(), View.OnClickListener {
 
@@ -22,11 +25,20 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
     }
 
     private fun initView() {
-        findViewById<View>(R.id.about_privacy).setOnClickListener(this)
-        findViewById<View>(R.id.iv_back).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
-        findViewById<TextView>(R.id.about_app_version).text = "V ${BuildConfig.VERSION_NAME}"
-    }
+        about_privacy.setOnClickListener(this)
+        iv_back.setOnClickListener(this)
+        tv_label.text = getString(R.string.about)
+        val channel = UMeng.getChannel()
+        val last = if (BuildConfig.DEBUG) {
+            "(Debug)-$channel"
+        } else {
+            ""
+        }
+        findViewById<TextView>(R.id.about_app_version).text = "v${BuildConfig.VERSION_NAME}$last"
+        findViewById<TextView>(R.id.about_right).text =
+            String.format(getString(R.string.about_right), getString(R.string.app_name))
+
+   }
 
     override fun onClick(v: View?) {
         when(v?.id) {

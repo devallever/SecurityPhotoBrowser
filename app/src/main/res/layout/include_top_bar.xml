@@ -5,7 +5,7 @@
 		android:id="@+id/top_bar"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/default_top_bar_height"
-		android:background="@color/default_top_bar_background_color">
+		android:background="@drawable/top_bar_bg">
 
 		<ImageView
 			android:id="@+id/iv_back"

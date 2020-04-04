@@ -40,5 +40,8 @@
     <color name="main_tab_highlight">@color/colorAccent</color>
     <color name="main_tab_unselect_color">#8a8a8a</color>
 
+    <color name="start_color">#0288d1</color>
+    <color name="end_color">#1976d2</color>
+
 
 </resources>

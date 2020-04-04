@@ -5,11 +5,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.allever.security.photo.browser"
         minSdkVersion 17
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 2
         versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -22,8 +22,8 @@ android {
     flavorDimensions "mark"
     productFlavors {
         google {}
-        xiaomi {}
-        baidu {}
+//        xiaomi {}
+//        baidu {}
     }
 
     productFlavors.all {
