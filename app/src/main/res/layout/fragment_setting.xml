@@ -27,6 +27,14 @@
         <include layout="@layout/include_divider_line"/>
 
         <TextView
+            style="@style/setting_item"
+            android:id="@+id/setting_tv_restore_all"
+            android:text="@string/setting_item_export_all" />
+
+        <include layout="@layout/include_divider_line"/>
+
+
+        <TextView
             android:id="@+id/setting_tv_share"
             style="@style/setting_item"
             android:drawableEnd="@drawable/ic_share"

@@ -119,6 +119,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
             override fun onItemClick(position: Int, holder: BaseViewHolder) {
                 if (mSelectMode) {
                     selectItem(position, holder)
+                    mGalleryAdapter?.notifyItemChanged(1,1)
                 } else {
                     val thumbnailBeanPosition = mThumbnailBeanList.indexOf(mGalleryData[position])
                     PreviewActivity.start(this@GalleryActivity, ArrayList(mThumbnailBeanList), thumbnailBeanPosition, PreviewActivity.TYPE_ENCODE)

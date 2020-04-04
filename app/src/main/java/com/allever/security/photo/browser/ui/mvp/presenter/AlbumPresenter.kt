@@ -19,6 +19,7 @@ import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.bean.LocalThumbnailBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
+import com.allever.security.photo.browser.bean.event.DecodeAllEvent
 import com.allever.security.photo.browser.bean.event.DecodeEvent
 import com.allever.security.photo.browser.bean.event.EncodeEvent
 import com.allever.security.photo.browser.function.endecode.PrivateHelper
@@ -213,6 +214,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                         imageFolder.name = (albumDir.name)
                         imageFolder.count = (imageFolder.data?.size ?: 0)
                         mAlbumImageFolderMap[albumDirPath] = imageFolder
+                        GlobalData.privateAlbumData.addAll(thumbnailBeans)
                     }
                 }
             }
@@ -374,6 +376,32 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
 
     fun setMorePosition(position: Int) {
         mClickMorePosition = position
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onReceiveDecodeAllEvent(decodeAllEvent: DecodeAllEvent) {
+        mImageFolderList.mapIndexed { index, imageFolder ->
+
+            decodeAllEvent.thumbnailBeanList.mapIndexed { index, thumbnailBean ->
+                if (GlobalData.privateAlbumData.contains(thumbnailBean)) {
+                    val nameMd5 = MD5.getMD5Str(thumbnailBean.path!!)
+                    val linkFile = File(imageFolder.dir, nameMd5)
+                    if (linkFile.exists()) {
+                        linkFile.delete()
+                    }
+                    imageFolder.data?.remove(thumbnailBean)
+                }
+            }
+
+
+
+            imageFolder.count = imageFolder.data?.size?:0
+        }
+
+
+
+        GlobalData.privateAlbumData.clear()
+        getPrivateAlbumData()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

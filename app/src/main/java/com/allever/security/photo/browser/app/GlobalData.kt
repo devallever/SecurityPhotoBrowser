@@ -6,8 +6,10 @@ import com.allever.security.photo.browser.util.MediaTypeUtil
 
 
 object GlobalData {
-    //相册列表数据
+    //系统图片列表数据
     var albumData = mutableListOf<ImageFolder>()
+
+    var privateAlbumData = mutableListOf<ThumbnailBean>()
 
     fun cloneAlbumData(data: MutableList<ImageFolder>) {
         albumData.clear()
