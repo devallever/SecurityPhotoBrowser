@@ -56,10 +56,17 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
             }
 
             override fun alwaysDenied(deniedList: MutableList<String>) {
-                PermissionManager.jumpPermissionSetting(activity, 0,
-                    DialogInterface.OnClickListener { dialog, which ->
-                        dialog?.dismiss()
-                    })
+                if (PermissionManager.hasPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)) {
+                    task?.run()
+                } else {
+                    PermissionManager.jumpPermissionSetting(activity, 0,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            dialog?.dismiss()
+                        })
+                }
             }
 
         }, Manifest.permission.READ_EXTERNAL_STORAGE,

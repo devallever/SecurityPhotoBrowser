@@ -3,7 +3,6 @@ package com.allever.security.photo.browser.ui
 import android.os.Bundle
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.ActivityCollector
-import com.allever.security.photo.browser.AlbumActivity
 import com.allever.security.photo.browser.MainActivity
 import com.allever.security.photo.browser.R
 import com.allever.security.photo.browser.function.password.PasswordConfig
@@ -17,6 +16,6 @@ class SplashActivity : BaseActivity() {
             PasswordConfig.secretCheckPass = false
             ActivityCollector.startActivity(this, MainActivity::class.java)
             finish()
-        }, 5000)
+        }, 2000)
     }
 }
