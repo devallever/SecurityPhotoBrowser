@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.allever.lib.common.util.log.LogUtils;
 import com.allever.security.photo.browser.R;
 import com.allever.security.photo.browser.bean.BitmapBean;
 import com.allever.security.photo.browser.bean.ImageFolder;
@@ -2410,6 +2412,7 @@ public class ImageHelper {
                         if (!includeGif) {
                             continue;
                         }
+                        bb.setType(MediaTypeUtil.INSTANCE.getTYPE_GIF());
                     } else if (MediaFile.isJPGFileType(bb.getPath())) {
                         bb.setType(MediaTypeUtil.INSTANCE.getTYPE_JPG());
                     } else if (MediaFile.isPNGFileType(bb.getPath())) {
@@ -3747,4 +3750,7 @@ public class ImageHelper {
         return !MediaFile.isVideoFile(path);
     }
 
+    private static void log(String msg) {
+        LogUtils.INSTANCE.d(msg);
+    }
 }
