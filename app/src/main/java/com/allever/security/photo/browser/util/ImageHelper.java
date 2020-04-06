@@ -1746,88 +1746,93 @@ public class ImageHelper {
     }
 
     /**
-     * 获取所有存在图片文件夹信息
+     * 获取所有存在图片文件夹信息//
      *
      * @param context
      * @return
      */
     public static ArrayList<ImageFolder> getAllImageFolderData(Context context, boolean includeGif) {
-
-        ArrayList<ImageFolder> data1 = new ArrayList<>();
-        Cursor c1 = null;
-        try {
-            String sql1;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                sql1 = "1=1) group by (" + MediaStore.Images.ImageColumns.BUCKET_ID + ") having " + MediaStore.Images.ImageColumns.DATE_TAKEN + "=max(" + MediaStore.Images.ImageColumns.DATE_TAKEN;
-            } else {
-                sql1 = "1=1) group by (" + MediaStore.Images.ImageColumns.BUCKET_ID;
-            }
-            ContentResolver cr = context.getContentResolver();
-            c1 = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{"count(" + MediaStore.Images.ImageColumns.BUCKET_ID + ") as count", MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                            MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN,
-                            MediaStore.Images.ImageColumns.ORIENTATION, MediaStore.Images.ImageColumns.BUCKET_ID},
-                    sql1, null, "max(" + MediaStore.Images.ImageColumns.DATE_TAKEN + ") DESC");
-            if (c1 == null) {
-                return data1;
-            }
-            if (c1.moveToFirst()) {
-                int index = 0;
-                int idIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-                int pathIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                int dateIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
-                int degreeIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION);
-                int nameIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME);
-                int numIndex = c1.getColumnIndex("count");
-                int bucketIdIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID);
-                do {
-                    ImageFolder imageFloder = new ImageFolder();
-                    imageFloder.setCount(c1.getInt(numIndex));
-                    String name = c1.getString(nameIndex);
-                    ThumbnailBean bean = new ThumbnailBean();
-                    bean.setDate(c1.getLong(dateIndex));
-//                    bean.setDegree(c1.getInt(degreeIndex));
-                    bean.setPath(c1.getString(pathIndex));
-                    if (MediaFile.isGifFileType(bean.getPath())) {
-                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_GIF());
-                    } else if (MediaFile.isJPGFileType(bean.getPath())) {
-                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_JPG());
-                    } else if (MediaFile.isPNGFileType(bean.getPath())) {
-                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_PNG());
-                    } else {
-                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE());
-                    }
-                    bean.setUri(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, c1.getInt(idIndex)));
-                    String dir = bean.getPath().substring(0, bean.getPath().lastIndexOf(File.separator));
-                    if (name == null) {
-                        imageFloder.setDirAndName(dir);
-                    } else {
-                        imageFloder.setDir(dir);
-                        imageFloder.setName(name);
-                    }
-                    imageFloder.setBucketId(c1.getString(bucketIdIndex));
-                    if (!includeGif) {
-                        ArrayList<ThumbnailBean> imgExcludeGif = getImageThumbnailBeanFromPathExcludeGif(context, dir);
-                        if (imgExcludeGif != null && imgExcludeGif.size() > 0) {
-                            imageFloder.setFirstImageBean(imgExcludeGif.get(0));
-                            imageFloder.setCount(imgExcludeGif.size());
-                            data1.add(imageFloder);
-                            index++;
-                        }
-                    } else {
-                        imageFloder.setFirstImageBean(bean);
-                        data1.add(imageFloder);
-                        index++;
-                    }
-                } while (c1.moveToNext());
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        } finally {
-            if (c1 != null) {
-                c1.close();
-            }
-        }
-        return data1;
+        return (ArrayList<ImageFolder>) MediaHelper.INSTANCE.getAlbumInfo(MediaHelper.INSTANCE.getTYPE_IMAGE(), includeGif);
+//        ArrayList<ImageFolder> data1 = new ArrayList<>();
+//        Cursor c1 = null;
+//        try {
+//            String sql1;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                sql1 = "1=1) group by (" + MediaStore.Images.ImageColumns.BUCKET_ID + ") having " + MediaStore.Images.ImageColumns.DATE_TAKEN + "=max(" + MediaStore.Images.ImageColumns.DATE_TAKEN;
+//            } else {
+//                sql1 = "1=1) group by (" + MediaStore.Images.ImageColumns.BUCKET_ID;
+//            }
+//            ContentResolver cr = context.getContentResolver();
+//            c1 = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{
+//                    "count(bucket_id) as count",
+//                            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+//                            MediaStore.Images.ImageColumns._ID,
+//                            MediaStore.Images.ImageColumns.DATA,
+//                            MediaStore.Images.ImageColumns.DATE_TAKEN,
+//                            MediaStore.Images.ImageColumns.ORIENTATION,
+//                            MediaStore.Images.ImageColumns.BUCKET_ID},
+//                    sql1, null, "max(" + MediaStore.Images.ImageColumns.DATE_TAKEN + ") DESC");
+//            if (c1 == null) {
+//                return data1;
+//            }
+//            if (c1.moveToFirst()) {
+//                int index = 0;
+//                int idIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+//                int pathIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+//                int dateIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+//                int degreeIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION);
+//                int nameIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME);
+//                int numIndex = c1.getColumnIndex("count");
+//                int bucketIdIndex = c1.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID);
+//                do {
+//                    ImageFolder imageFloder = new ImageFolder();
+//                    imageFloder.setCount(c1.getInt(numIndex));
+//                    String name = c1.getString(nameIndex);
+//                    ThumbnailBean bean = new ThumbnailBean();
+//                    bean.setDate(c1.getLong(dateIndex));
+////                    bean.setDegree(c1.getInt(degreeIndex));
+//                    bean.setPath(c1.getString(pathIndex));
+//                    if (MediaFile.isGifFileType(bean.getPath())) {
+//                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_GIF());
+//                    } else if (MediaFile.isJPGFileType(bean.getPath())) {
+//                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_JPG());
+//                    } else if (MediaFile.isPNGFileType(bean.getPath())) {
+//                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_PNG());
+//                    } else {
+//                        bean.setType(MediaTypeUtil.INSTANCE.getTYPE_OTHER_IMAGE());
+//                    }
+//                    bean.setUri(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, c1.getInt(idIndex)));
+//                    String dir = bean.getPath().substring(0, bean.getPath().lastIndexOf(File.separator));
+//                    if (name == null) {
+//                        imageFloder.setDirAndName(dir);
+//                    } else {
+//                        imageFloder.setDir(dir);
+//                        imageFloder.setName(name);
+//                    }
+//                    imageFloder.setBucketId(c1.getString(bucketIdIndex));
+//                    if (!includeGif) {
+//                        ArrayList<ThumbnailBean> imgExcludeGif = getImageThumbnailBeanFromPathExcludeGif(context, dir);
+//                        if (imgExcludeGif != null && imgExcludeGif.size() > 0) {
+//                            imageFloder.setFirstImageBean(imgExcludeGif.get(0));
+//                            imageFloder.setCount(imgExcludeGif.size());
+//                            data1.add(imageFloder);
+//                            index++;
+//                        }
+//                    } else {
+//                        imageFloder.setFirstImageBean(bean);
+//                        data1.add(imageFloder);
+//                        index++;
+//                    }
+//                } while (c1.moveToNext());
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (c1 != null) {
+//                c1.close();
+//            }
+//        }
+//        return data1;
     }
 
     /**
@@ -1837,62 +1842,62 @@ public class ImageHelper {
      * @return
      */
     public static ArrayList<ImageFolder> getAllVideoFolderData(Context context) {
-
-        ArrayList<ImageFolder> data2 = new ArrayList<>();
-        Cursor c2 = null;
-        try {
-            String sql2;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                sql2 = "1=1) group by (" + MediaStore.Video.VideoColumns.BUCKET_ID + ") having " + MediaStore.Video.VideoColumns.DATE_TAKEN + "=max(" + MediaStore.Video.VideoColumns.DATE_TAKEN;
-            } else {
-                sql2 = "1=1) group by (" + MediaStore.Video.VideoColumns.BUCKET_ID;
-            }
-            ContentResolver cr = context.getContentResolver();
-            c2 = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[]{"count(" + MediaStore.Video.VideoColumns.BUCKET_ID + ") as count", MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME,
-                            MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.BUCKET_ID},
-                    sql2, null, "max(" + MediaStore.Video.VideoColumns.DATE_TAKEN + ") DESC");
-            if (c2 == null) {
-                return data2;
-            }
-            if (c2.moveToFirst()) {
-                int idIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns._ID);
-                int pathIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.DATA);
-                int dateIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN);
-                int nameIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME);
-                int numIndex = c2.getColumnIndex("count");
-                int bucketIdIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID);
-                do {
-                    ImageFolder imageFloder = new ImageFolder();
-                    int count = c2.getInt(numIndex);
-                    DLog.d(TAG, "count = " + count);
-                    imageFloder.setCount(count);
-                    String name = c2.getString(nameIndex);
-                    ThumbnailBean bean = new ThumbnailBean();
-                    bean.setType(MediaTypeUtil.INSTANCE.getTYPE_VIDEO());
-                    bean.setDate(c2.getLong(dateIndex));
-//                    bean.setDegree(0);
-                    bean.setPath(c2.getString(pathIndex));
-                    bean.setUri(ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, c2.getInt(idIndex)));
-                    String dir = bean.getPath().substring(0, bean.getPath().lastIndexOf(File.separator));
-                    if (name == null) {
-                        imageFloder.setDirAndName(dir);
-                    } else {
-                        imageFloder.setDir(dir);
-                        imageFloder.setName(name);
-                    }
-                    imageFloder.setFirstImageBean(bean);
-                    imageFloder.setBucketId(c2.getString(bucketIdIndex));
-                    data2.add(imageFloder);
-                } while (c2.moveToNext());
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        } finally {
-            if (c2 != null) {
-                c2.close();
-            }
-        }
-        return data2;
+        return (ArrayList<ImageFolder>) MediaHelper.INSTANCE.getAlbumInfo(MediaHelper.INSTANCE.getTYPE_VIDEO(), false);
+//        ArrayList<ImageFolder> data2 = new ArrayList<>();
+//        Cursor c2 = null;
+//        try {
+//            String sql2;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                sql2 = "1=1) group by (" + MediaStore.Video.VideoColumns.BUCKET_ID + ") having " + MediaStore.Video.VideoColumns.DATE_TAKEN + "=max(" + MediaStore.Video.VideoColumns.DATE_TAKEN;
+//            } else {
+//                sql2 = "1=1) group by (" + MediaStore.Video.VideoColumns.BUCKET_ID;
+//            }
+//            ContentResolver cr = context.getContentResolver();
+//            c2 = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[]{"count(" + MediaStore.Video.VideoColumns.BUCKET_ID + ") as count", MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME,
+//                            MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.BUCKET_ID},
+//                    sql2, null, "max(" + MediaStore.Video.VideoColumns.DATE_TAKEN + ") DESC");
+//            if (c2 == null) {
+//                return data2;
+//            }
+//            if (c2.moveToFirst()) {
+//                int idIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns._ID);
+//                int pathIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.DATA);
+//                int dateIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN);
+//                int nameIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME);
+//                int numIndex = c2.getColumnIndex("count");
+//                int bucketIdIndex = c2.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID);
+//                do {
+//                    ImageFolder imageFloder = new ImageFolder();
+//                    int count = c2.getInt(numIndex);
+//                    DLog.d(TAG, "count = " + count);
+//                    imageFloder.setCount(count);
+//                    String name = c2.getString(nameIndex);
+//                    ThumbnailBean bean = new ThumbnailBean();
+//                    bean.setType(MediaTypeUtil.INSTANCE.getTYPE_VIDEO());
+//                    bean.setDate(c2.getLong(dateIndex));
+////                    bean.setDegree(0);
+//                    bean.setPath(c2.getString(pathIndex));
+//                    bean.setUri(ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, c2.getInt(idIndex)));
+//                    String dir = bean.getPath().substring(0, bean.getPath().lastIndexOf(File.separator));
+//                    if (name == null) {
+//                        imageFloder.setDirAndName(dir);
+//                    } else {
+//                        imageFloder.setDir(dir);
+//                        imageFloder.setName(name);
+//                    }
+//                    imageFloder.setFirstImageBean(bean);
+//                    imageFloder.setBucketId(c2.getString(bucketIdIndex));
+//                    data2.add(imageFloder);
+//                } while (c2.moveToNext());
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (c2 != null) {
+//                c2.close();
+//            }
+//        }
+//        return data2;
     }
 
     /**
