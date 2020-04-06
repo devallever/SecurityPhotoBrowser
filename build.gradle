@@ -5,10 +5,10 @@ ext{
     minSdkVersion = 17
     compileSdkVersion = 29
     targetSdkVersion = 29
-    versionCode = 2
-    versionName = "2.0"
+    versionCode = 1
+    versionName = "1.0"
 
-    umengAppKey = "5d61ebd3570df3add50003a6"
+    umengAppKey = "5e4e389b895cca11bf000017"
     admobAppId = "ca-app-pub-9972782174497381~1820665514"  //adeverdeng
 
     //C:\Users\Allever\AndroidStudioProjects/com.allever.app.jks
