@@ -264,7 +264,14 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_back -> {
-                finish()
+                when (mFlSelectAlbumContainer.visibility) {
+                    View.VISIBLE -> {
+                        showSelectAlbumContainer(false)
+                    }
+                    View.GONE -> {
+                        finish()
+                    }
+                }
             }
             R.id.ll_album_title_container, R.id.iv_select_album -> {
                 when (mFlSelectAlbumContainer.visibility) {
@@ -395,11 +402,11 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
      *
      * @return
      */
-    private fun getFolderDataTask(): AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>> {
+    private fun getFolderDataTask(): AsyncTask<Void, Void, ArrayList<ImageFolder>> {
 //        mIsNeedRefresh = false
-        return object : AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>>() {
+        return object : AsyncTask<Void, Void, ArrayList<ImageFolder>>() {
 
-            override fun doInBackground(vararg params: Void): java.util.ArrayList<ImageFolder>? {
+            override fun doInBackground(vararg params: Void): ArrayList<ImageFolder>? {
 
                 //文件夹信息
                 val datas = ImageHelper.getAllFolderData(this@PickActivity)
@@ -468,7 +475,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
                 return datas
             }
 
-            override fun onPostExecute(result: java.util.ArrayList<ImageFolder>?) {
+            override fun onPostExecute(result: ArrayList<ImageFolder>?) {
                 if (result == null || result.size == 0) {
                     return
                 }
