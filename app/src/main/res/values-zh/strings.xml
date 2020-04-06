@@ -80,7 +80,7 @@
     <string name="import_resource">正在为您导入资源...</string>
 
     <string name="tab_guide">使用说明</string>
-    <string name="tab_main">隐私相册</string>
+    <string name="tab_main">@string/app_name</string>
     <string name="permission_setting">设置权限</string>
 
     <string name="guide">
