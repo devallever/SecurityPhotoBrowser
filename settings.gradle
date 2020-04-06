@@ -6,3 +6,23 @@ include ':common'
 project(':common').projectDir = new File(settingsDir, '../AndroidDependencyLib/common')
 include ':umeng'
 project(':umeng').projectDir = new File(settingsDir, '../AndroidDependencyLib/umeng')
+
+include ':recommend'
+project(':recommend').projectDir = new File(settingsDir, '../AndroidDependencyLib/recommend')
+include ':httpsglide'
+project(':httpsglide').projectDir = new File(settingsDir, '../AndroidDependencyLib/httpsglide')
+
+include ':adlib'
+project(':adlib').projectDir = new File(settingsDir, '../AndroidAdLibs/adlib')
+//include ':AdsLib'
+//project(':AdsLib').projectDir = new File(settingsDir, '../AndroidAdLibs/AdsLib')
+
+include ':admob'
+project(':admob').projectDir = new File(settingsDir, '../AndroidAdLibs/admob')
+
+
+include ':comment'
+project(':comment').projectDir = new File(settingsDir, '../AndroidDependencyLib/comment')
+
+include ':widget'
+project(':widget').projectDir = new File(settingsDir, '../AndroidUIKit/widget')

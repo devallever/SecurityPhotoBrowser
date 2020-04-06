@@ -7,10 +7,10 @@ import android.view.View
 import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
+import com.allever.lib.common.util.SystemUtils
 import com.allever.lib.umeng.UMeng
 import com.allever.security.photo.browser.BuildConfig
 import com.allever.security.photo.browser.R
-import com.allever.security.photo.browser.util.SystemUtils
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.include_top_bar.*
 
@@ -46,7 +46,7 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
                 finish()
             }
             R.id.about_privacy -> {
-                val privacyUrl = "https://plus.google.com/116794250597377070773/posts/SYoEZWDm77x"
+                val privacyUrl = "http://x.xiniubaba.com/x.php/1ycP23/5049"
                 SystemUtils.startWebView(App.context, privacyUrl)
             }
         }

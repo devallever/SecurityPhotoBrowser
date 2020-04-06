@@ -5,15 +5,21 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.allever.lib.ad.chain.AdChainHelper
+import com.allever.lib.ad.chain.AdChainListener
+import com.allever.lib.ad.chain.IAd
 import com.allever.lib.common.app.App
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
+import com.allever.lib.common.util.toast
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.ad.AdConstant
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.SeparatorBean
 import com.allever.security.photo.browser.bean.ThumbnailBean
@@ -29,6 +35,7 @@ import com.allever.security.photo.browser.ui.mvp.view.GalleryView
 import com.allever.security.photo.browser.util.DialogHelper
 import com.allever.security.photo.browser.util.MD5
 import com.allever.security.photo.browser.util.SharePreferenceUtil
+import kotlinx.android.synthetic.main.activity_gallery.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -54,6 +61,9 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
     private lateinit var mLoadingDialog: AlertDialog
 
     private var mSelectMode = false
+
+    private var mBannerAd: IAd? = null
+    private var mInsertAd: IAd? = null
 
     override fun getContentView(): Int = R.layout.activity_gallery
     override fun createPresenter(): GalleryPresenter = GalleryPresenter()
@@ -145,11 +155,8 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         }
 
         EventBus.getDefault().register(this)
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        loadBanner()
     }
 
     override fun onClick(v: View?) {
@@ -162,7 +169,7 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
             }
 
             R.id.iv_right -> {
-                ToastUtils.show("Export")
+                loadInsertAd()
                 restoreResourceList(mExportThumbnailBeanList)
                 mSelectMode = false
             }
@@ -288,46 +295,56 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
             }
 
             override fun onSuccess(successList: List<PrivateBean>) {
-                hideLoading()
-                val exportIndexList = mutableListOf<Int>()
-                successList.map {
-                    val thumbnailBean = mPrivateThumbMap[it]
-                    if (thumbnailBean != null) {
-                        thumbnailBean.isChecked = false
-                        SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(thumbnailBean.path), null)
-                        exportIndexList.add(mGalleryData.indexOf(thumbnailBean))
-                        mThumbnailBeanList.remove(thumbnailBean)
-                        mGalleryData.remove(thumbnailBean)
-                        mPrivateThumbMap.remove(it)
-                    }
+                mHandler.postDelayed({
+                    toast(R.string.export_success)
+                    hideLoading()
+                    mInsertAd?.show()
+
+                    val exportIndexList = mutableListOf<Int>()
+                    successList.map {
+                        val thumbnailBean = mPrivateThumbMap[it]
+                        if (thumbnailBean != null) {
+                            thumbnailBean.isChecked = false
+                            SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(thumbnailBean.path), null)
+                            exportIndexList.add(mGalleryData.indexOf(thumbnailBean))
+                            mThumbnailBeanList.remove(thumbnailBean)
+                            mGalleryData.remove(thumbnailBean)
+                            mPrivateThumbMap.remove(it)
+                        }
 
 //                    val nameMd5 = MD5.getMD5Str(thumbnailBean?.path!!)
 //                    val linkFile = File(mAlbumPath, nameMd5)
 //                    if (linkFile.exists()) {
 //                        linkFile.delete()
 //                    }
-                }
-                mGalleryAdapter.notifyDataSetChanged()
-                mExportThumbnailBeanList.clear()
-                mBtnExport.visibility = View.GONE
+                    }
+                    mGalleryAdapter.notifyDataSetChanged()
+                    mExportThumbnailBeanList.clear()
+                    mBtnExport.visibility = View.GONE
 
-                val decodeEvent = DecodeEvent()
-                decodeEvent.needRefresh = false
-                decodeEvent.indexList = exportIndexList
-                EventBus.getDefault().post(decodeEvent)
+                    val decodeEvent = DecodeEvent()
+                    decodeEvent.needRefresh = false
+                    decodeEvent.indexList = exportIndexList
+                    EventBus.getDefault().post(decodeEvent)
+                }, 5000)
             }
 
             override fun onFailed(errors: List<PrivateBean>) {
-                hideLoading()
-                errors.map {
-                    val thumbnailBean = mPrivateThumbMap[it]
-                    if (thumbnailBean != null) {
-                        thumbnailBean.isChecked = false
+                mHandler.postDelayed({
+                    toast(R.string.export_fail)
+                    hideLoading()
+                    mInsertAd?.show()
+
+                    errors.map {
+                        val thumbnailBean = mPrivateThumbMap[it]
+                        if (thumbnailBean != null) {
+                            thumbnailBean.isChecked = false
+                        }
                     }
-                }
-                mGalleryAdapter.notifyDataSetChanged()
-                mExportThumbnailBeanList.clear()
-                mBtnExport.visibility = View.GONE
+                    mGalleryAdapter.notifyDataSetChanged()
+                    mExportThumbnailBeanList.clear()
+                    mBtnExport.visibility = View.GONE
+                }, 5000)
             }
         })
     }
@@ -359,7 +376,10 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
 
     }
 
-
+    private fun hideLoadingAndShowAd() {
+        hideLoading()
+        mInsertAd?.show()
+    }
 
     companion object {
         fun start(context: Context, albumName: String, albumPath: String, data: ArrayList<ThumbnailBean>?) {
@@ -377,5 +397,49 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         private const val EXTRA_ALBUM_NAME = "EXTRA_ALBUM_NAME"
         private const val EXTRA_DATA = "EXTRA_DATA"
         private const val EXTRA_ALBUM_PATH = "EXTRA_ALBUM_PATH"
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBannerAd?.onAdPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBannerAd?.onAdResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+        mBannerAd?.destroy()
+        mInsertAd?.destroy()
+    }
+
+    private fun loadBanner() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_GALLERY_BANNER, bannerContainer, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mBannerAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {}
+
+        })
+    }
+
+    private fun loadInsertAd() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_EXPORT_INSERT, window.decorView as ViewGroup, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mInsertAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {
+            }
+
+        })
     }
 }

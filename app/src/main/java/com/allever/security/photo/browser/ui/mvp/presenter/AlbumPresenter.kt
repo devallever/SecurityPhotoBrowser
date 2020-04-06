@@ -12,6 +12,7 @@ import com.allever.lib.common.app.App
 import com.allever.lib.common.mvp.BasePresenter
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.ToastUtils
+import com.allever.lib.common.util.log
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.R
@@ -150,9 +151,11 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
      */
     private fun handleAddAlbum(album: String) {
         val albumFile = File(PrivateHelper.PATH_ALBUM + File.separator + album)
+        var result = false
         if (!albumFile.exists()) {
-            albumFile.mkdirs()
+            result = albumFile.mkdirs()
         }
+        log("result = ${result.toString()}")
     }
 
     @SuppressLint("StaticFieldLeak")

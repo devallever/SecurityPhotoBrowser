@@ -15,7 +15,8 @@
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/FullScreenStyle"
-		tools:ignore="GoogleAppIndexingWarning">
+		tools:ignore="GoogleAppIndexingWarning"
+		android:requestLegacyExternalStorage="true">
 		<activity
 			android:name=".ui.SplashActivity"
 			android:screenOrientation="portrait">
@@ -63,9 +64,13 @@
 
 		<meta-data
 			android:name="UMENG_APPKEY"
-			android:value="5d61ebd3570df3add50003a6"/>
+			android:value="${UMENG_APP_KEY}" />
 		<meta-data
 			android:name="UMENG_CHANNEL"
 			android:value="${UMENG_CHANNEL_VALUE}" />
+
+		<meta-data
+			android:name="com.google.android.gms.ads.APPLICATION_ID"
+			android:value="${ADMOB_APP_ID}" />
 	</application>
 </manifest>

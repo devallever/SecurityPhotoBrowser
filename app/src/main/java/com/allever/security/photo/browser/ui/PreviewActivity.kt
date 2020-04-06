@@ -6,9 +6,15 @@ import android.content.Intent
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AlertDialog
 import android.view.View
+import android.view.ViewGroup
+import com.allever.lib.ad.chain.AdChainHelper
+import com.allever.lib.ad.chain.AdChainListener
+import com.allever.lib.ad.chain.IAd
 import com.allever.lib.common.app.App
 import com.allever.lib.common.util.DLog
+import com.allever.lib.common.util.toast
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.ad.AdConstant
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.bean.ThumbnailBean
 import com.allever.security.photo.browser.bean.event.DecodeEvent
@@ -20,6 +26,7 @@ import com.allever.security.photo.browser.ui.mvp.view.PreviewView
 import com.allever.security.photo.browser.util.*
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.ToastUtils
+import kotlinx.android.synthetic.main.activity_gallery.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.lang.Exception
@@ -33,6 +40,8 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
     private lateinit var mLoadingDialog: AlertDialog
     private lateinit var mDeleteDialog: AlertDialog
     private var mSourceType = TYPE_ENCODE
+
+    private var mInsertAd: IAd? = null
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     override fun getContentView(): Int = R.layout.activity_priview
@@ -88,6 +97,7 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
             R.id.preview_iv_export -> {
                 DLog.d("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
                 restoreResource(mThumbnailBeanList[mPosition])
+                loadInsertAd()
             }
             R.id.preview_iv_delete -> {
                 showDeleteDialog()
@@ -168,22 +178,32 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
                 }
 
                 override fun onSuccess() {
-                    hideLoading()
-                    SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
+                    mHandler.postDelayed({
+                        hideLoading()
+                        mInsertAd?.show()
+                        toast(R.string.export_success)
 
-                    val decodeList = mutableListOf<ThumbnailBean>()
-                    decodeList.add(bean)
-                    val decodeEvent = DecodeEvent()
-                    decodeEvent.thumbnailBeanList = decodeList
-                    decodeEvent.indexList.add(mPosition)
+                        SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
+
+                        val decodeList = mutableListOf<ThumbnailBean>()
+                        decodeList.add(bean)
+                        val decodeEvent = DecodeEvent()
+                        decodeEvent.thumbnailBeanList = decodeList
+                        decodeEvent.indexList.add(mPosition)
 //                    decodeEvent.index = mPosition
-                    EventBus.getDefault().post(decodeEvent)
-                    finish()
-                    DLog.d("export onSuccess")
+                        EventBus.getDefault().post(decodeEvent)
+                        finish()
+                        DLog.d("export onSuccess")
+                    }, 5000)
+
                 }
 
                 override fun onFailed(msg: String) {
-                    hideLoading()
+                    mHandler.postDelayed({
+                        hideLoading()
+                        mInsertAd?.show()
+                        toast(R.string.export_fail)
+                    }, 5000)
                     DLog.d("export onFailed")
                 }
             })
@@ -223,5 +243,25 @@ class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewV
 
         public const val TYPE_SYSTEM = 1
         public const val TYPE_ENCODE = 2
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+        mInsertAd?.destroy()
+    }
+
+    private fun loadInsertAd() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_EXPORT_INSERT, window.decorView as ViewGroup, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mInsertAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {
+            }
+
+        })
     }
 }

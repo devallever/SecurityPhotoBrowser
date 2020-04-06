@@ -5,32 +5,42 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.allever.security.photo.browser"
-        minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 2
-        versionName "2.0"
+        applicationId "${rootProject.ext.applicationId}"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName "${rootProject.ext.versionName}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        //默认渠道为官网
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "offical"]
+        multiDexEnabled true
+
+        //BuildConfig添加的字段
+        //buildConfigField "int", "TEXT_FIELD", "2"
+        buildConfigField "String", "UMENG_APP_KEY", "\"${rootProject.ext.umengAppKey}\""
+
+        //在Manifest.xml中使用的值
+        manifestPlaceholders += [
+                UMENG_APP_KEY: rootProject.ext.umengAppKey,
+                ADMOB_APP_ID : rootProject.ext.admobAppId
+        ]
     }
 
-    //友盟多渠道
+    //友盟多渠道----------------------------------------------------------------------------------------------------------
     flavorDimensions "mark"
     productFlavors {
         google {}
-//        xiaomi {}
+        xiaomi {}
 //        baidu {}
     }
 
     productFlavors.all {
         flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
     }
+    //友盟多渠道----------------------------------------------------------------------------------------------------------
 
-
+    //打包配置----------------------------------------------------------------
     signingConfigs {
         release {
             storeFile file("${rootProject.ext.signingStoreFile}")
@@ -39,7 +49,29 @@ android {
             keyPassword "${rootProject.ext.signingKeyPassword}"
         }
     }
+    applicationVariants.all {
+        variant ->
+            if (variant.buildType.name.equals('release')) {
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "${defaultConfig.applicationId}_(Release)_V${defaultConfig.versionName}_C${defaultConfig.versionCode}_${variant.flavorName}_ad(Build${releaseTime()}).apk"
+                        output.outputFileName = new File(fileName)
+                        //com.allever.security.photo.browser_(Release)_V1.0_C1_(Build201908251506).apk
+                    }
+                }
+            }
+    }
+    //打包配置----------------------------------------------------------------
 
+    //解决打包失败------------------------------------------------------------
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    //解决打包失败------------------------------------------------------------
 
     buildTypes {
         release {
@@ -87,6 +119,11 @@ dependencies {
     implementation project(':permission')
     implementation project(':common')
     implementation project(':umeng')
+    implementation project(':comment')
+    implementation project(':umeng')
+    implementation project(':recommend')
+    implementation project(':widget')
+    implementation project(':admob')
     implementation(name: "Toolkit-1.1", ext: 'aar')
 
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'

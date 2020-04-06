@@ -3,15 +3,20 @@ package com.allever.security.photo.browser.ui
 import android.Manifest
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.allever.lib.ad.chain.AdChainHelper
+import com.allever.lib.ad.chain.AdChainListener
+import com.allever.lib.ad.chain.IAd
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.AlbumActivity
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.ad.AdConstant
 import com.allever.security.photo.browser.app.Base2Fragment
 import com.allever.security.photo.browser.bean.ImageFolder
 import com.allever.security.photo.browser.ui.adapter.PrivateAlbumAdapter
@@ -27,6 +32,8 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAlbumBottomDialog: AlbumDialog? = null
 
+    private var mBannerAd: IAd? = null
+
     override fun getContentView(): Int = R.layout.fragment_album
 
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
@@ -35,11 +42,12 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
 
         root.findViewById<View>(R.id.album_btn_add_album).setOnClickListener(this)
-
+        mBannerContainer = root.findViewById(R.id.bannerContainer)
         mAlbumBottomDialog = AlbumDialog(this)
     }
 
     override fun initData() {
+        loadBanner()
         //清除私密相册密码验证记录
         mPresenter.clearPasswordStatus()
 
@@ -89,11 +97,6 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
                 .create()
                 .show()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mPresenter.destroy()
     }
 
     override fun onClick(v: View?) {
@@ -174,5 +177,35 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         mPresenter.onActivityResult(activity!!, requestCode, resultCode, data)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBannerAd?.onAdPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBannerAd?.onAdResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.destroy()
+        mBannerAd?.destroy()
+    }
+
+    private lateinit var mBannerContainer: ViewGroup
+    private fun loadBanner() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_ALBUM_BANNER, mBannerContainer, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mBannerAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {}
+
+        })
     }
 }

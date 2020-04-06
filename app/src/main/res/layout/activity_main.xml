@@ -8,17 +8,26 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@drawable/top_bar_bg">
+        android:layout_height="?actionBarSize">
         <TextView
             android:id="@+id/id_main_tv_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/tab_main"
+            android:layout_height="?actionBarSize"
+            android:background="@drawable/top_bar_bg"
+            android:text="@string/app_name"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"/>
+
+        <com.allever.lib.ui.widget.AnimationImageView
+            android:id="@+id/iv_right"
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:src="@drawable/recommend_ic_gift"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"/>
     </RelativeLayout>
 
 

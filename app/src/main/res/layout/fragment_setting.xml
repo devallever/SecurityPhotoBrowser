@@ -50,6 +50,22 @@
 
         <include layout="@layout/include_divider_line"/>
 
+        <TextView
+            android:id="@+id/setting_tv_support"
+            style="@style/setting_item"
+            android:drawableEnd="@drawable/ic_support"
+            android:text="@string/support"
+            android:visibility="visible"/>
+
+        <include layout="@layout/include_divider_line"
+            android:visibility="visible"/>
+
+        <com.allever.lib.ad.chain.BannerLayout
+            android:id="@+id/bannerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

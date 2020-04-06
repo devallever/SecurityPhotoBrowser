@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Privacy Album</string>
+    <string name="app_name">Secret Photo</string>
 
     <!-- Pick -->
     <string name="pick_import">Import</string>
@@ -68,6 +68,7 @@
 
     <string name="share">Share</string>
     <string name="about">About</string>
+    <string name="support">Support us</string>
     <string name="feedback">Feedback</string>
     <string name="privacy">Privacy Policy</string>
     <string name="about_right">Copyright @2018–2020 %s All rights reserved</string>
@@ -99,4 +100,11 @@
     <string name="permission_accept">Accept</string>
     <string name="permission_reject">Reject</string>
 
+    <string name="share_content">【%s】This application is very good, recommend it. Get address\n%s</string>
+
+    <string name="export_success">Export Success</string>
+    <string name="export_fail">Export Fail</string>
+
+    <string name="import_success">Import Success</string>
+    <string name="import_fail">Import Fail</string>
 </resources>

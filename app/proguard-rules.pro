@@ -20,6 +20,15 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 友盟------------------------------------------------------------------------------------------------
+-keep class com.umeng.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 # 友盟特有-----------------------------------------------------------------------------------------------------------------
 # 填应用包名
 -keep public class [com.allever.security.photo.browser].R$*{
@@ -49,6 +58,76 @@
 # for DexGuard only
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
+# okhttp-----------------------------------------------------------------------------------------
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+# okhttp-----------------------------------------------------------------------------------------
+
+# Retrofit-----------------------------------------------------------------------------------------
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+# Retrofit-----------------------------------------------------------------------------------------
+
+# RxJava RxAndroid----------------------------------------------------------------------------------
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# RxJava RxAndroid----------------------------------------------------------------------------------
+
+# Gson-----------------------------------------------------------------------------------------
+# Gson--------------------------------------------------------------------------
+
+
+
+# ADMOB-----------------------------------------------------------------------
+# For Google Play Services
+-keep public class com.google.android.gms.ads.**{
+   public *;
+}
+
+# For old ads classes
+-keep public class com.google.ads.**{
+   public *;
+}
+
+# For mediation
+-keepattributes *Annotation*
+
+# Other required classes for Google Play Services
+# Read more at http://developer.android.com/google/play-services/setup.html
+-keep class * extends java.util.ListResourceBundle {
+   protected Object[][] getContents();
+}
+
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+   public static final *** NULL;
+}
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+   @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keepnames class * implements android.os.Parcelable {
+   public static final ** CREATOR;
+}
+
+# ADMOB-----------------------------------------------------------------------
+
+
 
 # 奇葩问题
 # Process: com.allever.app.virtual.call, PID: 28185
@@ -57,4 +136,40 @@
 -dontwarn org.xmlpull.v1.XmlPullParser
 -dontwarn org.xmlpull.v1.XmlSerializer
 -keep class org.xmlpull.v1.* {*;}
+
+
+# 推荐模块------------------------------------------------------------------------
+# okhttp-----------------------------------------------------------------------------------------
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+# okhttp-----------------------------------------------------------------------------------------
+
+# Retrofit-----------------------------------------------------------------------------------------
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+# Retrofit-----------------------------------------------------------------------------------------
+
+# RxJava RxAndroid----------------------------------------------------------------------------------
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# RxJava RxAndroid----------------------------------------------------------------------------------
+
+# Gson-----------------------------------------------------------------------------------------
+# Gson--------------------------------------------------------------------------
+
+# 推荐模块------------------------------------------------------------------------
 

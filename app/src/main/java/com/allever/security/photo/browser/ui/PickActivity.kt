@@ -11,10 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.allever.lib.ad.chain.AdChainHelper
+import com.allever.lib.ad.chain.AdChainListener
+import com.allever.lib.ad.chain.IAd
 import com.allever.lib.common.util.DLog
+import com.allever.lib.common.util.toast
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 import com.allever.security.photo.browser.R
+import com.allever.security.photo.browser.ad.AdConstant
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.app.GlobalData
 import com.allever.security.photo.browser.bean.ImageFolder
@@ -31,6 +36,7 @@ import com.allever.security.photo.browser.ui.widget.tab.TabLayout
 import com.allever.security.photo.browser.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
+import kotlinx.android.synthetic.main.activity_gallery.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
@@ -78,6 +84,9 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
 
     private lateinit var mImportLoadingDialog: AlertDialog
 
+    private var mBannerAd: IAd? = null
+    private var mInsertAd: IAd? = null
+
     override fun getContentView(): Int = R.layout.activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
@@ -113,13 +122,8 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
             override fun alwaysDenied(deniedList: MutableList<String>) {}
 
         }, Manifest.permission.READ_EXTERNAL_STORAGE)
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mSelectedData.map {
-            it.isChecked = false
-        }
+        loadBanner()
     }
 
     override fun onBackPressed() {
@@ -289,6 +293,7 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
             }
 
             R.id.btn_import -> {
+                loadInsertAd()
                 for (index in mSelectedData.indices) {
                     val bean = mSelectedData[index]
                     bean.sourceType = ThumbnailBean.DECODE
@@ -340,37 +345,47 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
                 }
 
                 override fun onSuccess(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
-                    hideImportLoading()
-                    DLog.d("onSuccess encode")
-                    mBtnImport.isClickable = true
+                    mHandler.postDelayed({
+                        hideImportLoading()
+                        mInsertAd?.show()
+                        toast(R.string.import_success)
+                        DLog.d("onSuccess encode")
+                        mBtnImport.isClickable = true
 
-                    val thumbnailBeans = mutableListOf<ThumbnailBean>()
-                    successList.map {
-                        val name = File(it.encodePath).name
-                        DLog.d("file name = $name")
-                        val obj = SharePreferenceUtil.getObjectFromShare(applicationContext, name)
-                        if (obj is LocalThumbnailBean) {
-                            val thumb = obj as LocalThumbnailBean
-                            val thumbnailBean = PrivateHelper.changeLocalThumbnailBean2ThumbnailBean(thumb)
-                            thumbnailBean.isChecked = false
-                            if (!thumbnailBean.isInvalid) {
-                                thumbnailBeans.add(thumbnailBean)
+                        val thumbnailBeans = mutableListOf<ThumbnailBean>()
+                        successList.map {
+                            val name = File(it.encodePath).name
+                            DLog.d("file name = $name")
+                            val obj = SharePreferenceUtil.getObjectFromShare(applicationContext, name)
+                            if (obj is LocalThumbnailBean) {
+                                val thumb = obj as LocalThumbnailBean
+                                val thumbnailBean = PrivateHelper.changeLocalThumbnailBean2ThumbnailBean(thumb)
+                                thumbnailBean.isChecked = false
+                                if (!thumbnailBean.isInvalid) {
+                                    thumbnailBeans.add(thumbnailBean)
+                                }
                             }
                         }
-                    }
 
-                    val encodeEvent =  EncodeEvent()
-                    encodeEvent.albumName = mAlbumName
-                    encodeEvent.thumbnailBeanList.addAll(thumbnailBeans)
-                    EventBus.getDefault().post(encodeEvent)
+                        val encodeEvent =  EncodeEvent()
+                        encodeEvent.albumName = mAlbumName
+                        encodeEvent.thumbnailBeanList.addAll(thumbnailBeans)
+                        EventBus.getDefault().post(encodeEvent)
 
-                    finish()
+                        finish()
+                    }, 5000)
+
                 }
 
                 override fun onFailed(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
-                    hideImportLoading()
-                    DLog.d("onFailed encode")
-                    mBtnImport.isClickable = true
+                    mHandler.postDelayed({
+                        hideImportLoading()
+                        mInsertAd?.show()
+                        toast(R.string.import_fail)
+                        DLog.d("onFailed encode")
+                        mBtnImport.isClickable = true
+                    }, 5000)
+
                 }
             })
         }
@@ -570,5 +585,51 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
         private const val ANIMATION_DURATION = 200L
 
         private const val EXTRA_ALBUM_NAME = "EXTRA_ALBUM_NAME"
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBannerAd?.onAdPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBannerAd?.onAdResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mSelectedData.map {
+            it.isChecked = false
+        }
+        mBannerAd?.destroy()
+        mInsertAd?.destroy()
+    }
+
+    private fun loadBanner() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_PICK_BANNER, bannerContainer, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mBannerAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {}
+
+        })
+    }
+
+    private fun loadInsertAd() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_IMPORT_INSERT, window.decorView as ViewGroup, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mInsertAd = ad
+            }
+            override fun onFailed(msg: String) {}
+            override fun onShowed() {}
+            override fun onDismiss() {
+            }
+
+        })
     }
 }

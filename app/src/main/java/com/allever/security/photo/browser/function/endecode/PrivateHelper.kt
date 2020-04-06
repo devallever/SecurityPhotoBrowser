@@ -25,9 +25,9 @@ object PrivateHelper {
     val PATH_ALBUM =
         Environment.getExternalStorageDirectory().absolutePath + File.separator + "." + App.context.packageName + "/Image/Cache/Album"
     //解密临时文件路径
-    val PATH_DECODE_TEMP = App.context.externalCacheDir.absolutePath + "/.temp/"
+    val PATH_DECODE_TEMP = App.context.externalCacheDir?.absolutePath + "/.temp/"
     //创建 .nomedia 文件
-    val PATH_DECODE_TEMP_NOMEDIA = App.context.externalCacheDir.absolutePath + "/.temp/.nomedia"
+    val PATH_DECODE_TEMP_NOMEDIA = App.context.externalCacheDir?.absolutePath + "/.temp/.nomedia"
 
     /**
      * 对字节加解密

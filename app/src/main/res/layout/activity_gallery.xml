@@ -8,11 +8,25 @@
     <!-- 标题栏 -->
     <include layout="@layout/include_top_bar"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/gallery_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top_bar"/>
+        android:orientation="vertical"
+        android:layout_below="@id/top_bar">
+
+        <com.allever.lib.ad.chain.BannerLayout
+            android:id="@+id/bannerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gallery_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/gallery_btn_pick"

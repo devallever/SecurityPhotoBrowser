@@ -1,14 +1,29 @@
 package com.allever.security.photo.browser
 
+import android.animation.ObjectAnimator
+import android.app.Dialog
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import com.allever.lib.ad.chain.AdChainHelper
+import com.allever.lib.ad.chain.AdChainListener
+import com.allever.lib.ad.chain.IAd
+import com.allever.lib.comment.CommentHelper
+import com.allever.lib.comment.CommentListener
 import com.allever.lib.common.ui.widget.tab.TabLayout
 import com.allever.lib.common.util.DisplayUtils
+import com.allever.lib.recommend.RecommendActivity
+import com.allever.lib.recommend.RecommendDialogHelper
+import com.allever.lib.recommend.RecommendDialogListener
+import com.allever.lib.recommend.RecommendGlobal
+import com.allever.lib.ui.widget.ShakeHelper
+import com.allever.lib.umeng.UMeng
+import com.allever.security.photo.browser.ad.AdConstant
 import com.allever.security.photo.browser.app.Base2Activity
 import com.allever.security.photo.browser.ui.AlbumFragment
 import com.allever.security.photo.browser.ui.GuideFragment
@@ -17,9 +32,15 @@ import com.allever.security.photo.browser.ui.SettingFragment
 import com.allever.security.photo.browser.ui.adapter.ViewPagerAdapter
 import com.allever.security.photo.browser.ui.mvp.presenter.MainPresenter
 import com.allever.security.photo.browser.ui.mvp.view.MainView
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.include_top_bar.*
+import kotlinx.android.synthetic.main.include_top_bar.iv_right
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
-    TabLayout.OnTabSelectedListener {
+    TabLayout.OnTabSelectedListener, View.OnClickListener {
 
     private lateinit var mVp: ViewPager
     private lateinit var mViewPagerAdapter: ViewPagerAdapter
@@ -30,13 +51,22 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
 
     private var mFragmentList = mutableListOf<Fragment>()
 
+    private var mExitInsertAd: IAd? = null
+    private var mIsAdLoaded = false
+    private var mBackInsertAd: IAd? = null
+
+    private lateinit var mShakeAnimator: ObjectAnimator
+
     override fun getContentView(): Any = R.layout.activity_main
 
     override fun initView() {
+        mShakeAnimator = ShakeHelper.createShakeAnimator(iv_right, true)
+        mShakeAnimator.start()
 
         mTab = findViewById(R.id.tab_layout)
         mVp = findViewById(R.id.id_main_vp)
         mTvTitle = findViewById(R.id.id_main_tv_title)
+        iv_right.setOnClickListener(this)
 
         mainTabHighlight = resources.getColor(R.color.main_tab_highlight)
         mainTabUnSelectColor = resources.getColor(R.color.main_tab_unselect_color)
@@ -47,7 +77,9 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
 
     }
 
-    override fun initData() {}
+    override fun initData() {
+        loadExitInsert()
+    }
 
     override fun createPresenter(): MainPresenter = MainPresenter()
 
@@ -112,6 +144,14 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
         mTab.setSelectedTabIndicatorColor(mainTabHighlight)
     }
 
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.iv_right -> {
+                RecommendActivity.start(this, UMeng.getChannel())
+            }
+        }
+    }
+
     override fun onTabSelected(tab: TabLayout.Tab) {
         mVp.currentItem = tab.position
 
@@ -146,11 +186,115 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
         return view
     }
 
+    private fun loadExitInsert() {
+        AdChainHelper.loadAd(AdConstant.AD_NAME_EXIT_INSERT, window.decorView as ViewGroup, object :
+            AdChainListener {
+            override fun onLoaded(ad: IAd?) {
+                mIsAdLoaded = true
+                mExitInsertAd = ad
+            }
+
+            override fun onShowed() {
+                mIsAdLoaded = false
+            }
+
+            override fun onDismiss() {}
+            override fun onFailed(msg: String) {}
+        })
+    }
+
+    override fun onDestroy() {
+        mBackInsertAd?.destroy()
+        mExitInsertAd?.destroy()
+//        mShakeAnimator.cancel()
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
+
         if (isPasswordViewShowing()) {
             super.onBackPressed()
             return
         }
-        checkExit()
+
+        if (mIsAdLoaded) {
+            mExitInsertAd?.show()
+            mIsAdLoaded = false
+        } else {
+            if (UMeng.getChannel() == "google") {
+                //谷歌渠道，首次评分，其余推荐
+                if (mIsShowComment) {
+                    if (RecommendGlobal.recommendData.isEmpty()) {
+                        showComment()
+                    } else {
+                        showRecommendDialog()
+                    }
+                } else {
+                    showComment()
+                }
+            } else {
+                //其他渠道推荐
+                if (RecommendGlobal.recommendData.isEmpty()) {
+                    checkExit()
+                } else {
+                    showRecommendDialog()
+                }
+            }
+        }
+    }
+
+    private fun showRecommendDialog() {
+        val dialog = RecommendDialogHelper.createRecommendDialog(this, object :
+            RecommendDialogListener {
+            override fun onMore(dialog: Dialog?) {
+                dialog?.dismiss()
+            }
+
+            override fun onReject(dialog: Dialog?) {
+                dialog?.dismiss()
+                GlobalScope.launch {
+                    delay(200)
+                    finish()
+                }
+            }
+
+            override fun onBackPress(dialog: Dialog?) {
+                dialog?.dismiss()
+                GlobalScope.launch {
+                    delay(200)
+                    finish()
+                }
+            }
+        })
+
+        RecommendDialogHelper.show(this, dialog)
+    }
+
+    private var mIsShowComment = false
+    private fun showComment() {
+        val dialog = CommentHelper.createCommentDialog(this, object : CommentListener {
+            override fun onComment(dialog: Dialog?) {
+                dialog?.dismiss()
+            }
+
+            override fun onReject(dialog: Dialog?) {
+                dialog?.dismiss()
+                GlobalScope.launch {
+                    delay(200)
+                    finish()
+                }
+            }
+
+            override fun onBackPress(dialog: Dialog?) {
+                dialog?.dismiss()
+                GlobalScope.launch {
+                    delay(200)
+                    finish()
+                }
+            }
+        })
+
+        CommentHelper.show(this, dialog)
+        mIsShowComment = true
     }
 }
