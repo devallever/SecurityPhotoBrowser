@@ -71,7 +71,7 @@
         android:layout_below="@id/tab_bar"
         android:layout_above="@+id/btn_import">
 
-        <com.allever.lib.ad.chain.BannerLayout
+        <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

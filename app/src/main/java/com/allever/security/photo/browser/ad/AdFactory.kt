@@ -10,7 +10,6 @@ class AdFactory : IAdBusinessFactory {
         return when (businessName) {
             AdBusiness.A -> {
                 AdMobBusiness
-//                null
             }
             else -> {
                 null

@@ -12,7 +12,7 @@
             android:text="@string/guide"
             android:layout_margin="30dp"
             android:textColor="@color/black"/>
-        <com.allever.lib.ad.chain.BannerLayout
+        <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
