@@ -12,7 +12,7 @@ class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: Mutabl
     private var mData: MutableList<ThumbnailBean>? = data
     private var mContainer: ViewGroup? = null
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         return PreviewFragment()
     }
 

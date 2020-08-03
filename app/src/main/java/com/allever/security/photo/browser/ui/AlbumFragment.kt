@@ -60,7 +60,7 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
                     activity!!,
                     mImageFolderList[position].name!!,
                     mImageFolderList[position].dir!!,
-                    ArrayList(mImageFolderList[position].data)
+                    mImageFolderList[position].data?.let { ArrayList(it) }
                 )
                 mPresenter.setAlbumClickPosition(position)
             }
@@ -68,10 +68,13 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
         mPrivateAlbumAdapter.listener = object : PrivateAlbumAdapter.ItemClickListener {
             override fun onMoreClick(position: Int) {
                 mPresenter.setMorePosition(position)
-                mAlbumBottomDialog?.show(
-                    activity?.supportFragmentManager,
-                    AlbumActivity::class.java.simpleName
-                )
+                activity?.supportFragmentManager?.let {
+                    mAlbumBottomDialog?.show(
+                        it,
+                        AlbumActivity::class.java.simpleName
+                    )
+                }
+
             }
         }
 
@@ -153,10 +156,13 @@ class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, Vie
     }
 
     override fun showBottomDialog() {
-        mAlbumBottomDialog?.show(
-            activity?.supportFragmentManager,
-            AlbumActivity::class.java.simpleName
-        )
+        activity?.supportFragmentManager?.let {
+            mAlbumBottomDialog?.show(
+                it,
+                AlbumActivity::class.java.simpleName
+            )
+        }
+
     }
 
     override fun hideBottomDialog() {

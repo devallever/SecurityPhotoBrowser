@@ -39,7 +39,7 @@ class AlbumDialog : AppCompatDialogFragment {
 
     override fun onStart() {
         super.onStart()
-        val window = dialog.window
+        val window = dialog?.window
         if (window != null) {
             // 必须设置，否则无法全屏
             window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
