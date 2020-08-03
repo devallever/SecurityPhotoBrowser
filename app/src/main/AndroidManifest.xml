@@ -2,7 +2,7 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="com.allever.security.photo.browser">
+	package="org.xm.secret.photo.album">
 
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.VIBRATE"/>
@@ -27,11 +27,11 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".MainActivity"
+			android:name=".ui.MainActivity"
 			android:screenOrientation="portrait"
 			android:launchMode="singleTask"/>
 		<activity
-			android:name=".AlbumActivity"
+			android:name=".ui.AlbumActivity"
 			android:screenOrientation="portrait"/>
 		<activity
 			android:name=".ui.PickActivity"

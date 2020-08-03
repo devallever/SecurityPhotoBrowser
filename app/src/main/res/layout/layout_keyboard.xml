@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.allever.security.photo.browser.function.password.KeyboardView
+<org.xm.secret.photo.album.function.password.KeyboardView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -87,4 +87,4 @@
 
 	</LinearLayout>
 
-</com.allever.security.photo.browser.function.password.KeyboardView>
+</org.xm.secret.photo.album.function.password.KeyboardView>
