@@ -15,14 +15,14 @@ import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.permission.PermissionManager
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Fragment
+import org.xm.secret.photo.album.app.BaseFragment
 import org.xm.secret.photo.album.bean.ImageFolder
 import org.xm.secret.photo.album.ui.adapter.PrivateAlbumAdapter
 import org.xm.secret.photo.album.ui.dialog.AlbumDialog
 import org.xm.secret.photo.album.ui.mvp.presenter.AlbumPresenter
 import org.xm.secret.photo.album.ui.mvp.view.AlbumView
 
-class AlbumFragment : Base2Fragment<AlbumView, AlbumPresenter>(), AlbumView, View.OnClickListener,
+class AlbumFragment : BaseFragment<AlbumView, AlbumPresenter>(), AlbumView, View.OnClickListener,
     AlbumDialog.Callback {
 
     private lateinit var mRecyclerView: RecyclerView

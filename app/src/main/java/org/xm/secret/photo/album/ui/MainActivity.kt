@@ -17,15 +17,17 @@ import com.allever.lib.comment.CommentHelper
 import com.allever.lib.comment.CommentListener
 import com.allever.lib.common.ui.widget.tab.TabLayout
 import com.allever.lib.common.util.DisplayUtils
+import com.allever.lib.notchcompat.NotchCompat
 import com.allever.lib.recommend.RecommendActivity
 import com.allever.lib.recommend.RecommendDialogHelper
 import com.allever.lib.recommend.RecommendDialogListener
 import com.allever.lib.recommend.RecommendGlobal
 import com.allever.lib.ui.widget.ShakeHelper
 import com.allever.lib.umeng.UMeng
+import kotlinx.android.synthetic.main.activity_main.*
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.ui.adapter.ViewPagerAdapter
 import org.xm.secret.photo.album.ui.mvp.presenter.MainPresenter
 import org.xm.secret.photo.album.ui.mvp.view.MainView
@@ -34,7 +36,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
+class MainActivity : BaseActivity<MainView, MainPresenter>(), MainView,
     TabLayout.OnTabSelectedListener, View.OnClickListener {
 
     private lateinit var mVp: ViewPager
@@ -56,6 +58,11 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
         R.layout.activity_main
 
     override fun initView() {
+        NotchCompat.adaptNotchWithFullScreen(window)
+        checkNotch(Runnable {
+            addStatusBar(rootLayout, top_bar)
+        })
+
         mShakeAnimator = ShakeHelper.createShakeAnimator(iv_right, true)
         mShakeAnimator.start()
 
@@ -63,6 +70,7 @@ class MainActivity : Base2Activity<MainView, MainPresenter>(), MainView,
         mVp = findViewById(R.id.id_main_vp)
         mTvTitle = findViewById(R.id.id_main_tv_title)
         iv_right.setOnClickListener(this)
+        iv_right.visibility = View.GONE
 
         mainTabHighlight = resources.getColor(R.color.main_tab_highlight)
         mainTabUnSelectColor = resources.getColor(R.color.main_tab_unselect_color)

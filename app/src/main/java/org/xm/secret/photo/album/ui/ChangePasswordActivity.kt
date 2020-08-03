@@ -8,14 +8,15 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.allever.lib.notchcompat.NotchCompat
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.function.password.PasswordHelper
 import org.xm.secret.photo.album.ui.mvp.presenter.ChangePasswordPresenter
 import org.xm.secret.photo.album.ui.mvp.view.ChangePasswordView
 
 
-class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordPresenter>(), ChangePasswordView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+class ChangePasswordActivity : BaseActivity<ChangePasswordView, ChangePasswordPresenter>(), ChangePasswordView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private var mLlPwdContainer: LinearLayout? = null
     private var mPwdView: View? = null
 
@@ -43,6 +44,7 @@ class ChangePasswordActivity : Base2Activity<ChangePasswordView, ChangePasswordP
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
+        NotchCompat.adaptNotchWithFullScreen(window)
         findViewById<ImageView>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting_modify_password)
         mLlPwdContainer = findViewById(R.id.id_setting_secret_vault_pwd_container)

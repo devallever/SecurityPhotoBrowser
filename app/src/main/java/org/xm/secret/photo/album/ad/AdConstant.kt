@@ -20,17 +20,17 @@ object AdConstant {
 
 
     //adcocoallever
-    private const val ADMOB_APPID = "ca-app-pub-2202120086964772~9818074998"
-    private const val ALBUM_BANNER = "ca-app-pub-2202120086964772/5878829982"
+    private const val ADMOB_APPID = "ca-app-pub-2202120086964772~3897927612"
+    private const val ALBUM_BANNER = "ca-app-pub-2202120086964772/6332519269"
     private const val GUIDE_BANNER = ALBUM_BANNER
     private const val SETTING_BANNER = ALBUM_BANNER
     private const val GALLERY_BANNER = ALBUM_BANNER
     private const val PICK_BANNER = ALBUM_BANNER
-    private const val EXIT_INSERT = "ca-app-pub-2202120086964772/3252666644"
+    private const val EXIT_INSERT = "ca-app-pub-2202120086964772/6140947570"
     private const val IMPORT_INSERT = EXIT_INSERT
     private const val EXPORT_INSERT = EXIT_INSERT
     private const val SETTING_INSERT = EXIT_INSERT
-    private const val SETTING_VIDEO = "ca-app-pub-2202120086964772/3061094952"
+    private const val SETTING_VIDEO = "ca-app-pub-2202120086964772/8575539229"
 
 
     val AD_NAME_EXIT_INSERT = "AD_NAME_EXIT_INSERT"

@@ -8,13 +8,19 @@ import android.widget.TextView
 import com.allever.lib.common.app.App
 import com.allever.lib.common.app.BaseActivity
 import com.allever.lib.common.util.SystemUtils
+import com.allever.lib.notchcompat.NotchCompat
 import com.allever.lib.umeng.UMeng
 import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.activity_about.rootLayout
 import kotlinx.android.synthetic.main.include_top_bar.*
+import kotlinx.android.synthetic.main.include_top_bar.top_bar
 import org.xm.secret.photo.album.BuildConfig
 import org.xm.secret.photo.album.R
+import org.xm.secret.photo.album.app.BaseActivity2
 
-class AboutActivity: BaseActivity(), View.OnClickListener {
+class AboutActivity: BaseActivity2(), View.OnClickListener {
+
+    private val PRIVACY_URL = "https://secretphotoalbum.flycricket.io/privacy.html"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +31,11 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
     }
 
     private fun initView() {
+        NotchCompat.adaptNotchWithFullScreen(window)
+        checkNotch(Runnable {
+            addStatusBar(rootLayout, top_bar)
+        })
+
         about_privacy.setOnClickListener(this)
         iv_back.setOnClickListener(this)
         tv_label.text = getString(R.string.about)
@@ -46,8 +57,7 @@ class AboutActivity: BaseActivity(), View.OnClickListener {
                 finish()
             }
             R.id.about_privacy -> {
-                val privacyUrl = "http://x.xiniubaba.com/x.php/1ycP23/5049"
-                SystemUtils.startWebView(App.context, privacyUrl)
+                SystemUtils.startWebView(App.context, PRIVACY_URL)
             }
         }
     }

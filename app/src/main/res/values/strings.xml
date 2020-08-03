@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Secret Photo</string>
+    <string name="app_name">Secret Photo Album</string>
 
     <!-- Pick -->
     <string name="pick_import">Import</string>

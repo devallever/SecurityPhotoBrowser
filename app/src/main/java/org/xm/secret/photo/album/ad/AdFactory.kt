@@ -9,8 +9,8 @@ class AdFactory : IAdBusinessFactory {
     override fun getAdBusiness(businessName: String): IAdBusiness? {
         return when (businessName) {
             AdBusiness.A -> {
-//                AdMobBusiness
-                null
+                AdMobBusiness
+//                null
             }
             else -> {
                 null

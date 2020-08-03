@@ -6,12 +6,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.ui.mvp.presenter.SettingPresenter
 import org.xm.secret.photo.album.ui.mvp.view.SettingView
 import org.xm.secret.photo.album.util.FeedbackHelper
 
-class SettingActivity : Base2Activity<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
+class SettingActivity : BaseActivity<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
 
     override fun getContentView(): Int = R.layout.activity_setting
     override fun createPresenter(): SettingPresenter = SettingPresenter()

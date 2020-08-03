@@ -26,3 +26,6 @@ project(':comment').projectDir = new File(settingsDir, '../AndroidDependencyLib/
 
 include ':widget'
 project(':widget').projectDir = new File(settingsDir, '../AndroidUIKit/widget')
+
+include ':notchcompat'
+project(':notchcompat').projectDir = new File(settingsDir, '../AndroidDependencyLib/notchcompat')

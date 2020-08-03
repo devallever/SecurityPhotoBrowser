@@ -17,12 +17,12 @@ import com.allever.lib.recommend.RecommendGlobal
 import com.allever.lib.umeng.UMeng
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Fragment
+import org.xm.secret.photo.album.app.BaseFragment
 import org.xm.secret.photo.album.ui.mvp.presenter.SettingPresenter
 import org.xm.secret.photo.album.ui.mvp.view.SettingView
 import org.xm.secret.photo.album.util.FeedbackHelper
 
-class SettingFragment: Base2Fragment<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
+class SettingFragment: BaseFragment<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
 
     private var mBannerAd: IAd? = null
     private var mInsertAd: IAd? = null

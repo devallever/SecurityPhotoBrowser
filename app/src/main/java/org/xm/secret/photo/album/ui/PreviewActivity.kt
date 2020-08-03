@@ -14,7 +14,7 @@ import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.toast
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.bean.event.DecodeEvent
 import org.xm.secret.photo.album.function.endecode.PrivateBean
@@ -29,7 +29,7 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.lang.Exception
 
-class PreviewActivity : Base2Activity<PreviewView, PreviewPresenter>(), PreviewView, androidx.viewpager.widget.ViewPager.OnPageChangeListener,
+class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewView, androidx.viewpager.widget.ViewPager.OnPageChangeListener,
     View.OnClickListener {
     private var mViewPager: androidx.viewpager.widget.ViewPager? = null
     private var mPagerAdapter: PreviewFragmentPagerAdapter? = null

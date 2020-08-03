@@ -17,7 +17,7 @@ class MyApp : App() {
             UMeng.init(this)
         }
 
-//        AdChainHelper.init(this, AdConstant.adData, AdFactory())
+        AdChainHelper.init(this, AdConstant.adData, AdFactory())
 
 //        RecommendGlobal.init(UMeng.getChannel())
     }

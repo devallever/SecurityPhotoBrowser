@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.allever.lib.common.mvp.BaseMvpFragment
 import com.allever.lib.common.mvp.BasePresenter
 
-abstract class Base2Fragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() {
+abstract class BaseFragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

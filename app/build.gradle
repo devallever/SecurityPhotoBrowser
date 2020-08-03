@@ -30,7 +30,8 @@ android {
     //友盟多渠道----------------------------------------------------------------------------------------------------------
     flavorDimensions "mark"
     productFlavors {
-        google {}
+        kuan {}
+//        google {}
 //        xiaomi {}
 //        baidu {}
     }
@@ -123,6 +124,7 @@ dependencies {
     implementation project(':umeng')
     implementation project(':recommend')
     implementation project(':widget')
+    implementation project(':notchcompat')
     implementation project(':admob')
     implementation(name: "Toolkit-1.1", ext: 'aar')
 

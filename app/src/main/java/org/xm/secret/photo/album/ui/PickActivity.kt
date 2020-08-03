@@ -16,11 +16,12 @@ import com.allever.lib.ad.chain.AdChainListener
 import com.allever.lib.ad.chain.IAd
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.toast
+import com.allever.lib.notchcompat.NotchCompat
 import com.allever.lib.permission.PermissionListener
 import com.allever.lib.permission.PermissionManager
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.app.GlobalData
 import org.xm.secret.photo.album.bean.ImageFolder
 import org.xm.secret.photo.album.bean.LocalThumbnailBean
@@ -37,11 +38,14 @@ import org.xm.secret.photo.album.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
 import kotlinx.android.synthetic.main.activity_gallery.*
+import kotlinx.android.synthetic.main.activity_gallery.bannerContainer
+import kotlinx.android.synthetic.main.activity_gallery.rootLayout
+import kotlinx.android.synthetic.main.activity_pick.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
 
-class PickActivity : Base2Activity<PickView, PickPresenter>(),
+class PickActivity : BaseActivity<PickView, PickPresenter>(),
     PickView,
     TabLayout.OnTabSelectedListener,
     PickFragment.PickCallback,
@@ -90,6 +94,11 @@ class PickActivity : Base2Activity<PickView, PickPresenter>(),
     override fun getContentView(): Int = R.layout.activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
+        NotchCompat.adaptNotchWithFullScreen(window)
+        checkNotch(Runnable {
+            addStatusBar(rootLayout, top_bar)
+        })
+
         initTabs()
         initViewPager()
         initAnim()

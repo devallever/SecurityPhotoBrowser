@@ -15,6 +15,13 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/common_bg</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="default_icon_style">
         <item name="android:layout_width">@dimen/default_icon_width</item>
         <item name="android:layout_height">@dimen/default_icon_height</item>

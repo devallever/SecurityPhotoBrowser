@@ -17,9 +17,10 @@ import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
 import com.allever.lib.common.util.DLog
 import com.allever.lib.common.util.toast
+import com.allever.lib.notchcompat.NotchCompat
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.Base2Activity
+import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.bean.SeparatorBean
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.bean.event.DecodeEvent
@@ -35,6 +36,8 @@ import org.xm.secret.photo.album.util.DialogHelper
 import org.xm.secret.photo.album.util.MD5
 import org.xm.secret.photo.album.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.activity_gallery.*
+import kotlinx.android.synthetic.main.activity_gallery.rootLayout
+import kotlinx.android.synthetic.main.include_top_bar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -42,7 +45,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
-class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
+class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryView, View.OnClickListener {
 
     private lateinit var mBtnExport: ImageView
     private lateinit var mGalleryAdapter: GalleryAdapter
@@ -72,6 +75,11 @@ class GalleryActivity : Base2Activity<GalleryView, GalleryPresenter>(), GalleryV
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
+        NotchCompat.adaptNotchWithFullScreen(window)
+        checkNotch(Runnable {
+            addStatusBar(rootLayout, top_bar)
+        })
+
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = mAlbumName
         findViewById<View>(R.id.gallery_btn_pick).setOnClickListener(this)
