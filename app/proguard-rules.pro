@@ -31,7 +31,7 @@
 }
 # 友盟特有-----------------------------------------------------------------------------------------------------------------
 # 填应用包名
--keep public class [com.allever.security.photo.browser].R$*{
+-keep public class org.xm.secret.photo.album.R$*{
     public static final int *;
 }
 
