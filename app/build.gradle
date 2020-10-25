@@ -30,10 +30,12 @@ android {
     //友盟多渠道----------------------------------------------------------------------------------------------------------
     flavorDimensions "mark"
     productFlavors {
-        kuan {}
+        ad {}
 //        google {}
 //        xiaomi {}
 //        baidu {}
+//        kuan {}
+//        anzhi {}
     }
 
     productFlavors.all {

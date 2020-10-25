@@ -9,8 +9,9 @@ ext{
     versionName = "1.0.0"
 
     umengAppKey = "5e4e389b895cca11bf000017"
-//    admobAppId = ""  //adeverdeng
-    admobAppId = "ca-app-pub-2202120086964772~3897927612"   //adcocoallever
+    admobAppId = "ca-app-pub-9972782174497381~2056863410"  //adeverdeng
+//    admobAppId = "ca-app-pub-5576030072710638~3582727688"//462550602
+//    admobAppId = "ca-app-pub-2202120086964772~3897927612"   //adcocoallever
 
     //C:\Users\Allever\AndroidStudioProjects/com.allever.app.jks
     signingStoreFile = '../../org.xm.app.jks'

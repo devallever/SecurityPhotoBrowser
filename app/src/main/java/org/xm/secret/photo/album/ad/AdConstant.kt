@@ -6,31 +6,44 @@ import com.allever.lib.ad.AdBusiness
 object AdConstant {
 
     //    //adeverdeng
-//    private const val ADMOB_APPID = "ca-app-pub-9972782174497381~2056863410"
-//    private const val ALBUM_BANNER = "ca-app-pub-9972782174497381/8239128384"
-//    private const val GUIDE_BANNER = ALBUM_BANNER
-//    private const val SETTING_BANNER = ALBUM_BANNER
-//    private const val GALLERY_BANNER = ALBUM_BANNER
-//    private const val PICK_BANNER = ALBUM_BANNER
-//    private const val EXIT_INSERT = "ca-app-pub-9972782174497381/5421393358"
-//    private const val IMPORT_INSERT = EXIT_INSERT
-//    private const val EXPORT_INSERT = EXIT_INSERT
-//    private const val SETTING_INSERT = EXIT_INSERT
-//    private const val SETTING_VIDEO = "ca-app-pub-9972782174497381/7147933210"
-
-
-    //adcocoallever
-    private const val ADMOB_APPID = "ca-app-pub-2202120086964772~3897927612"
-    private const val ALBUM_BANNER = "ca-app-pub-2202120086964772/6332519269"
+    const val ADMOB_APP_ID = "adeverdeng\nca-app-pub-9972782174497381~2056863410"
+    private const val ALBUM_BANNER = "ca-app-pub-9972782174497381/8239128384"
     private const val GUIDE_BANNER = ALBUM_BANNER
     private const val SETTING_BANNER = ALBUM_BANNER
     private const val GALLERY_BANNER = ALBUM_BANNER
     private const val PICK_BANNER = ALBUM_BANNER
-    private const val EXIT_INSERT = "ca-app-pub-2202120086964772/6140947570"
+    private const val EXIT_INSERT = "ca-app-pub-9972782174497381/5421393358"
     private const val IMPORT_INSERT = EXIT_INSERT
     private const val EXPORT_INSERT = EXIT_INSERT
     private const val SETTING_INSERT = EXIT_INSERT
-    private const val SETTING_VIDEO = "ca-app-pub-2202120086964772/8575539229"
+    private const val SETTING_VIDEO = "ca-app-pub-9972782174497381/7147933210"
+
+
+//    //adcocoallever
+//    const val ADMOB_APP_ID = "adcocoallever\nca-app-pub-2202120086964772~3897927612"
+//    private const val ALBUM_BANNER = "ca-app-pub-2202120086964772/6332519269"
+//    private const val GUIDE_BANNER = ALBUM_BANNER
+//    private const val SETTING_BANNER = ALBUM_BANNER
+//    private const val GALLERY_BANNER = ALBUM_BANNER
+//    private const val PICK_BANNER = ALBUM_BANNER
+//    private const val EXIT_INSERT = "ca-app-pub-2202120086964772/6140947570"
+//    private const val IMPORT_INSERT = EXIT_INSERT
+//    private const val EXPORT_INSERT = EXIT_INSERT
+//    private const val SETTING_INSERT = EXIT_INSERT
+//    private const val SETTING_VIDEO = "ca-app-pub-2202120086964772/8575539229"
+
+    //462550602
+//    private const val ADMOB_APPID = "ca-app-pub-5576030072710638~3582727688"
+//    private const val ALBUM_BANNER = "ca-app-pub-5576030072710638/8548646737"
+//    private const val GUIDE_BANNER = ALBUM_BANNER
+//    private const val SETTING_BANNER = ALBUM_BANNER
+//    private const val GALLERY_BANNER = ALBUM_BANNER
+//    private const val PICK_BANNER = ALBUM_BANNER
+//    private const val EXIT_INSERT = "ca-app-pub-5576030072710638/9381849278"
+//    private const val IMPORT_INSERT = EXIT_INSERT
+//    private const val EXPORT_INSERT = EXIT_INSERT
+//    private const val SETTING_INSERT = EXIT_INSERT
+//    private const val SETTING_VIDEO = "ca-app-pub-5576030072710638/1503359252"
 
 
     val AD_NAME_EXIT_INSERT = "AD_NAME_EXIT_INSERT"

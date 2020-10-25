@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.include_top_bar.*
 import kotlinx.android.synthetic.main.include_top_bar.top_bar
 import org.xm.secret.photo.album.BuildConfig
 import org.xm.secret.photo.album.R
+import org.xm.secret.photo.album.ad.AdConstant
 import org.xm.secret.photo.album.app.BaseActivity2
 
 class AboutActivity: BaseActivity2(), View.OnClickListener {
@@ -41,9 +42,17 @@ class AboutActivity: BaseActivity2(), View.OnClickListener {
         tv_label.text = getString(R.string.about)
         val channel = UMeng.getChannel()
         val last = if (BuildConfig.DEBUG) {
-            "(Debug)-$channel"
+            "(Debug)-$channel\n" +
+                    "${App.context.packageName}\n" +
+                    "AdMob-${AdConstant.ADMOB_APP_ID}"
         } else {
-            ""
+            if (channel == "ad") {
+                "(Release)-$channel\n" +
+                        "${App.context.packageName}\n" +
+                        "AdMob-${AdConstant.ADMOB_APP_ID}"
+            } else {
+                ""
+            }
         }
         findViewById<TextView>(R.id.about_app_version).text = "v${BuildConfig.VERSION_NAME}$last"
         findViewById<TextView>(R.id.about_right).text =
