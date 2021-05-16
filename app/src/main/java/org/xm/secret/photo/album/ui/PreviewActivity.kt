@@ -44,7 +44,7 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     override fun getContentView(): Int = R.layout.activity_priview
     override fun initData() {
-        mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
+        mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA)!!)
         mPosition = intent.getIntExtra(EXTRA_POSITION, 0)
 
         mViewPager = findViewById(R.id.preview_view_pager)

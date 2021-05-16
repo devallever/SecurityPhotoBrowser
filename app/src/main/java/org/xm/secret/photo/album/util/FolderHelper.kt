@@ -313,10 +313,10 @@ object FolderHelper {
             values.put(Video.Media.DATA, fileSaved.absolutePath)
             if ("90" == rotation || "270" == rotation) {
                 values.put(Video.Media.RESOLUTION, height + "x" + width)
-                setVideoSize(values, height, width)
+                setVideoSize(values, height!!, width!!)
             } else {
                 values.put(Video.Media.RESOLUTION, width + "x" + height)
-                setVideoSize(values, width, height)
+                setVideoSize(values, width!!, height!!)
             }
             if (location != null) {
                 values.put(Video.Media.LATITUDE, location.latitude)

@@ -154,7 +154,7 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
     }
 
     override fun initData() {
-        mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA))
+        mGalleryData.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA)!!)
         mGalleryData.map {
             if (it is ThumbnailBean) {
                 mThumbnailBeanList.add(it)
